@@ -70,15 +70,30 @@ IDR_APPICON             ICON    DISCARDABLE     "App.ico"
 
 IDR_APPMENU MENU DISCARDABLE 
 BEGIN
-    POPUP "&File"
+    POPUP "&Database"
     BEGIN
-        MENUITEM "&Connect...\tCtrl+D",         ID_FILE_CONNECT
+        MENUITEM "&Connect...\tCtrl+D",         ID_DB_CONNECT
+        MENUITEM "&Disconnect",                 ID_DB_DISCONNECT
         MENUITEM SEPARATOR
-        MENUITEM "E&xit\tAlt+F4",               ID_FILE_EXIT
+        MENUITEM "E&xit\tAlt+F4",               ID_DB_EXIT
     END
     POPUP "&Query"
     BEGIN
-        MENUITEM "&Execute...\tCtrl+E",         ID_QUERY_EXECUTE
+        MENUITEM "&New\tCtrl+N",                ID_QUERY_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_QUERY_OPEN
+        MENUITEM "&Save As...\tCtrl+S",         ID_QUERY_SAVEAS
+        MENUITEM SEPARATOR
+    END
+    POPUP "&Execute"
+    BEGIN
+        MENUITEM "&Current\tCtrl+E",            ID_EXEC_CURRENT
+        MENUITEM "&File...\tCtrl+F",            ID_EXEC_FILE
+        MENUITEM SEPARATOR
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&Query\tCtrl+Y",              ID_WINDOW_QUERY
+        MENUITEM "&Results\tCtrl+R",            ID_WINDOW_RESULTS
     END
     POPUP "&Help"
     BEGIN
@@ -94,13 +109,13 @@ END
 
 IDD_MAIN DIALOGEX 0, 0, 301, 201
 STYLE WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     EDITTEXT        IDC_QUERY,15,25,100,100,ES_MULTILINE | ES_AUTOHSCROLL | 
                     ES_WANTRETURN | WS_VSCROLL
     CONTROL         "List1",IDC_GRID,"SysListView32",LVS_REPORT | 
-                    LVS_ALIGNLEFT | LVS_NOSORTHEADER | WS_BORDER | 
-                    WS_TABSTOP,130,25,100,100,WS_EX_CLIENTEDGE
+                    LVS_SINGLESEL | LVS_ALIGNLEFT | LVS_NOSORTHEADER | 
+                    WS_BORDER | WS_TABSTOP,130,25,100,100,WS_EX_CLIENTEDGE
     CONTROL         "Tab1",IDC_TAB,"SysTabControl32",0x0,5,5,290,190
 END
 
@@ -144,8 +159,14 @@ IDR_APPTOOLBAR          BITMAP  DISCARDABLE     "Toolbar.bmp"
 
 IDR_APPACCEL ACCELERATORS DISCARDABLE 
 BEGIN
-    "D",            ID_FILE_CONNECT,        VIRTKEY, CONTROL, NOINVERT
-    "E",            ID_QUERY_EXECUTE,       VIRTKEY, CONTROL, NOINVERT
+    "D",            ID_DB_CONNECT,          VIRTKEY, CONTROL, NOINVERT
+    "E",            ID_EXEC_CURRENT,        VIRTKEY, CONTROL, NOINVERT
+    "F",            ID_EXEC_FILE,           VIRTKEY, CONTROL, NOINVERT
+    "N",            ID_QUERY_NEW,           VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_QUERY_OPEN,          VIRTKEY, CONTROL, NOINVERT
+    "R",            ID_WINDOW_RESULTS,      VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_QUERY_SAVEAS,        VIRTKEY, CONTROL, NOINVERT
+    "Y",            ID_WINDOW_QUERY,        VIRTKEY, CONTROL, NOINVERT
 END
 
 
@@ -210,9 +231,9 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_FILE_POPUP           "File options"
-    ID_FILE_CONNECT         "Connect to a database"
-    ID_FILE_EXIT            "Exit PQT"
+    ID_DB_POPUP             "Database options"
+    ID_DB_CONNECT           "Connect to a database"
+    ID_DB_EXIT              "Exit PQT"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -224,7 +245,19 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_QUERY_POPUP          "Query options"
-    ID_QUERY_EXECUTE        "Execute the query"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EXEC_POPUP           "Query execution options"
+    ID_EXEC_CURRENT         "Execute the query"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_POPUP         "Window selection options"
+    ID_WINDOW_QUERY         "Switch to the query window"
+    ID_WINDOW_RESULTS       "Switch to the results window"
 END
 
 #endif    // English (U.K.) resources
