@@ -202,7 +202,7 @@ void CCfgConDlg::OnFiles()
 
 	CPath strPath;
 
-	if (strPath.Select(*this, CPath::OpenFile, szExts, szDefExt))
+	if (strPath.Select(*this, CPath::OpenFile, szExts, szDefExt, CPath::ApplicationDir()))
 		m_ebFile.Text(strPath);
 }
 
@@ -222,6 +222,6 @@ void CCfgConDlg::OnSQLDirs()
 {
 	CPath strPath;
 
-	if (strPath.SelectDir(*this, "Select the default SQL scripts folder."))
+	if (strPath.SelectDir(*this, "Select the default SQL scripts folder.", CPath::ApplicationDir()))
 		m_ebSQLDir.Text(strPath);
 }
