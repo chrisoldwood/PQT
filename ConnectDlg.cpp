@@ -73,11 +73,6 @@ void CConnectDlg::OnInitDialog()
 		m_cbDatabase.CurSel(0);
 		OnSelect();
 	}
-	else
-	{
-		// Show create connection dialog.
-		PostCtrlMsg(BN_CLICKED, IDC_ADD, Control(IDC_ADD).Handle());
-	}
 
 	UpdateUI();
 }
