@@ -125,17 +125,18 @@ LRESULT CRowDataDlg::OnRightClick(NMHDR& rMsgHdr)
 
 		::ClientToScreen(m_lvGrid.Handle(), &ptMenu);
 
-		// Show contect menu.
+		// Show context menu.
 		uint nCmdID = oMenu.TrackMenu(m_lvGrid, ptMenu);
 
 		// Handle command.
+		if (nCmdID == ID_ROWDATA_COPYVALUE)
+		{
+			CClipboard::CopyText(m_hWnd, m_oRow[nRowCol].Format());
+		}
+
 		if (nCmdID == ID_ROWDATA_COPYNAME)
 		{
 			CClipboard::CopyText(m_hWnd, m_oTable.Column(nRowCol).Name());
-		}
-		else if (nCmdID == ID_ROWDATA_COPYVALUE)
-		{
-			CClipboard::CopyText(m_hWnd, m_oRow[nRowCol].Format());
 		}
 	}
 
