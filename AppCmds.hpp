@@ -35,24 +35,29 @@ public:
 	// Database menu.
 	void OnDBConnect();
 	void OnDBDisconnect();
+	void OnDBConnectMRU(int nCmdID);
 	void OnDBExit();
 
 	// Query menu.
 	void OnQueryNew();
 	void OnQueryOpen();
-	void OnQueryOpen(const char* pszFileName);
+	void OnQueryOpen(const CPath& strPath);
+	void OnQuerySave();
 	void OnQuerySaveAs();
+	void OnQueryPrint();
 	void OnQueryPrefs();
 
 	// Execute menu.
 	void OnExecCurrent();
 	void OnExecFile();
-	void OnExecFile(const char* pszFileName);
+	void OnExecFile(const CPath& strPath);
 	void OnExecScript(int nCmdID);
 
 	// Results menu.
 	void OnResultsFind();
 	void OnResultsFindNext();
+	void OnResultsSaveAs();
+	void OnResultsPrint();
 
 	// Window menu.
 	void OnWindowQuery();
@@ -69,6 +74,8 @@ public:
 	void OnUIExecFile();
 	void OnUIResultsFind();
 	void OnUIResultsFindNext();
+	void OnUIResultsSaveAs();
+	void OnUIResultsPrint();
 
 	//
 	// Command property methods.
@@ -89,6 +96,14 @@ protected:
 		ID_FIRST_SCRIPT_CMD = 305,
 		ID_LAST_SCRIPT_CMD  = 399,
 	};
+
+	//
+	// Internal methods.
+	//
+	void Connect(int nConnection, const CString& strLogin, const CString& strPassword);
+	bool LoadQuery(const CPath& strPath);
+	bool SaveQuery(const CPath& strPath);
+	void UpdateScriptsMenu();
 };
 
 /******************************************************************************
