@@ -75,13 +75,22 @@ BEGIN
         MENUITEM "&Connect...\tCtrl+D",         ID_DB_CONNECT
         MENUITEM "&Disconnect",                 ID_DB_DISCONNECT
         MENUITEM SEPARATOR
+        MENUITEM "&1",                          ID_DB_MRU_1
+        MENUITEM "&2",                          ID_DB_MRU_2
+        MENUITEM "&3",                          ID_DB_MRU_3
+        MENUITEM "&4",                          ID_DB_MRU_4
+        MENUITEM "&5",                          ID_DB_MRU_5
+        MENUITEM SEPARATOR
         MENUITEM "E&xit\tAlt+F4",               ID_DB_EXIT
     END
     POPUP "&Query"
     BEGIN
         MENUITEM "&New\tCtrl+N",                ID_QUERY_NEW
         MENUITEM "&Open...\tCtrl+O",            ID_QUERY_OPEN
-        MENUITEM "&Save As...\tCtrl+S",         ID_QUERY_SAVEAS
+        MENUITEM "&Save\tCtrl+S",               ID_QUERY_SAVE
+        MENUITEM "Save &As...",                 ID_QUERY_SAVEAS
+        MENUITEM SEPARATOR
+        MENUITEM "&Print...",                   ID_QUERY_PRINT
         MENUITEM SEPARATOR
         MENUITEM "&Preferences...",             ID_QUERY_PREFS
     END
@@ -95,6 +104,9 @@ BEGIN
     BEGIN
         MENUITEM "&Find...\tCtrl+F3",           ID_RESULTS_FIND
         MENUITEM "Find &Next\tF3",              ID_RESULTS_FINDNEXT
+        MENUITEM SEPARATOR
+        MENUITEM "&Save...",                    ID_RESULTS_SAVEAS
+        MENUITEM "&Print...\tCtrl+P",           ID_RESULTS_PRINT
     END
     POPUP "&Window"
     BEGIN
@@ -104,6 +116,15 @@ BEGIN
     POPUP "&Help"
     BEGIN
         MENUITEM "&About PQT",                  ID_HELP_ABOUT
+    END
+END
+
+IDR_ROWDATAMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "Popup"
+    BEGIN
+        MENUITEM "Copy &Column",                ID_ROWDATA_COPYNAME
+        MENUITEM "Copy &Value",                 ID_ROWDATA_COPYVALUE
     END
 END
 
@@ -150,17 +171,17 @@ STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Connect To A Database"
 FONT 8, "MS Sans Serif"
 BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,45,75,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,101,75,50,14
-    EDITTEXT        IDC_LOGIN,50,30,75,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_PASSWORD,50,50,75,14,ES_PASSWORD | ES_AUTOHSCROLL
+    LTEXT           "&Database:",IDC_STATIC,10,12,40,8
     COMBOBOX        IDC_DATABASE,50,10,75,50,CBS_DROPDOWNLIST | CBS_SORT | 
                     WS_VSCROLL | WS_TABSTOP
-    LTEXT           "&Database:",IDC_STATIC,10,12,40,8
     LTEXT           "&Login:",IDC_STATIC,10,33,40,8
+    EDITTEXT        IDC_LOGIN,50,30,75,14,ES_AUTOHSCROLL
     LTEXT           "&Password:",IDC_STATIC,10,53,40,8
+    EDITTEXT        IDC_PASSWORD,50,50,75,14,ES_PASSWORD | ES_AUTOHSCROLL
     PUSHBUTTON      "&Add...",IDC_ADD,140,10,50,14
     PUSHBUTTON      "&Edit...",IDC_EDIT,140,30,50,14
+    DEFPUSHBUTTON   "OK",IDOK,45,75,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,101,75,50,14
 END
 
 IDD_QUERYPREFS DIALOG DISCARDABLE  0, 0, 222, 90
@@ -181,15 +202,16 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,165,27,50,14
 END
 
-IDD_ROWDATA DIALOGEX 0, 0, 312, 236
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_ROWDATA DIALOGEX 0, 0, 312, 230
+STYLE WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | 
+    WS_THICKFRAME
 CAPTION "Row Data"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "List1",IDC_GRID,"SysListView32",LVS_REPORT | 
-                    LVS_SINGLESEL | LVS_NOSORTHEADER | WS_BORDER | 
-                    WS_TABSTOP,5,5,300,200,WS_EX_CLIENTEDGE
-    PUSHBUTTON      "Close",IDCANCEL,130,215,50,14
+                    LVS_SINGLESEL | WS_BORDER | WS_TABSTOP,5,5,300,200,
+                    WS_EX_CLIENTEDGE
+    PUSHBUTTON      "Close",IDCANCEL,255,210,50,14
 END
 
 IDD_CFGCONNECTION DIALOG DISCARDABLE  0, 0, 222, 202
@@ -275,8 +297,9 @@ BEGIN
     "F",            ID_EXEC_FILE,           VIRTKEY, CONTROL, NOINVERT
     "N",            ID_QUERY_NEW,           VIRTKEY, CONTROL, NOINVERT
     "O",            ID_QUERY_OPEN,          VIRTKEY, CONTROL, NOINVERT
+    "P",            ID_RESULTS_PRINT,       VIRTKEY, CONTROL, NOINVERT
     "R",            ID_WINDOW_RESULTS,      VIRTKEY, CONTROL, NOINVERT
-    "S",            ID_QUERY_SAVEAS,        VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_QUERY_SAVE,          VIRTKEY, CONTROL, NOINVERT
     VK_F3,          ID_RESULTS_FINDNEXT,    VIRTKEY, NOINVERT
     VK_F3,          ID_RESULTS_FIND,        VIRTKEY, CONTROL, NOINVERT
     "Y",            ID_WINDOW_QUERY,        VIRTKEY, CONTROL, NOINVERT
@@ -312,7 +335,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 305
         TOPMARGIN, 7
-        BOTTOMMARGIN, 229
+        BOTTOMMARGIN, 223
     END
 
     IDD_CFGCONNECTION, DIALOG
@@ -393,8 +416,13 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_DB_POPUP             "Database options"
-    ID_DB_CONNECT           "Connect to a database\nConnect..."
+    ID_DB_CONNECT           "Connect to a database\nConnect"
     ID_DB_DISCONNECT        "Disconnect from the current database\nDisconnect"
+    ID_DB_MRU_1             "Open this connection"
+    ID_DB_MRU_2             "Open this connection"
+    ID_DB_MRU_3             "Open this connection"
+    ID_DB_MRU_4             "Open this connection"
+    ID_DB_MRU_5             "Open this connection"
     ID_DB_EXIT              "Exit PQT"
 END
 
@@ -409,8 +437,10 @@ BEGIN
     ID_QUERY_POPUP          "Query options"
     ID_QUERY_NEW            "Clear the current query\nNew Query"
     ID_QUERY_OPEN           "Load a query from a file\nOpen Query"
+    ID_QUERY_SAVE           "Save the query to a file\nSave Query"
     ID_QUERY_SAVEAS         "Save the current query to a file\nSave Query"
-    ID_QUERY_PREFS          "Edit the query settings"
+    ID_QUERY_PRINT          "Print the query\nPrint Query"
+    ID_QUERY_PREFS          "Edit the query settings\nQuery Settings"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -432,6 +462,8 @@ BEGIN
     ID_RESULTS_POPUP        "Results view options"
     ID_RESULTS_FIND         "Finds the first occurence of a value in the results view"
     ID_RESULTS_FINDNEXT     "Finds the next occurence of a value in the results view"
+    ID_RESULTS_SAVEAS       "Save the results to a file\nSave Results"
+    ID_RESULTS_PRINT        "Print the results\nPrint Results"
 END
 
 #endif    // English (U.K.) resources

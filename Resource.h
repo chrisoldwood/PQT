@@ -6,26 +6,38 @@
 #define IDR_APPMENU                     3
 #define IDR_APPACCEL                    4
 #define IDR_APPTOOLBAR                  5
+#define IDR_ROWDATAMENU                 6
 #define ID_DB_POPUP                     100
 #define ID_DB_CONNECT                   101
 #define ID_DB_DISCONNECT                102
-#define ID_DB_EXIT                      103
+#define ID_DB_MRU_1                     103
+#define ID_DB_MRU_2                     104
+#define ID_DB_MRU_3                     105
+#define ID_DB_MRU_4                     106
+#define ID_DB_MRU_5                     107
+#define ID_DB_EXIT                      110
 #define ID_QUERY_POPUP                  200
 #define ID_QUERY_NEW                    201
 #define ID_QUERY_OPEN                   202
-#define ID_QUERY_SAVEAS                 203
-#define ID_QUERY_PREFS                  204
+#define ID_QUERY_SAVE                   203
+#define ID_QUERY_SAVEAS                 204
+#define ID_QUERY_PRINT                  205
+#define ID_QUERY_PREFS                  206
 #define ID_EXEC_POPUP                   300
 #define ID_EXEC_CURRENT                 301
 #define ID_EXEC_FILE                    302
 #define ID_RESULTS_POPUP                400
 #define ID_RESULTS_FIND                 401
 #define ID_RESULTS_FINDNEXT             402
+#define ID_RESULTS_SAVEAS               403
+#define ID_RESULTS_PRINT                404
 #define ID_WINDOW_POPUP                 800
 #define ID_WINDOW_QUERY                 801
 #define ID_WINDOW_RESULTS               802
 #define ID_HELP_POPUP                   900
 #define ID_HELP_ABOUT                   902
+#define ID_ROWDATA_COPYNAME             1001
+#define ID_ROWDATA_COPYVALUE            1002
 #define IDC_TAB                         1058
 #define IDC_QUERY                       1059
 #define IDC_GRID                        1060
@@ -68,8 +80,8 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        123
-#define _APS_NEXT_COMMAND_VALUE         132
+#define _APS_NEXT_RESOURCE_VALUE        124
+#define _APS_NEXT_COMMAND_VALUE         143
 #define _APS_NEXT_CONTROL_VALUE         1071
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
