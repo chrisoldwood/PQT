@@ -24,7 +24,9 @@
 *******************************************************************************
 */
 
-CConnectDlg::CConnectDlg() : CDialog(IDD_CONNECT)
+CConnectDlg::CConnectDlg()
+	: CDialog(IDD_CONNECT)
+	, m_nConnection(-1)
 {
 	DEFINE_CTRL_TABLE
 		CTRL(IDC_DATABASE,   &m_cbDatabase  )
@@ -53,24 +55,34 @@ CConnectDlg::CConnectDlg() : CDialog(IDD_CONNECT)
 
 void CConnectDlg::OnInitDialog()
 {
+	CString strDefault;
+
 	// Initialise the controls.
 	m_ebLogin.TextLimit(100);
 	m_ebPassword.TextLimit(100);
 
 	// Load the database combo.
-	for (int i = 0; i < App.m_aConConfigs.Size(); i++)
+	for (int i = 0; i < App.m_apConConfigs.Size(); i++)
 	{
-		CConConfig& oConn = App.m_aConConfigs[i];
+		CConConfig* pConn = App.m_apConConfigs[i];
 
-		int nIndex = m_cbDatabase.Add(oConn.m_strName);
-		m_cbDatabase.ItemData(nIndex, i);
+		m_cbDatabase.Add(pConn->m_strName, i);
+
+		if (m_nConnection == i)
+			strDefault = pConn->m_strName;
 	}
 
 	// Any connections setup?
 	if (m_cbDatabase.Count())
 	{
-		// Select 1st connection by default.
-		m_cbDatabase.CurSel(0);
+		// Find default.
+		int nDefault = m_cbDatabase.FindExact(strDefault);
+
+		// Select 1st, if no default.
+		if (nDefault == CB_ERR)
+			nDefault = 0;
+			
+		m_cbDatabase.CurSel(nDefault);
 		OnSelect();
 	}
 
@@ -118,7 +130,7 @@ void CConnectDlg::OnAdd()
 	if (Dlg.RunModal(*this) == IDOK)
 	{
 		// Add to the App collection.
-		int nArrIndex = App.m_aConConfigs.Add(*new CConConfig(Dlg.m_oConfig));
+		int nArrIndex = App.m_apConConfigs.Add(new CConConfig(Dlg.m_oConfig));
 
 		// Add to the combo box.
 		int nCBIndex = m_cbDatabase.Add(Dlg.m_oConfig.m_strName);
@@ -157,12 +169,12 @@ void CConnectDlg::OnEdit()
 	// Initialise the dialog.
 	CCfgConDlg Dlg;
 
-	Dlg.m_oConfig = App.m_aConConfigs[nConn];
+	Dlg.m_oConfig = *App.m_apConConfigs[nConn];
 
 	if (Dlg.RunModal(*this) == IDOK)
 	{
 		// Update the master list.
-		App.m_aConConfigs[nConn] = Dlg.m_oConfig;
+		*App.m_apConConfigs[nConn] = Dlg.m_oConfig;
 
 		// Update to the combo box.
 		m_cbDatabase.Delete(nSel);
@@ -192,10 +204,10 @@ void CConnectDlg::OnSelect()
 	// Get the current selection.
 	int         nSel  = m_cbDatabase.CurSel();
 	int         nConn = m_cbDatabase.ItemData(nSel);
-	CConConfig&	oConn = App.m_aConConfigs[nConn];
+	CConConfig*	pConn = App.m_apConConfigs[nConn];
 
 	// Set the default login.
-	m_ebLogin.Text(oConn.m_strLogin);
+	m_ebLogin.Text(pConn->m_strLogin);
 }
 
 /******************************************************************************
