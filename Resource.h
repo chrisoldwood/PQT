@@ -16,6 +16,9 @@
 #define ID_DB_MRU_4                     106
 #define ID_DB_MRU_5                     107
 #define ID_DB_EXIT                      110
+#define IDR_TABLEMENU                   125
+#define ID_TABLE_COPY_NAME              143
+#define ID_TABLE_COPY_VALUE             144
 #define ID_QUERY_POPUP                  200
 #define ID_QUERY_NEW                    201
 #define ID_QUERY_OPEN                   202
@@ -83,8 +86,8 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        125
-#define _APS_NEXT_COMMAND_VALUE         143
+#define _APS_NEXT_RESOURCE_VALUE        126
+#define _APS_NEXT_COMMAND_VALUE         145
 #define _APS_NEXT_CONTROL_VALUE         1073
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

@@ -123,8 +123,17 @@ IDR_ROWDATAMENU MENU DISCARDABLE
 BEGIN
     POPUP "Popup"
     BEGIN
-        MENUITEM "Copy &Column",                ID_ROWDATA_COPYNAME
         MENUITEM "Copy &Value",                 ID_ROWDATA_COPYVALUE
+        MENUITEM "Copy &Column",                ID_ROWDATA_COPYNAME
+    END
+END
+
+IDR_TABLEMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "Popup"
+    BEGIN
+        MENUITEM "Copy Field &Value",           ID_TABLE_COPY_VALUE
+        MENUITEM "Copy &Column Name",           ID_TABLE_COPY_NAME
     END
 END
 
