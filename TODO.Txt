@@ -1,15 +1,7 @@
 - Parsing of query (prompt for parameters).
 
-- Copy row/value to clipboard.
-
-- Display of query filename.
-
 - Toolbar buttons & tooltips.
-
-- Reg. of app/file ext.
 
 - HelpFile.
 
-- ReadMe.txt
-
-- Properties dailog for an open connection.
+- Better formatting on results printing.
