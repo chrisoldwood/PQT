@@ -7,3 +7,9 @@
 - Toolbar buttons & tooltips.
 
 - Reg. of app/file ext.
+
+- HelpFile.
+
+- ReadMe.txt
+
+- Properties dailog for an open connection.

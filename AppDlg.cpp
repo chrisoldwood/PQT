@@ -186,7 +186,7 @@ void CAppDlg::ShowRowDetails()
 	if (m_lvGrid.IsSelection())
 	{
 		// Get the current selection.
-		int   nRow = m_lvGrid.Selected();
+		int   nRow = m_lvGrid.Selection();
 		CRow& oRow = m_lvGrid.Row(nRow);
 
 		CRowDataDlg Dlg(oRow);
