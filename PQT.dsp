@@ -128,6 +128,10 @@ SOURCE=.\FindDlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ParamsDlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\PQTApp.cpp
 # End Source File
 # Begin Source File
@@ -201,6 +205,10 @@ SOURCE=.\ConnectDlg.hpp
 # Begin Source File
 
 SOURCE=.\FindDlg.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ParamsDlg.hpp
 # End Source File
 # Begin Source File
 
