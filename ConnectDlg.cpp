@@ -84,6 +84,10 @@ void CConnectDlg::OnInitDialog()
 			
 		m_cbDatabase.CurSel(nDefault);
 		OnSelect();
+
+		// Set focus to password field.
+		m_ebPassword.Focus();
+		MsgHandled(false);
 	}
 
 	UpdateUI();
