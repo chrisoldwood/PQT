@@ -12,6 +12,9 @@
 #ifndef PQTAPP_HPP
 #define PQTAPP_HPP
 
+// Template shorthands.
+typedef TRefArray<CConConfig> TConConfigs;
+
 /******************************************************************************
 ** 
 ** The application class.
@@ -33,12 +36,23 @@ public:
 	//
 	CAppWnd		m_AppWnd;
 	CAppCmds	m_AppCmds;
+
+	int			m_nDefConnection;
 	CString		m_strConnection;
-	CString		m_strDatabase;
 	CPath		m_strQueryFile;
 	CODBCSource	m_oConnection;
 	CMDB		m_oMDB;
+	CQuery*		m_pQuery;
+	CString		m_strFindVal;
+	int			m_nLastFindRow;
+	int			m_nLastFindCol;
+	CScripts	m_oScripts;
+
+	TConConfigs	m_aConConfigs;
 	CRect		m_rcLastPos;
+	int			m_nMinWidth;
+	int			m_nMaxWidth;
+	CString		m_strNull;
 
 protected:
 	//
