@@ -39,6 +39,7 @@ public:
 
 	int			m_nDefConnection;
 	CPath		m_strQueryFile;
+	bool		m_bModified;
 	CODBCSource	m_oConnection;
 	CMDB		m_oMDB;
 	CQuery*		m_pQuery;

@@ -28,9 +28,9 @@ CPQTApp App;
 */
 
 #ifdef _DEBUG
-const char* CPQTApp::VERSION      = "v1.0 Alpha [Debug]";
+const char* CPQTApp::VERSION      = "v1.0 Beta [Debug]";
 #else
-const char* CPQTApp::VERSION      = "v1.0 Alpha";
+const char* CPQTApp::VERSION      = "v1.0 Beta";
 #endif
 
 /******************************************************************************
@@ -48,6 +48,7 @@ const char* CPQTApp::VERSION      = "v1.0 Alpha";
 CPQTApp::CPQTApp()
 	: CApp(m_AppWnd, m_AppCmds)
 	, m_nDefConnection(-1)
+	, m_bModified(false)
 	, m_pQuery(NULL)
 	, m_nLastFindRow(-1)
 	, m_nLastFindCol(-1)
