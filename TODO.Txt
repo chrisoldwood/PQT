@@ -5,3 +5,5 @@
 - Better formatting on results printing.
 
 - Scripts menu to include folders.
+
+- Make password the focus window for connections.

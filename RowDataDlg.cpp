@@ -75,7 +75,7 @@ void CRowDataDlg::OnInitDialog()
 		char szRow[10];
 
 		// LPARAM is column index.
-		int nRow = m_lvGrid.InsertItem(i, itoa(i, szRow, 10), i, -1);
+		int nRow = m_lvGrid.InsertItem(i, itoa(i, szRow, 10));
 
 		// Set the column name.
 		m_lvGrid.ItemText(nRow, 1, m_oTable.Column(i).Name());
@@ -85,6 +85,8 @@ void CRowDataDlg::OnInitDialog()
 			m_lvGrid.ItemText(nRow, 2, App.m_strNull);
 		else
 			m_lvGrid.ItemText(nRow, 2, m_oRow[i].Format());
+
+		m_lvGrid.ItemData(nRow, i);
 	}
 
 	// Sort listview.
