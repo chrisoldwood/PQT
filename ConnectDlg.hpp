@@ -30,19 +30,32 @@ public:
 	//
 	// Members.
 	//
-	CString	m_strConnection;
+	int		m_nConnection;
+	CString	m_strLogin;
+	CString	m_strPassword;
 
 protected:
 	//
 	// Members.
 	//
-	CEditBox	m_ebConnection;
+	CComboBox	m_cbDatabase;
+	CEditBox	m_ebLogin;
+	CEditBox	m_ebPassword;
 	
 	//
 	// Message handlers.
 	//
 	virtual void OnInitDialog();
 	virtual bool OnOk();
+
+	void OnAdd();
+	void OnEdit();
+	void OnSelect();
+
+	//
+	// Internal methods.
+	//
+	void UpdateUI();
 };
 
 /******************************************************************************
