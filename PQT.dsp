@@ -122,6 +122,10 @@ SOURCE=.\ConnectDlg.cpp
 
 SOURCE=.\PQTApp.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\TableGrid.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -161,6 +165,10 @@ SOURCE=.\PQTApp.hpp
 # Begin Source File
 
 SOURCE=.\Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TableGrid.hpp
 # End Source File
 # End Group
 # Begin Group "Resource Files"
