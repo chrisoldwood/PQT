@@ -22,7 +22,8 @@
 *******************************************************************************
 */
 
-CAppWnd::CAppWnd() : CDlgFrame(IDR_APPICON, m_AppDlg, false)
+CAppWnd::CAppWnd()
+	: CDlgFrame(IDR_APPICON, m_AppDlg, false)
 {
 }
 
@@ -56,6 +57,9 @@ CAppWnd::~CAppWnd()
 
 void CAppWnd::OnCreate(const CRect& rcClient)
 {
+	// Register for drag'n'drop support.
+	::DragAcceptFiles(m_hWnd, TRUE);
+
 	//
 	// Create and attach the components.
 	//
@@ -77,6 +81,26 @@ void CAppWnd::OnCreate(const CRect& rcClient)
 
 	// Call base class.
 	CDlgFrame::OnCreate(rcClient);
+}
+
+/******************************************************************************
+** Method:		OnDestroy()
+**
+** Description:	The window is being destroyed.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppWnd::OnDestroy()
+{
+	// Unregister for drag'n'drop support.
+	::DragAcceptFiles(m_hWnd, FALSE);
+
+	CDlgFrame::OnDestroy();
 }
 
 /******************************************************************************
@@ -135,10 +159,10 @@ void CAppWnd::UpdateTitle()
 	CString strTitle = App.m_strTitle;
 
 	// Append connection
-	if (App.m_strDatabase != "")
+	if (App.m_strConnection != "")
 	{
 		strTitle += " [";
-		strTitle += App.m_strDatabase;
+		strTitle += App.m_strConnection;
 		strTitle += "]";
 	}
 
@@ -151,4 +175,27 @@ void CAppWnd::UpdateTitle()
 	}
 
 	Title(strTitle);
+}
+
+/******************************************************************************
+** Method:		OnDropFile()
+**
+** Description:	The user has drag'n'dropped one or more files onto the window.
+**
+** Parameters:	nFile		The index of the dropped file.
+**				pszPath		The files' path.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppWnd::OnDropFile(int nFile, const char* pszPath)
+{
+	ASSERT(nFile   >= 0);
+	ASSERT(pszPath != NULL);
+
+	// Only load the first file.
+	if (nFile == 0)
+		App.m_AppCmds.OnQueryOpen(pszPath);
 }
