@@ -96,10 +96,6 @@ SOURCE=.\AboutDlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\App.rc
-# End Source File
-# Begin Source File
-
 SOURCE=.\AppCmds.cpp
 # End Source File
 # Begin Source File
@@ -129,6 +125,10 @@ SOURCE=.\FindDlg.cpp
 # Begin Source File
 
 SOURCE=.\ParamsDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PQT.rc
 # End Source File
 # Begin Source File
 
