@@ -1,0 +1,5 @@
+- Add a find function.
+
+- Parsing of query (prompt for parameters).
+
+- Query load and save.

@@ -1,0 +1,245 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "Resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+#include "WclRsc.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.K.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "Resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""WclRsc.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "#include ""App.rcv""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_APPICON             ICON    DISCARDABLE     "App.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_APPMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Connect...\tCtrl+D",         ID_FILE_CONNECT
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit\tAlt+F4",               ID_FILE_EXIT
+    END
+    POPUP "&Query"
+    BEGIN
+        MENUITEM "&Execute...\tCtrl+E",         ID_QUERY_EXECUTE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About PQT",                  ID_HELP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAIN DIALOGEX 0, 0, 301, 201
+STYLE WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_QUERY,15,25,100,100,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    ES_WANTRETURN | WS_VSCROLL
+    CONTROL         "List1",IDC_GRID,"SysListView32",LVS_REPORT | 
+                    LVS_ALIGNLEFT | LVS_NOSORTHEADER | WS_BORDER | 
+                    WS_TABSTOP,130,25,100,100,WS_EX_CLIENTEDGE
+    CONTROL         "Tab1",IDC_TAB,"SysTabControl32",0x0,5,5,290,190
+END
+
+IDD_ABOUT DIALOG DISCARDABLE  0, 0, 142, 101
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "About PQT"
+FONT 8, "MS Sans Serif"
+BEGIN
+    ICON            IDR_APPICON,IDC_STATIC,10,10,21,20
+    CTEXT           "Parameterised Query Tool",IDC_STATIC,40,10,90,10
+    CTEXT           "v1.0 Alpha",IDC_STATIC,40,20,90,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,10,40,120,1
+    CTEXT           "(C) Chris Oldwood 2000",IDC_STATIC,10,50,120,10
+    CTEXT           "gort@cix.co.uk",IDC_STATIC,10,59,120,10
+    DEFPUSHBUTTON   "OK",IDOK,46,80,50,15
+END
+
+IDD_CONNECT DIALOG DISCARDABLE  0, 0, 232, 50
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Connect To A Database"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "&Connection String:",IDC_STATIC,10,10,150,8
+    EDITTEXT        IDC_CONNECTION,10,20,150,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,170,10,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,170,27,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_APPTOOLBAR          BITMAP  DISCARDABLE     "Toolbar.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_APPACCEL ACCELERATORS DISCARDABLE 
+BEGIN
+    "D",            ID_FILE_CONNECT,        VIRTKEY, CONTROL, NOINVERT
+    "E",            ID_QUERY_EXECUTE,       VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_CONNECT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 225
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 43
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SYS_RESTORE         "Restore the window size and position."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SYS_MOVE            "Move the window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SYS_SIZE            "Resize the window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SYS_MINIMIZE        "Minimize the window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SYS_MAXIMIZE        "Maximize the window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SYS_CLOSE           "Close the window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SYS_SWITCH          "Switch to another application"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_POPUP           "File options"
+    ID_FILE_CONNECT         "Connect to a database"
+    ID_FILE_EXIT            "Exit PQT"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_HELP_POPUP           "Help options"
+    ID_HELP_ABOUT           "Show PQT version"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_QUERY_POPUP          "Query options"
+    ID_QUERY_EXECUTE        "Execute the query"
+END
+
+#endif    // English (U.K.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+#include "App.rcv"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
