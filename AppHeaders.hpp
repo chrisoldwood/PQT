@@ -31,7 +31,12 @@
 
 #include "Resource.h"
 
-// Main app classes.
+// App data classes.
+#include "ConConfig.hpp"
+#include "Query.hpp"
+#include "Scripts.hpp"
+
+// App GUI classes.
 #include "AppCmds.hpp"
 #include "AppToolBar.hpp"
 #include "AppDlg.hpp"
