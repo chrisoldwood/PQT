@@ -32,12 +32,20 @@ protected:
 	// Members.
 	//
 	CRow&		m_oRow;
+	CTable&		m_oTable;
 	CListView 	m_lvGrid;
+	uint		m_nSortColumn;
+	int			m_nSortOrder;
 
 	//
 	// Message handlers.
 	//
 	virtual void OnInitDialog();
+	LRESULT OnRightClick(NMHDR& rMsgHdr);
+	LRESULT OnClickColumn(NMHDR& rMsgHdr);
+
+	// Listview sort function.
+	static int CALLBACK CompareFunction(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 };
 
 /******************************************************************************
