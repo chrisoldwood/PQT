@@ -64,6 +64,8 @@
 #define IDC_WEBSITE                     1083
 #define IDC_EMAIL                       1084
 #define IDC_VERSION                     1085
+#define IDC_PARAM_VALUE                 2000
+#define IDC_PARAM_NAME                  2500
 #define IDD_MAIN                        5000
 #define IDD_ABOUT                       5001
 #define IDD_CONNECT                     5002
@@ -73,6 +75,7 @@
 #define IDD_DSNS                        5006
 #define IDD_DRIVERS                     5007
 #define IDD_FIND                        5008
+#define IDD_PARAMETERS                  5009
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
@@ -80,9 +83,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        124
+#define _APS_NEXT_RESOURCE_VALUE        125
 #define _APS_NEXT_COMMAND_VALUE         143
-#define _APS_NEXT_CONTROL_VALUE         1071
+#define _APS_NEXT_CONTROL_VALUE         1073
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

@@ -1,7 +1,7 @@
-- Parsing of query (prompt for parameters).
-
 - Toolbar buttons & tooltips.
 
 - HelpFile.
 
 - Better formatting on results printing.
+
+- Scripts menu to include folders.
