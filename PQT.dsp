@@ -333,6 +333,10 @@ SOURCE=.\ReadMe.txt
 # End Source File
 # Begin Source File
 
+SOURCE=.\RelNotes.txt
+# End Source File
+# Begin Source File
+
 SOURCE=.\TODO.Txt
 # End Source File
 # End Target
