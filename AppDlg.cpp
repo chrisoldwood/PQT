@@ -10,6 +10,7 @@
 
 #include "AppHeaders.hpp"
 #include <stdio.h>
+#include "RowDataDlg.hpp"
 
 /******************************************************************************
 ** Method:		Default constructor.
@@ -34,6 +35,11 @@ CAppDlg::CAppDlg() : CMainDlg(IDD_MAIN)
 	DEFINE_GRAVITY_TABLE
 		CTRLGRAV(IDC_TAB, LEFT_EDGE, TOP_EDGE, RIGHT_EDGE, BOTTOM_EDGE)
 	END_GRAVITY_TABLE
+
+	DEFINE_CTRLMSG_TABLE
+		NFY_CTRLMSG(IDC_GRID, NM_DBLCLK,   OnGridDblClick)
+		NFY_CTRLMSG(IDC_GRID, LVN_KEYDOWN, OnGridKeyDown )
+	END_CTRLMSG_TABLE
 }
 
 /******************************************************************************
@@ -62,6 +68,7 @@ void CAppDlg::OnInitDialog()
 	// Set grid style.
 	m_lvGrid.FullRowSelect(true);
 	m_lvGrid.GridLines(true);
+	m_lvGrid.NullValue(App.m_strNull);
 }
 
 /******************************************************************************
@@ -96,11 +103,13 @@ void CAppDlg::DisplayTable(const CTable& oTable)
 	{
 		const CColumn& oColumn = oTable.Column(i);
 
-		pColumns[i].m_pszName   = oColumn.Name();
-		pColumns[i].m_nWidth    = m_lvGrid.StringWidth(oColumn.DisplayWidth()) + 15;
-		pColumns[i].m_nAlign    = LVCFMT_LEFT;
-		pColumns[i].m_nField    = i;
-		pColumns[i].m_pszFormat = NULL;
+		// Compute col width in chars, clipping to app settings.
+		int nColWidth = min(max(oColumn.DisplayWidth(), App.m_nMinWidth), App.m_nMaxWidth);
+
+		pColumns[i].m_strName = oColumn.Name();
+		pColumns[i].m_nWidth  = m_lvGrid.StringWidth(nColWidth) + 15;
+		pColumns[i].m_nAlign  = LVCFMT_LEFT;
+		pColumns[i].m_nField  = i;
 	}
 
 	// Load the grid.
@@ -110,4 +119,79 @@ void CAppDlg::DisplayTable(const CTable& oTable)
 	// Turn painting back on.
 	m_lvGrid.Redraw(true);
 	m_lvGrid.Invalidate();
+
+	// Cleanup.
+	delete[] pColumns;
+}
+
+/******************************************************************************
+** Method:		OnGridDblClick()
+**
+** Description:	Grid row double-clicked.
+**
+** Parameters:	rMsgHdr		The message details.
+**
+** Returns:		0.
+**
+*******************************************************************************
+*/
+
+LRESULT CAppDlg::OnGridDblClick(NMHDR&)
+{
+	if (m_lvGrid.IsSelection())
+		ShowRowDetails();
+
+	return 0;
+}
+
+/******************************************************************************
+** Method:		OnGridKeyDown()
+**
+** Description:	Key pressed on grid.
+**
+** Parameters:	rMsgHdr		The message details.
+**
+** Returns:		0.
+**
+*******************************************************************************
+*/
+
+LRESULT CAppDlg::OnGridKeyDown(NMHDR& oNMHdr)
+{
+	NMLVKEYDOWN& oMsg = reinterpret_cast<NMLVKEYDOWN&>(oNMHdr);
+
+	// User pressed ENTER key?
+	if (m_lvGrid.IsSelection() && (oMsg.wVKey == VK_RETURN))
+		ShowRowDetails();
+
+	return 0;
+}
+
+/******************************************************************************
+** Method:		ShowRowDetails()
+**
+** Description:	Shows a dialog which displays the row details in full for the
+**				selected row.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppDlg::ShowRowDetails()
+{
+	// Is a selection?
+	if (m_lvGrid.IsSelection())
+	{
+		// Get the current selection.
+		int   nRow = m_lvGrid.Selected();
+		CRow& oRow = m_lvGrid.Row(nRow);
+
+		CRowDataDlg Dlg(oRow);
+
+		// Show dialog.
+		Dlg.RunModal(*this);
+	}
 }
