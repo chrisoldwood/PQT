@@ -1,7 +1,7 @@
 /******************************************************************************
-** (C) Chris Wood 1998
+** (C) Chris Oldwood
 **
-** MODULE:		APP15.RCV
+** MODULE:		APP.RCV
 ** COMPONENT:	The Application.
 ** DESCRIPTION:	The application version information resource.
 **
@@ -26,7 +26,7 @@ FILEFLAGS		VS_FF_DEBUG | VS_FF_PRERELEASE
 #else
 FILEFLAGS		0
 #endif
-FILEOS			VOS_DOS_WINDOWS16
+FILEOS			VOS_DOS_WINDOWS32
 FILETYPE		VFT_APP
 FILESUBTYPE		VFT_UNKNOWN
 BEGIN
@@ -34,14 +34,16 @@ BEGIN
 	BEGIN
 		BLOCK "040904E4"
 		BEGIN
-			VALUE "CompanyName", "Comgraphix Ltd\0"
-			VALUE "FileDescription", "Parameterised Query Tool\0"
-			VALUE "FileVersion", "1.0\0"
-			VALUE "InternalName", "PQT.exe\0"
-			VALUE "LegalCopyright", "(C) Chris Oldwood 2000\0"
+			VALUE "FileDescription",  "Parameterised Query Tool\0"
+			VALUE "FileVersion",      "1.0 Alpha\0"
+			VALUE "InternalName",     "PQT.exe\0"
+			VALUE "LegalCopyright",   "(C) Chris Oldwood 2002\0"
 			VALUE "OriginalFilename", "PQT.exe\0"
-			VALUE "ProductName", "Parameterised Query Tool\0"
-			VALUE "ProductVersion", "1.0\0"
+			VALUE "ProductName",      "Parameterised Query Tool\0"
+			VALUE "ProductVersion",   "1.0 Alpha\0"
+#ifdef _DEBUG
+			VALUE "Comments",         "Debug Build\0"
+#endif
 		END
 	END
 	BLOCK "VarFileInfo"
