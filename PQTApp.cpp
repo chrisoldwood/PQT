@@ -93,7 +93,7 @@ bool CPQTApp::OnOpen()
 	m_AppCmds.UpdateUI();
 
 	// Prompt for connection.
-	m_AppWnd.PostCommand(ID_FILE_CONNECT);
+	m_AppWnd.PostCommand(ID_DB_CONNECT);
 
 	return true;
 }
