@@ -96,7 +96,7 @@ void CAppCmds::OnFileConnect()
 		catch(CSQLException& e)
 		{
 			// Notify user.
-			App.AlertMsg(e.ErrorText());
+			App.AlertMsg(e.m_strError);
 		}
 
 		UpdateUI();
@@ -178,7 +178,7 @@ void CAppCmds::OnQueryExecute()
 	catch(CSQLException& e)
 	{
 		// Notify user.
-		App.AlertMsg(e.ErrorText());
+		App.AlertMsg(e.m_strError);
 	}
 }
 
