@@ -52,6 +52,11 @@ CPQTApp::CPQTApp()
 	, m_nLastFindRow(-1)
 	, m_nLastFindCol(-1)
 	, m_oScripts(m_oMDB)
+	, m_oMRUList(5)
+	, m_pCurrConn(NULL)
+	, m_nMinWidth(6)
+	, m_nMaxWidth(25)
+	, m_strNull("(null)")
 {
 }
 
@@ -88,9 +93,6 @@ bool CPQTApp::OnOpen()
 	// Set the app title.
 	m_strTitle = "P.Q.T.";
 
-	// Set the query file name.
-//	m_strQueryFile = "Untitled";
-
 	// Load settings.
 	LoadDefaults();
 	
@@ -100,6 +102,9 @@ bool CPQTApp::OnOpen()
 	// Create the main window.
 	if (!m_AppWnd.Create())
 		return false;
+
+	// Initialise the MRU list.
+	m_oMRUList.UpdateMenu(*m_AppWnd.Menu(), ID_DB_MRU_1);
 
 	// Show it.
 	if ( (m_iCmdShow == SW_SHOWNORMAL) && (m_rcLastPos.Empty() == false) )
@@ -144,7 +149,7 @@ bool CPQTApp::OnClose()
 
 	// Cleanup.	
 	delete m_pQuery;
-	m_aConConfigs.DeleteAll();
+	m_apConConfigs.DeleteAll();
 
 	return true;
 }
@@ -173,9 +178,9 @@ void CPQTApp::LoadDefaults()
 	m_rcLastPos.bottom = m_oIniFile.ReadInt("Main", "Bottom", 0);
 
 	// Read the results preferences.
-	m_nMinWidth = m_oIniFile.ReadInt   ("Results", "MinWidth",  6);
-	m_nMaxWidth = m_oIniFile.ReadInt   ("Results", "MaxWidth",  25);
-	m_strNull   = m_oIniFile.ReadString("Results", "NullValue", "(null)");
+	m_nMinWidth = m_oIniFile.ReadInt   ("Results", "MinWidth",  m_nMinWidth);
+	m_nMaxWidth = m_oIniFile.ReadInt   ("Results", "MaxWidth",  m_nMaxWidth);
+	m_strNull   = m_oIniFile.ReadString("Results", "NullValue", m_strNull);
 
 	// Read the connection list.
 	int nConnections = m_oIniFile.ReadInt("Main", "NumConnections", 0);
@@ -200,14 +205,17 @@ void CPQTApp::LoadDefaults()
 
 		// Add to collection, if it is valid.
 		if (!pConConfig->m_strName.Empty())
-			m_aConConfigs.Add(*pConConfig);
+			m_apConConfigs.Add(pConConfig);
 		else
 			delete pConConfig;
 	}
 
 	// Validate settings.
-	if (m_nDefConnection >= m_aConConfigs.Size())
-		m_nDefConnection = 0;
+	if (m_nDefConnection >= m_apConConfigs.Size())
+		m_nDefConnection = -1;
+
+	// Load MRU list.
+	m_oMRUList.Load(m_oIniFile);
 }
 
 /******************************************************************************
@@ -239,24 +247,27 @@ void CPQTApp::SaveDefaults()
 	m_oIniFile.WriteString("Results", "NullValue", m_strNull  );
 
 	// Write the connection list.
-	m_oIniFile.WriteInt("Main", "NumConnections", m_aConConfigs.Size());
+	m_oIniFile.WriteInt("Main", "NumConnections", m_apConConfigs.Size());
 
-	for (int i = 0; i < m_aConConfigs.Size(); i++)
+	for (int i = 0; i < m_apConConfigs.Size(); i++)
 	{
-		CConConfig& oConConfig = m_aConConfigs[i];
+		CConConfig* pConConfig = m_apConConfigs[i];
 		CString     strSection;
 
 		// Create the section name.
 		strSection.Format("Connection%d", i);
 
 		// Write the section.
-		m_oIniFile.WriteString(strSection, "Name",     oConConfig.m_strName);
-		m_oIniFile.WriteString(strSection, "DSN",      oConConfig.m_strDSN);
-		m_oIniFile.WriteString(strSection, "Driver",   oConConfig.m_strDriver);
-		m_oIniFile.WriteString(strSection, "Server",   oConConfig.m_strServer);
-		m_oIniFile.WriteString(strSection, "Database", oConConfig.m_strDatabase);
-		m_oIniFile.WriteString(strSection, "File",     oConConfig.m_strFile);
-		m_oIniFile.WriteString(strSection, "Login",    oConConfig.m_strLogin);
-		m_oIniFile.WriteString(strSection, "Scripts",  oConConfig.m_strSQLDir);
+		m_oIniFile.WriteString(strSection, "Name",     pConConfig->m_strName);
+		m_oIniFile.WriteString(strSection, "DSN",      pConConfig->m_strDSN);
+		m_oIniFile.WriteString(strSection, "Driver",   pConConfig->m_strDriver);
+		m_oIniFile.WriteString(strSection, "Server",   pConConfig->m_strServer);
+		m_oIniFile.WriteString(strSection, "Database", pConConfig->m_strDatabase);
+		m_oIniFile.WriteString(strSection, "File",     pConConfig->m_strFile);
+		m_oIniFile.WriteString(strSection, "Login",    pConConfig->m_strLogin);
+		m_oIniFile.WriteString(strSection, "Scripts",  pConConfig->m_strSQLDir);
 	}
+
+	// Save MRU list.
+	m_oMRUList.Save(m_oIniFile);
 }

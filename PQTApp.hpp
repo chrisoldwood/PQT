@@ -13,7 +13,7 @@
 #define PQTAPP_HPP
 
 // Template shorthands.
-typedef TRefArray<CConConfig> TConConfigs;
+typedef TPtrArray<CConConfig> CConConfigs;
 
 /******************************************************************************
 ** 
@@ -38,7 +38,6 @@ public:
 	CAppCmds	m_AppCmds;
 
 	int			m_nDefConnection;
-	CString		m_strConnection;
 	CPath		m_strQueryFile;
 	CODBCSource	m_oConnection;
 	CMDB		m_oMDB;
@@ -47,8 +46,10 @@ public:
 	int			m_nLastFindRow;
 	int			m_nLastFindCol;
 	CScripts	m_oScripts;
+	CMRUList	m_oMRUList;
 
-	TConConfigs	m_aConConfigs;
+	CConConfigs	m_apConConfigs;
+	CConConfig* m_pCurrConn;
 	CRect		m_rcLastPos;
 	int			m_nMinWidth;
 	int			m_nMaxWidth;
