@@ -263,6 +263,70 @@ SOURCE=.\App.rcv
 SOURCE=.\Toolbar.bmp
 # End Source File
 # End Group
+# Begin Group "Scripts"
+
+# PROP Default_Filter ""
+# Begin Group "Northwind"
+
+# PROP Default_Filter ""
+# End Group
+# Begin Group "Pubs"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Scripts\Pubs\Authors.sql
+# End Source File
+# Begin Source File
+
+SOURCE=.\Scripts\Pubs\Publishers.sql
+# End Source File
+# End Group
+# Begin Group "UK-Locals"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=".\Scripts\UK-Locals\All Customers.sql"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Scripts\UK-Locals\All Deals.sql"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Scripts\UK-Locals\All Instruments.sql"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Scripts\UK-Locals\All Target Customers.sql"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Scripts\UK-Locals\All Users.sql"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Scripts\UK-Locals\Find Customer By ID.sql"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Scripts\UK-Locals\Find Customer By Name.sql"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Scripts\UK-Locals\Find Customers Deals.sql"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Scripts\UK-Locals\Find User By ID.sql"
+# End Source File
+# End Group
+# End Group
+# Begin Source File
+
+SOURCE=.\PQT.ini
+# End Source File
 # Begin Source File
 
 SOURCE=.\ReadMe.txt
