@@ -100,13 +100,16 @@ void CTableGrid::Columns(int nColumns, Column* pColumns)
 	{
 		DeleteAllColumns();
 
+		// Add row number colun.
+		InsertColumn(0, "#", 50);
+
 		// Setup the grid columns.
 		for (int c = 0; c < nColumns; c++)
 		{
 			Column* pColumn = new Column(pColumns[c]);
 
 			m_oColumns.Add(*pColumn);
-			InsertColumn(c, pColumn->m_strName, pColumn->m_nWidth, pColumn->m_nAlign);
+			InsertColumn(c+1, pColumn->m_strName, pColumn->m_nWidth, pColumn->m_nAlign);
 		}
 	}
 }
@@ -183,7 +186,12 @@ void CTableGrid::AddRows(const CResultSet& oRS, bool bReSort, int nSel)
 
 int CTableGrid::AddRow(const CRow& oRow, bool bReSort, bool bSelect)
 {
-	int nRow = AppendItem(FieldValue(0, oRow), &oRow);
+	char szRow[100];
+
+	int nRow = AppendItem("", &oRow);
+
+	// Set the row number.
+	ItemText(nRow, 0, itoa(nRow+1, szRow, 10));
 
 	return UpdateRow(nRow, bReSort, bSelect);
 }
@@ -207,8 +215,8 @@ int CTableGrid::UpdateRow(int nRow, bool bReSort, bool bSelect)
 	CRow& oRow = Row(nRow);
 
 	// For all grid columns.
-	for (int i = 0; i < NumColumns(); i++)
-		ItemText(nRow, i, FieldValue(i, oRow));
+	for (int i = 0; i < m_oColumns.Size(); i++)
+		ItemText(nRow, i+1, FieldValue(i, oRow));
 
 	// Re-sort the row?
 	if (bReSort)
