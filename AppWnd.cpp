@@ -134,6 +134,21 @@ void CAppWnd::OnFocus()
 
 bool CAppWnd::OnQueryClose()
 {
+	// If query modified, query to save.
+	if (App.m_bModified)
+	{
+		int nResult = QueryMsg(CAppCmds::QUERY_MODIFIED_MSG);
+
+		if (nResult == IDCANCEL)
+			return false;
+
+		if (nResult == IDYES)
+		{
+			App.m_AppCmds.OnQuerySave();
+			return false;
+		}
+	}
+
 	// Fetch windows final placement.
 	App.m_rcLastPos = Placement();
 
@@ -174,6 +189,11 @@ void CAppWnd::UpdateTitle()
 	{
 		strTitle += " [";
 		strTitle += App.m_strQueryFile.FileName();
+
+		// Add modified flag, if set.
+		if (App.m_bModified)
+			strTitle += " *";
+
 		strTitle += "]";
 	}
 
