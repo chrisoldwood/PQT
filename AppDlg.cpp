@@ -53,7 +53,7 @@ void CAppDlg::OnInitDialog()
 	// Add the tabs.
 	m_tcTabCtrl.AddTab("Query",   m_ebQuery);
 	m_tcTabCtrl.AddTab("Results", m_lvGrid);
-	m_tcTabCtrl.CurSel(0);
+	m_tcTabCtrl.CurSel(QUERY_TAB);
 
 	// Use a fixed pitch font for the query/results.
 	m_ebQuery.Font(CFont(ANSI_FIXED_FONT));
@@ -79,7 +79,7 @@ void CAppDlg::OnInitDialog()
 void CAppDlg::DisplayTable(const CTable& oTable)
 {
 	// Turn off painting.
-	m_lvGrid.CanRedraw(false);
+	m_lvGrid.Redraw(false);
 
 	// Clear grid.
 	m_lvGrid.DeleteAllItems();
@@ -88,134 +88,26 @@ void CAppDlg::DisplayTable(const CTable& oTable)
 	// Tell list view how many rows we're adding.
 	m_lvGrid.Reserve(oTable.RowCount());
 
-	// Add the row number column.
-	m_lvGrid.InsertColumn(0, "#", m_lvGrid.StringWidth(3) + 15);
+	// Allocate the columns array.
+	CTableGrid::Column* pColumns = new CTableGrid::Column[oTable.ColumnCount()];
 
 	// Setup the columns.
 	for (int i = 0; i < oTable.ColumnCount(); i++)
 	{
 		const CColumn& oColumn = oTable.Column(i);
 
-		const char* pszName = oColumn.Name();
-		int         nWidth  = m_lvGrid.StringWidth(strlen(pszName)) + 15;
-
-		m_lvGrid.InsertColumn(i+1, pszName, nWidth);
+		pColumns[i].m_pszName   = oColumn.Name();
+		pColumns[i].m_nWidth    = m_lvGrid.StringWidth(oColumn.DisplayWidth()) + 15;
+		pColumns[i].m_nAlign    = LVCFMT_LEFT;
+		pColumns[i].m_nField    = i;
+		pColumns[i].m_pszFormat = NULL;
 	}
 
-	int nCharWidth = m_lvGrid.StringWidth(1);
-
-	// Create column width buffers.
-	int* aiWidths = (int*) calloc(sizeof(int), oTable.ColumnCount());
-
-	// Add the rows.
-	for (int r = 0; r < oTable.RowCount(); r++)
-	{
-		const CRow& oRow = oTable[r];
-
-		// Add the row to the grid.
-		char szRowNum[20];
-
-		m_lvGrid.AddItem(itoa(r+1, szRowNum, 10));
-
-		// For all columns.
-		for (int c = 0; c < oTable.ColumnCount(); c++)
-		{
-			const CField& oField = oRow[c];
-
-			// Nothing to display?
-			if (oField == null)
-				continue;
-
-			char		szValue[100];
-			CString		strValue;
-			const char* pszField = NULL;
-
-			// Convert values.
-			switch (oTable.Column(c).ColType())
-			{
-				// 32-bit integer.
-				case MDCT_INT:
-				case MDCT_IDENTITY:
-				{
-					sprintf(szValue, "%d", oField.GetInt());
-					pszField = szValue;
-				}
-				break;
-
-				// 64-bit floating-point.
-				case MDCT_DOUBLE:
-				{
-					sprintf(szValue, "%f", oField.GetDouble());
-					pszField = szValue;
-				}
-				break;
-
-				// Single character.
-				case MDCT_CHAR:
-				{
-					sprintf(szValue, "%c", oField.GetChar());
-					pszField = szValue;
-				}
-				break;
-
-				// Character string.
-				case MDCT_FXDSTR:
-				case MDCT_VARSTR:
-				{
-					pszField = oField.GetString();
-				}
-				break;
-
-				// Boolean (true/false).
-				case MDCT_BOOL:
-				{
-					pszField = (oField.GetBool() == true) ? "Yes" : "No";
-				}
-				break;
-
-				// Date & Time as time_t.
-				case MDCT_DATETIME:
-				{
-					time_t tTime = oField;
-					strftime(szValue, sizeof(szValue), "%d/%m/%Y %H:%M:%S", localtime(&tTime));
-					pszField = szValue;
-				}
-				break;
-
-				// Date & Time as CTimeStamp.
-				case MDCT_TIMESTAMP:
-				{
-					const CTimeStamp& tTime = oField;
-					strValue = tTime.ToString();
-					pszField = strValue;
-				}
-				break;
-			}
-
-			int nWidth = 15;
-
-			// Show it!
-			if (pszField != NULL)
-			{
-				m_lvGrid.ItemText(r, c+1, pszField);
-
-				if (strlen(pszField) < 30)
-					nWidth += nCharWidth * strlen(pszField);
-			}
-
-			// Update column width.
-			if (nWidth > aiWidths[c])
-				aiWidths[c] = nWidth;
-		}
-	}
-
-	// Set column widths.
-	for (i = 0; i < oTable.ColumnCount(); i++)
-		ListView_SetColumnWidth(m_lvGrid.Handle(), i+1, aiWidths[i]);
-
-	free(aiWidths);
+	// Load the grid.
+	m_lvGrid.Columns(oTable.ColumnCount(), pColumns);
+	m_lvGrid.AddRows(oTable, false, 0);
 
 	// Turn painting back on.
-	m_lvGrid.CanRedraw(true);
+	m_lvGrid.Redraw(true);
 	m_lvGrid.Invalidate();
 }

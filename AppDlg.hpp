@@ -12,6 +12,8 @@
 #ifndef APPDLG_HPP
 #define APPDLG_HPP
 
+#include "TableGrid.hpp"
+
 /******************************************************************************
 ** 
 ** This is the main application dialog.
@@ -44,7 +46,7 @@ public:
 	//
 	CTabWndHost	m_tcTabCtrl;
 	CEditBox	m_ebQuery;
-	CListView	m_lvGrid;
+	CTableGrid	m_lvGrid;
 
 protected:
 	//
