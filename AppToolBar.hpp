@@ -31,7 +31,14 @@ public:
 	//
 	// Members.
 	//
-	CCmdButton	m_HelpBtn;
+	CCmdButton	m_btnOpenDB;
+	CCmdButton	m_btnCloseDB;
+	CCmdButton	m_btnNewQuery;
+	CCmdButton	m_btnOpenQuery;
+	CCmdButton	m_btnSaveQuery;
+	CCmdButton	m_btnExecQuery;
+	CCmdButton	m_btnExecFile;
+	CCmdButton	m_btnHelp;
 };
 
 /******************************************************************************
