@@ -32,12 +32,23 @@ public:
 	// Commands.
 	//
 
-	// File menu.
-	void OnFileConnect();
-	void OnFileExit();
+	// Database menu.
+	void OnDBConnect();
+	void OnDBDisconnect();
+	void OnDBExit();
 
 	// Query menu.
-	void OnQueryExecute();
+	void OnQueryNew();
+	void OnQueryOpen();
+	void OnQuerySaveAs();
+
+	// Execute menu.
+	void OnExecCurrent();
+	void OnExecFile();
+
+	// Window menu.
+	void OnWindowQuery();
+	void OnWindowResults();
 
 	// Help menu.
 	void OnHelpAbout();
@@ -45,7 +56,9 @@ public:
 	//
 	// UI handlers.
 	//
-	void OnUIQueryExecute();
+	void OnUIDBDisconnect();
+	void OnUIExecCurrent();
+	void OnUIExecFile();
 
 protected:
 	//

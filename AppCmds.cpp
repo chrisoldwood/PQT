@@ -12,6 +12,20 @@
 #include "AboutDlg.hpp"
 #include "ConnectDlg.hpp"
 
+
+/******************************************************************************
+**
+** Local variables.
+**
+*******************************************************************************
+*/
+
+static char szExts[] = {	"SQL Scripts (*.sql)\0*.sql\0"
+							"All Files (*.*)\0*.*\0"
+							"\0\0"							};
+
+static char szDefExt[] = { "sql" };
+
 /******************************************************************************
 ** Method:		Constructor.
 **
@@ -28,10 +42,17 @@ CAppCmds::CAppCmds()
 {
 	// Define the command table.
 	DEFINE_CMD_TABLE
-		CMD_ENTRY(ID_FILE_CONNECT,	OnFileConnect,	NULL,				-1)
-		CMD_ENTRY(ID_FILE_EXIT,		OnFileExit,		NULL,				-1)
-		CMD_ENTRY(ID_QUERY_EXECUTE,	OnQueryExecute,	OnUIQueryExecute,	-1)
-		CMD_ENTRY(ID_HELP_ABOUT,	OnHelpAbout,	NULL,				-1)
+		CMD_ENTRY(ID_DB_CONNECT,		OnDBConnect,		NULL,				-1)
+		CMD_ENTRY(ID_DB_DISCONNECT,		OnDBDisconnect,		OnUIDBDisconnect,	-1)
+		CMD_ENTRY(ID_DB_EXIT,			OnDBExit,			NULL,				-1)
+		CMD_ENTRY(ID_QUERY_NEW,			OnQueryNew,			NULL,				-1)
+		CMD_ENTRY(ID_QUERY_OPEN,		OnQueryOpen,		NULL,				-1)
+		CMD_ENTRY(ID_QUERY_SAVEAS,		OnQuerySaveAs,		NULL,				-1)
+		CMD_ENTRY(ID_EXEC_CURRENT,		OnExecCurrent,		OnUIExecCurrent,	-1)
+		CMD_ENTRY(ID_EXEC_FILE,			OnExecFile,			OnUIExecFile,		-1)
+		CMD_ENTRY(ID_WINDOW_QUERY,		OnWindowQuery,		NULL,				-1)
+		CMD_ENTRY(ID_WINDOW_RESULTS,	OnWindowResults,	NULL,				-1)
+		CMD_ENTRY(ID_HELP_ABOUT,		OnHelpAbout,		NULL,				-1)
 	END_CMD_TABLE
 }
 
@@ -52,7 +73,7 @@ CAppCmds::~CAppCmds()
 }
 
 /******************************************************************************
-** Method:		OnFileConnect()
+** Method:		OnDBConnect()
 **
 ** Description:	Prompt the user for a connection string and open the database
 **				connection.
@@ -64,7 +85,7 @@ CAppCmds::~CAppCmds()
 *******************************************************************************
 */
 
-void CAppCmds::OnFileConnect()
+void CAppCmds::OnDBConnect()
 {
 	CConnectDlg Dlg;
 
@@ -105,7 +126,29 @@ void CAppCmds::OnFileConnect()
 }
 
 /******************************************************************************
-** Method:		OnFileExit()
+** Method:		OnDBDisconnect()
+**
+** Description:	Close the current database connection.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppCmds::OnDBDisconnect()
+{
+	// Close connection, if open.
+	if (App.m_oConnection.IsOpen())
+		App.m_oConnection.Close();
+
+	UpdateUI();
+	App.m_AppWnd.UpdateTitle();
+}
+
+/******************************************************************************
+** Method:		OnDBExit()
 **
 ** Description:	Terminate the app.
 **
@@ -116,13 +159,123 @@ void CAppCmds::OnFileConnect()
 *******************************************************************************
 */
 
-void CAppCmds::OnFileExit()
+void CAppCmds::OnDBExit()
 {
 	App.m_AppWnd.Close();
 }
 
 /******************************************************************************
-** Method:		OnQueryExecute()
+** Method:		OnQueryNew()
+**
+** Description:	Delete the contents of the query window.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppCmds::OnQueryNew()
+{
+	// Empty the window contents.
+	App.m_AppWnd.m_AppDlg.m_ebQuery.Text("");
+}
+
+/******************************************************************************
+** Method:		OnQueryOpen()
+**
+** Description:	Load a query from a file.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppCmds::OnQueryOpen()
+{
+	CPath strPath;
+
+	// Select the file to open.
+	if (!strPath.Select(App.m_AppWnd, CPath::OpenFile, szExts, szDefExt))
+		return;
+
+	try
+	{
+		CFile oFile;
+
+		// Open, for reading.
+		oFile.Open(strPath, CStream::ReadOnly);
+
+		// Get the files' length.
+		long lLength = oFile.Seek(0, CFile::End);
+		oFile.Seek(0);
+
+		// Allocate a read buffer + EOL char.
+		char* pszQuery = (char*) _alloca(lLength+1);
+
+		// Read the file and close it.
+		oFile.Read(pszQuery, lLength);
+		oFile.Close();
+
+		// Ensure the query string has an EOL char.
+		pszQuery[lLength] = '\0';
+
+		// Load the query into the text editor.
+		App.m_AppWnd.m_AppDlg.m_ebQuery.Text(pszQuery);
+	}
+	catch(CFileException& e)
+	{
+		// Notify user.
+		App.AlertMsg(e.ErrorText());
+	}
+}
+
+/******************************************************************************
+** Method:		OnQuerySaveAs()
+**
+** Description:	Save the current query to a file.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppCmds::OnQuerySaveAs()
+{
+	CPath strPath;
+
+	// Select the file to open.
+	if (!strPath.Select(App.m_AppWnd, CPath::SaveFile, szExts, szDefExt))
+		return;
+
+	// Get the query text.
+	CString strQuery = App.m_AppWnd.m_AppDlg.m_ebQuery.Text();
+
+	try
+	{
+		CFile oFile;
+
+		// Open, for reading.
+		oFile.Create(strPath);
+
+		// Write the file and close it.
+		oFile.Write(strQuery, strQuery.Length());
+		oFile.Close();
+	}
+	catch(CFileException& e)
+	{
+		// Notify user.
+		App.AlertMsg(e.ErrorText());
+	}
+}
+
+/******************************************************************************
+** Method:		OnExecCurrent()
 **
 ** Description:	Execute the current query.
 **
@@ -133,7 +286,7 @@ void CAppCmds::OnFileExit()
 *******************************************************************************
 */
 
-void CAppCmds::OnQueryExecute()
+void CAppCmds::OnExecCurrent()
 {
 	// Get the query text.
 	CString strQuery = App.m_AppWnd.m_AppDlg.m_ebQuery.Text();
@@ -142,37 +295,14 @@ void CAppCmds::OnQueryExecute()
 	{
 		CBusyCursor	oBusy;
 
-		CTable& oTable = App.m_oMDB.CreateTable("market");
-
-		oTable.AddColumn("marketid",   MDCT_FXDSTR,    3, CColumn::NOT_NULLABLE);
-		oTable.AddColumn("name",       MDCT_FXDSTR,   40, CColumn::NOT_NULLABLE);
-		oTable.AddColumn("statusdate", MDCT_DATETIME,  0, CColumn::NULLABLE);
-		oTable.AddColumn("rowid",      MDCT_INT,       0, CColumn::NOT_NULLABLE);
-
-		oTable << App.m_oConnection;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
 		// Execute the query.
 		CTable& oTable = App.m_oMDB.CreateTable("Query", App.m_oConnection, strQuery);
-*/
 
 		// Load the table and switch to the results view.
 		App.m_AppWnd.m_AppDlg.DisplayTable(oTable);
 		App.m_AppWnd.m_AppDlg.m_tcTabCtrl.CurSel(CAppDlg::RESULTS_TAB);
+
+		// Cleanup.
 		delete &oTable;
 	}
 	catch(CSQLException& e)
@@ -180,6 +310,94 @@ void CAppCmds::OnQueryExecute()
 		// Notify user.
 		App.AlertMsg(e.m_strError);
 	}
+}
+
+/******************************************************************************
+** Method:		OnExecFile()
+**
+** Description:	Execute a query stored in an external file.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppCmds::OnExecFile()
+{
+	CPath strPath;
+
+	// Select the file to open.
+	if (!strPath.Select(App.m_AppWnd, CPath::OpenFile, szExts, szDefExt))
+		return;
+
+	try
+	{
+		CFile oFile;
+
+		// Open, for reading.
+		oFile.Open(strPath, CStream::ReadOnly);
+
+		// Get the files' length.
+		long lLength = oFile.Seek(0, CFile::End);
+		oFile.Seek(0);
+
+		// Allocate a read buffer + EOL char.
+		char* pszQuery = (char*) _alloca(lLength+1);
+
+		// Read the file and close it.
+		oFile.Read(pszQuery, lLength);
+		oFile.Close();
+
+		// Ensure the query string has an EOL char.
+		pszQuery[lLength] = '\0';
+
+		// Load the query into the text editor.
+		App.m_AppWnd.m_AppDlg.m_ebQuery.Text(pszQuery);
+
+		// Exec it.
+		OnExecCurrent();
+	}
+	catch(CFileException& e)
+	{
+		// Notify user.
+		App.AlertMsg(e.ErrorText());
+	}
+}
+
+/******************************************************************************
+** Method:		OnWindowQuery()
+**
+** Description:	Switch to the query window.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppCmds::OnWindowQuery()
+{
+	App.m_AppWnd.m_AppDlg.m_tcTabCtrl.CurSel(CAppDlg::QUERY_TAB);
+}
+
+/******************************************************************************
+** Method:		OnWindowResults()
+**
+** Description:	Switch to the results window.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppCmds::OnWindowResults()
+{
+	App.m_AppWnd.m_AppDlg.m_tcTabCtrl.CurSel(CAppDlg::RESULTS_TAB);
 }
 
 /******************************************************************************
@@ -213,10 +431,23 @@ void CAppCmds::OnHelpAbout()
 *******************************************************************************
 */
 
-void CAppCmds::OnUIQueryExecute()
+void CAppCmds::OnUIDBDisconnect()
 {
 	bool bConnected = App.m_oConnection.IsOpen();
 
-	App.m_AppWnd.m_Menu.EnableCmd(ID_QUERY_EXECUTE, bConnected);
-//	App.m_AppWnd.m_ToolBar.m_?Btn.Enable(bConnected);
+	App.m_AppWnd.m_Menu.EnableCmd(ID_DB_DISCONNECT, bConnected);
+}
+
+void CAppCmds::OnUIExecCurrent()
+{
+	bool bConnected = App.m_oConnection.IsOpen();
+
+	App.m_AppWnd.m_Menu.EnableCmd(ID_EXEC_CURRENT, bConnected);
+}
+
+void CAppCmds::OnUIExecFile()
+{
+	bool bConnected = App.m_oConnection.IsOpen();
+
+	App.m_AppWnd.m_Menu.EnableCmd(ID_EXEC_FILE, bConnected);
 }
