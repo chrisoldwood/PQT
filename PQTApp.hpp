@@ -54,6 +54,11 @@ public:
 	int			m_nMaxWidth;
 	CString		m_strNull;
 
+	//
+	// Constants.
+	//
+	static const char* VERSION;
+
 protected:
 	//
 	// Startup and Shutdown template methods.

@@ -21,6 +21,19 @@
 CPQTApp App;
 
 /******************************************************************************
+**
+** Class constants.
+**
+*******************************************************************************
+*/
+
+#ifdef _DEBUG
+const char* CPQTApp::VERSION      = "v1.0 Alpha [Debug]";
+#else
+const char* CPQTApp::VERSION      = "v1.0 Alpha";
+#endif
+
+/******************************************************************************
 ** Method:		Constructor
 **
 ** Description:	Default constructor.
@@ -101,8 +114,9 @@ bool CPQTApp::OnOpen()
 	// Update UI.
 	m_AppCmds.UpdateUI();
 
-	// Prompt for connection.
-	m_AppWnd.PostCommand(ID_DB_CONNECT);
+	// Prompt for connection, if running SQL script.
+	if (m_strCmdLine != "")
+		m_AppWnd.PostCommand(ID_DB_CONNECT);
 
 	return true;
 }
