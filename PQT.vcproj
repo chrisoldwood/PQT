@@ -627,37 +627,6 @@
 					RelativePath="Scripts\Pubs\Publishers.sql">
 				</File>
 			</Filter>
-			<Filter
-				Name="UK-Locals"
-				Filter="">
-				<File
-					RelativePath="Scripts\UK-Locals\All Customers.sql">
-				</File>
-				<File
-					RelativePath="Scripts\UK-Locals\All Deals.sql">
-				</File>
-				<File
-					RelativePath="Scripts\UK-Locals\All Instruments.sql">
-				</File>
-				<File
-					RelativePath="Scripts\UK-Locals\All Target Customers.sql">
-				</File>
-				<File
-					RelativePath="Scripts\UK-Locals\All Users.sql">
-				</File>
-				<File
-					RelativePath="Scripts\UK-Locals\Find Customer By ID.sql">
-				</File>
-				<File
-					RelativePath="Scripts\UK-Locals\Find Customer By Name.sql">
-				</File>
-				<File
-					RelativePath="Scripts\UK-Locals\Find Customers Deals.sql">
-				</File>
-				<File
-					RelativePath="Scripts\UK-Locals\Find User By ID.sql">
-				</File>
-			</Filter>
 		</Filter>
 		<File
 			RelativePath="PQT.ini">
