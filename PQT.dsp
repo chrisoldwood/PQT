@@ -116,11 +116,43 @@ SOURCE=.\AppWnd.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CfgConDlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ConnectDlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FindDlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\PQTApp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Query.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\QueryPrefsDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\RowDataDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Scripts.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SelDriverDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SelDSNDlg.cpp
 # End Source File
 # Begin Source File
 
@@ -156,7 +188,19 @@ SOURCE=.\AppWnd.hpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CfgConDlg.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ConConfig.hpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ConnectDlg.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\FindDlg.hpp
 # End Source File
 # Begin Source File
 
@@ -164,7 +208,31 @@ SOURCE=.\PQTApp.hpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Query.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\QueryPrefsDlg.hpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\RowDataDlg.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Scripts.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SelDriverDlg.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SelDSNDlg.hpp
 # End Source File
 # Begin Source File
 
