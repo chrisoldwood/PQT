@@ -165,7 +165,7 @@ void CParamsDlg::OnInitDialog()
 	}
 
 	// Fix the tabbing order.
-	for (i = m_pastrParams->Size()-1; i >= 0; --i)
+	for (int i = m_pastrParams->Size()-1; i >= 0; --i)
 	{
 		::BringWindowToTop(m_aoLabels[i]->Handle());
 		::BringWindowToTop(m_aoEditBoxes[i]->Handle());

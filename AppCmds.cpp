@@ -175,8 +175,10 @@ void CAppCmds::OnDBConnectMRU(int nCmdID)
 	// Get the MRU item.
 	CString strConn = App.m_oMRUList[nCmdID - ID_DB_MRU_1];
 
+	int i = 0;
+
 	// Find the connection index.
-	for (int i = 0; i < App.m_apConConfigs.Size(); ++i)
+	for (; i < App.m_apConConfigs.Size(); ++i)
 	{
 		CConConfig* pConnCfg = App.m_apConConfigs[i];
 
@@ -1358,7 +1360,7 @@ void CAppCmds::UpdateScriptsMenu()
 				App.m_oScripts.Add(ID_FIRST_SCRIPT_CMD+i, strPath, astrFiles[i]);
 
 			// Load favourite scripts menu.
-			for (i = 0; i < App.m_oScripts.RowCount(); i++)
+			for (int i = 0; i < App.m_oScripts.RowCount(); i++)
 			{
 				CRow&   oRow    = App.m_oScripts[i];
 				int     nID     = oRow[CScripts::ID];
