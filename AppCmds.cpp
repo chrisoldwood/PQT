@@ -1087,7 +1087,7 @@ void CAppCmds::OnUIDBDisconnect()
 	bool bConnected = App.m_oConnection.IsOpen();
 
 	App.m_AppWnd.m_Menu.EnableCmd(ID_DB_DISCONNECT, bConnected);
-	App.m_AppWnd.m_ToolBar.m_btnCloseDB.Enable(bConnected);
+//	App.m_AppWnd.m_ToolBar.m_btnCloseDB.Enable(bConnected);
 }
 
 void CAppCmds::OnUIExecCurrent()
@@ -1095,7 +1095,7 @@ void CAppCmds::OnUIExecCurrent()
 	bool bConnected = App.m_oConnection.IsOpen();
 
 	App.m_AppWnd.m_Menu.EnableCmd(ID_EXEC_CURRENT, bConnected);
-	App.m_AppWnd.m_ToolBar.m_btnExecQuery.Enable(bConnected);
+//	App.m_AppWnd.m_ToolBar.m_btnExecQuery.Enable(bConnected);
 }
 
 void CAppCmds::OnUIExecFile()
@@ -1103,7 +1103,7 @@ void CAppCmds::OnUIExecFile()
 	bool bConnected = App.m_oConnection.IsOpen();
 
 	App.m_AppWnd.m_Menu.EnableCmd(ID_EXEC_FILE, bConnected);
-	App.m_AppWnd.m_ToolBar.m_btnExecFile.Enable(bConnected);
+//	App.m_AppWnd.m_ToolBar.m_btnExecFile.Enable(bConnected);
 }
 
 void CAppCmds::OnUIResultsFind()

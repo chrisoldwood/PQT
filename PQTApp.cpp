@@ -28,9 +28,9 @@ CPQTApp App;
 */
 
 #ifdef _DEBUG
-const char* CPQTApp::VERSION      = "v1.0 [Debug]";
+const char* CPQTApp::VERSION      = "v1.1 [Debug]";
 #else
-const char* CPQTApp::VERSION      = "v1.0";
+const char* CPQTApp::VERSION      = "v1.1";
 #endif
 
 /******************************************************************************

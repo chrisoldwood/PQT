@@ -69,8 +69,8 @@ void CAppWnd::OnCreate(const CRect& rcClient)
 	m_Menu.LoadRsc(IDR_APPMENU);
 	Menu(&m_Menu);
 
-	m_ToolBar.Create(*this, IDC_TOOL_BAR, rcClient);
-	ToolBar(&m_ToolBar);
+//	m_ToolBar.Create(*this, IDC_TOOL_BAR, rcClient);
+//	ToolBar(&m_ToolBar);
 
 	m_StatusBar.Create(*this, IDC_STATUS_BAR, rcClient);
 	StatusBar(&m_StatusBar);
