@@ -40,7 +40,7 @@ CRowDataDlg::CRowDataDlg(CRow& oRow)
 	END_GRAVITY_TABLE
 
 	DEFINE_CTRLMSG_TABLE
-		NFY_CTRLMSG(IDC_GRID, NM_RCLICK,       OnRightClick)
+		NFY_CTRLMSG(IDC_GRID, NM_RCLICK,       OnRightClick )
 		NFY_CTRLMSG(IDC_GRID, LVN_COLUMNCLICK, OnClickColumn)
 	END_CTRLMSG_TABLE
 }
@@ -89,6 +89,9 @@ void CRowDataDlg::OnInitDialog()
 
 	// Sort listview.
 	m_lvGrid.Sort(CompareFunction, (LPARAM)this);
+
+	// Select 1st row by default.
+	m_lvGrid.Select(0);
 }
 
 /******************************************************************************
