@@ -49,6 +49,9 @@
 #define IDC_SQLDIR                      1074
 #define IDC_SQLDIRS                     1075
 #define IDC_COMPUTERS                   1076
+#define IDC_WEBSITE                     1083
+#define IDC_EMAIL                       1084
+#define IDC_VERSION                     1085
 #define IDD_MAIN                        5000
 #define IDD_ABOUT                       5001
 #define IDD_CONNECT                     5002
