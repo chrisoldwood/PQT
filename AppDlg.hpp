@@ -52,9 +52,11 @@ protected:
 	//
 	// Message processors.
 	//
-	virtual void    OnInitDialog();
-	        LRESULT OnGridDblClick(NMHDR&);
-	        LRESULT OnGridKeyDown(NMHDR&);
+	virtual void OnInitDialog();
+
+	void    OnQueryChanged();
+	LRESULT OnGridDblClick(NMHDR&);
+	LRESULT OnGridKeyDown(NMHDR& oNMHdr);
 
 	//
 	// Internal methods.

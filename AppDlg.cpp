@@ -37,8 +37,9 @@ CAppDlg::CAppDlg() : CMainDlg(IDD_MAIN)
 	END_GRAVITY_TABLE
 
 	DEFINE_CTRLMSG_TABLE
-		NFY_CTRLMSG(IDC_GRID, NM_DBLCLK,   OnGridDblClick)
-		NFY_CTRLMSG(IDC_GRID, LVN_KEYDOWN, OnGridKeyDown )
+		CMD_CTRLMSG(IDC_QUERY, EN_CHANGE,   OnQueryChanged)
+		NFY_CTRLMSG(IDC_GRID,  NM_DBLCLK,   OnGridDblClick)
+		NFY_CTRLMSG(IDC_GRID,  LVN_KEYDOWN, OnGridKeyDown )
 	END_CTRLMSG_TABLE
 }
 
@@ -122,6 +123,29 @@ void CAppDlg::DisplayTable(const CTable& oTable)
 
 	// Cleanup.
 	delete[] pColumns;
+}
+
+/******************************************************************************
+** Method:		OnQueryChanged()
+**
+** Description:	Query text changed, update modified flag.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppDlg::OnQueryChanged()
+{
+	// 1st modification?
+	if (!App.m_bModified)
+	{
+		// Update flag and UI.
+		App.m_bModified = true;
+		App.m_AppWnd.UpdateTitle();
+	}
 }
 
 /******************************************************************************
