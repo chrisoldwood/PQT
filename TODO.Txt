@@ -1,5 +1,9 @@
-- Add a find function.
-
 - Parsing of query (prompt for parameters).
 
-- Query load and save.
+- Copy row/value to clipboard.
+
+- Display of query filename.
+
+- Toolbar buttons & tooltips.
+
+- Reg. of app/file ext.
