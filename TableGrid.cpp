@@ -23,9 +23,7 @@
 */
 
 CTableGrid::CTableGrid(IRowHandler* pRowHandler)
-	: m_nColumns(0)
-	, m_pColumns(NULL)
-	, m_pRowHandler(pRowHandler)
+	: m_pRowHandler(pRowHandler)
 {
 }
 
@@ -43,6 +41,7 @@ CTableGrid::CTableGrid(IRowHandler* pRowHandler)
 
 CTableGrid::~CTableGrid()
 {
+	m_oColumns.DeleteAll();
 }
 
 /******************************************************************************
@@ -64,10 +63,14 @@ void CTableGrid::OnCreate(const CRect& /*rcClient*/)
 	FullRowSelect(true);
 
 	// Setup the grid columns, if supplied.
-	if (m_pColumns != NULL)
+	if (m_oColumns.Size())
 	{
-		for (int c = 0; c < m_nColumns; c++)
-			InsertColumn(c, m_pColumns[c].m_pszName, m_pColumns[c].m_nWidth, m_pColumns[c].m_nAlign);
+		for (int c = 0; c < m_oColumns.Size(); c++)
+		{
+			Column& oColumn = m_oColumns[c];
+
+			InsertColumn(c, oColumn.m_strName, oColumn.m_nWidth, oColumn.m_nAlign);
+		}
 	}
 }
 
@@ -86,11 +89,11 @@ void CTableGrid::OnCreate(const CRect& /*rcClient*/)
 
 void CTableGrid::Columns(int nColumns, Column* pColumns)
 {
-	ASSERT(nColumns >  0);
+	ASSERT(nColumns >= 0);
 	ASSERT(pColumns != NULL);
 
-	m_nColumns = nColumns;
-	m_pColumns = pColumns;
+	// Delete exsiting columns.
+	m_oColumns.DeleteAll();
 
 	// Window created?
 	if (Handle() != NULL)
@@ -98,8 +101,13 @@ void CTableGrid::Columns(int nColumns, Column* pColumns)
 		DeleteAllColumns();
 
 		// Setup the grid columns.
-		for (int c = 0; c < m_nColumns; c++)
-			InsertColumn(c, m_pColumns[c].m_pszName, m_pColumns[c].m_nWidth, m_pColumns[c].m_nAlign);
+		for (int c = 0; c < nColumns; c++)
+		{
+			Column* pColumn = new Column(pColumns[c]);
+
+			m_oColumns.Add(*pColumn);
+			InsertColumn(c, pColumn->m_strName, pColumn->m_nWidth, pColumn->m_nAlign);
+		}
 	}
 }
 
@@ -309,7 +317,7 @@ int CTableGrid::CompareRows(CRow& oRow1, CRow& oRow2)
 		return m_pRowHandler->CompareRows(oRow1, oRow2);
 
 	// Sort by column 0's field.
-	int nSortCol = m_pColumns[0].m_nField;
+	int nSortCol = m_oColumns[0].m_nField;
 
 	return oRow1[nSortCol].Compare(oRow2[nSortCol]);
 }
@@ -329,12 +337,15 @@ int CTableGrid::CompareRows(CRow& oRow1, CRow& oRow2)
 
 CString CTableGrid::FieldValue(int nColumn, const CRow& oRow)
 {
-	int nField = m_pColumns[nColumn].m_nField;
+	int nField = m_oColumns[nColumn].m_nField;
 
 	// Use external handler?
 	if (m_pRowHandler != NULL)
 		return m_pRowHandler->RowFieldValue(oRow, nField);
 
 	// Use default formatter.
-	return oRow[nField].Format(m_pColumns[nColumn].m_pszFormat);
+	if (oRow[nField] == null)
+		return m_strNull;
+
+	return oRow[nField].Format();
 }

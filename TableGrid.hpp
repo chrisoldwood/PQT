@@ -34,11 +34,10 @@ public:
 
 	struct Column
 	{
-		const char*	m_pszName;		// The name.
-		int			m_nWidth;		// The width in pixels.
-		int			m_nAlign;		// The alignment of the text.
-		int			m_nField;		// The row field.
-		const char*	m_pszFormat;	// The field format.
+		CString	m_strName;		// The name.
+		int		m_nWidth;		// The width in pixels.
+		int		m_nAlign;		// The alignment of the text.
+		int		m_nField;		// The row field.
 	};
 
 	//
@@ -52,6 +51,7 @@ public:
 	int   RowCount();
 	CRow& Row(int nRow);
 
+	void  Clear    ();
 	void  AddRows  (const CTable& oTable,  bool bReSort = true, int nSel = 0);
 	void  AddRows  (const CResultSet& oRS, bool bReSort = true, int nSel = 0);
 	int   AddRow   (const CRow& oRow,      bool bReSort = true, bool bSelect = true);
@@ -60,13 +60,15 @@ public:
 
 	void  Sort();
 
+	void  NullValue(const CString& strNull);
+
 protected:
 	//
 	// Members.
 	//
-	int				m_nColumns;
-	Column*			m_pColumns;
-	IRowHandler*	m_pRowHandler;
+	TRefArray<Column>	m_oColumns;
+	IRowHandler*		m_pRowHandler;
+	CString				m_strNull;
 
 	//
 	// Message processors.
@@ -112,6 +114,17 @@ inline CRow& CTableGrid::Row(int nRow)
 	ASSERT((nRow >= 0) && (nRow < RowCount()));
 
 	return *((CRow*)ItemPtr(nRow));
+}
+
+inline void CTableGrid::Clear()
+{
+	DeleteAllItems();
+	DeleteAllColumns();
+}
+
+inline void CTableGrid::NullValue(const CString& strNull)
+{
+	m_strNull = strNull;
 }
 
 #endif //TABLEGRID_HPP
