@@ -1,4 +1,4 @@
-PQT v1.0
+PQT v1.1
 ========
 
 1) Installation.
@@ -21,4 +21,4 @@ Web:   http://www.cix.co.uk/~gort
 
 Chris Oldwood 
 
-13th January 2003
+19th June 2003
