@@ -13,6 +13,7 @@
 #include "ConnectDlg.hpp"
 #include "QueryPrefsDlg.hpp"
 #include "FindDlg.hpp"
+#include "ParamsDlg.hpp"
 
 /******************************************************************************
 **
@@ -32,6 +33,16 @@ static char szTXTExts[] = {	"Text Files (*.txt)\0*.txt\0"
 							"\0\0"							};
 
 static char szTXTDefExt[] = { "txt" };
+
+
+/******************************************************************************
+**
+** Class members.
+**
+*******************************************************************************
+*/
+
+const char* CAppCmds::QUERY_MODIFIED_MSG = "The current query has been modified.\n\nDo you want to save it first?";
 
 /******************************************************************************
 ** Method:		Constructor.
@@ -220,6 +231,21 @@ void CAppCmds::OnDBExit()
 
 void CAppCmds::OnQueryNew()
 {
+	// If query modified, query to save.
+	if (App.m_bModified)
+	{
+		int nResult = App.QueryMsg(QUERY_MODIFIED_MSG);
+
+		if (nResult == IDCANCEL)
+			return;
+
+		if (nResult == IDYES)
+		{
+			OnQuerySave();
+			return;
+		}
+	}
+
 	// Empty the window contents.
 	App.m_AppWnd.m_AppDlg.m_ebQuery.Text("");
 
@@ -228,6 +254,7 @@ void CAppCmds::OnQueryNew()
 
 	// Reset query filename.
 	App.m_strQueryFile = "";
+	App.m_bModified    = false;
 
 	// Update UI.
 	App.m_AppWnd.UpdateTitle();
@@ -247,6 +274,21 @@ void CAppCmds::OnQueryNew()
 
 void CAppCmds::OnQueryOpen()
 {
+	// If query modified, query to save.
+	if (App.m_bModified)
+	{
+		int nResult = App.QueryMsg(QUERY_MODIFIED_MSG);
+
+		if (nResult == IDCANCEL)
+			return;
+
+		if (nResult == IDYES)
+		{
+			OnQuerySave();
+			return;
+		}
+	}
+
 	const char* pszDefDir = NULL;
 
 	// Use Scripts dir as default, if set.
@@ -274,43 +316,10 @@ void CAppCmds::OnQueryOpen()
 
 void CAppCmds::OnQueryOpen(const CPath& strPath)
 {
-	try
-	{
-		CFile oFile;
+	LoadQuery(strPath);
 
-		// Open, for reading.
-		oFile.Open(strPath, GENERIC_READ);
-
-		// Get the files' length.
-		long lLength = oFile.Size();
-
-		// Allocate a read buffer + EOL char.
-		char* pszQuery = (char*) _alloca(lLength+1);
-
-		// Read the file and close it.
-		oFile.Read(pszQuery, lLength);
-		oFile.Close();
-
-		// Ensure the query string has an EOL char.
-		pszQuery[lLength] = '\0';
-
-		// Load the query into the text editor.
-		App.m_AppWnd.m_AppDlg.m_ebQuery.Text(pszQuery);
-
-		// Switch to query window.
-		App.m_AppWnd.m_AppDlg.m_tcTabCtrl.CurSel(CAppDlg::QUERY_TAB);
-
-		// Save query filename.
-		App.m_strQueryFile = strPath;
-
-		// Update UI.
-		App.m_AppWnd.UpdateTitle();
-	}
-	catch(CFileException& e)
-	{
-		// Notify user.
-		App.AlertMsg(e.ErrorText());
-	}
+	// Switch to query window.
+	App.m_AppWnd.m_AppDlg.m_tcTabCtrl.CurSel(CAppDlg::QUERY_TAB);
 }
 
 /******************************************************************************
@@ -358,6 +367,10 @@ void CAppCmds::OnQuerySaveAs()
 
 	// Select the filename.
 	if (!strPath.Select(App.m_AppWnd, CPath::SaveFile, szSQLExts, szSQLDefExt, pszDefDir))
+		return;
+
+	// Warn if replacing.
+	if ( (strPath.Exists()) && (App.QueryMsg("Replace existing file?\n\n%s", strPath) != IDYES) )
 		return;
 
 	// Save it.
@@ -533,6 +546,94 @@ void CAppCmds::OnExecCurrent()
 	if (nEnd > nStart)
 		strQuery = strQuery.Mid(nStart, nEnd-nStart);
 
+	// Any parameters to provide?
+	if (strQuery.Find('$') != -1)
+	{
+		CStrArray astrParams, astrValues;
+
+		int nParamStart = 0;
+		int nParamEnd   = 0;
+
+		// For all parameters.
+		while ((nParamStart = strQuery.Find('$', nParamStart)) != -1)
+		{
+			// Find parameter end marker.
+			nParamEnd = strQuery.Find('$', nParamStart+1);
+
+			// Parameter end maker not found?
+			if (nParamEnd == -1)
+			{
+				App.AlertMsg("Parameter marker ($) mismatch.");
+				return;
+			}
+
+			// Extract parameter name.
+			CString strParam = strQuery.Mid(nParamStart+1, nParamEnd-nParamStart-1);
+
+			if (strParam.Empty())
+			{
+				App.AlertMsg("Empty parameter ($$) found."); 
+				return;
+			}
+
+			// Add to list, if a new parameter.
+			if (astrParams.Find(strParam) == -1)
+				astrParams.Add(strParam);
+
+			// Skip passed parameter.
+			nParamStart = nParamEnd+1;
+		}
+
+		CParamsDlg Dlg;
+
+		Dlg.m_pastrParams = &astrParams;
+		Dlg.m_pastrValues = &astrValues;
+
+		// Query user for parameter values.
+		if (Dlg.RunModal(App.m_AppWnd) != IDOK)
+			return;
+
+		ASSERT(astrParams.Size() == astrValues.Size());
+
+		// Copy parameterised query.
+		CString strTmpQuery = strQuery;
+
+		nParamStart = 0;
+		nParamEnd   = -1;
+
+		// Clear query.
+		strQuery = "";
+
+		// For all parameters.
+		while ((nParamStart = strTmpQuery.Find('$', nParamStart)) != -1)
+		{
+			// Copy query up to parameter start marker.
+			strQuery += strTmpQuery.Mid(nParamEnd+1, nParamStart-nParamEnd-1);
+
+			// Find parameter end marker.
+			nParamEnd = strTmpQuery.Find('$', nParamStart+1);
+
+			ASSERT(nParamEnd != -1);
+
+			// Extract parameter name.
+			CString strParam = strTmpQuery.Mid(nParamStart+1, nParamEnd-nParamStart-1);
+
+			// Find parameter index.
+			int nParam = astrParams.Find(strParam);
+
+			ASSERT(nParam != -1);
+
+			// Substitute value.
+			strQuery += astrValues[nParam];
+
+			// Skip passed parameter.
+			nParamStart = nParamEnd+1;
+		}
+
+		// Copy tail end of query.
+		strQuery += strTmpQuery.Mid(nParamEnd+1, strTmpQuery.Length()-nParamEnd-1);
+	}
+
 	try
 	{
 		CBusyCursor	oBusy;
@@ -559,6 +660,9 @@ void CAppCmds::OnExecCurrent()
 	}
 	catch(CSQLException& e)
 	{
+		// Translate % chars before reporting.
+		e.m_strError.Replace('%', "%%");
+
 		// Notify user.
 		App.AlertMsg(e.m_strError);
 	}
@@ -580,6 +684,21 @@ void CAppCmds::OnExecCurrent()
 
 void CAppCmds::OnExecFile()
 {
+	// If query modified, query to save.
+	if (App.m_bModified)
+	{
+		int nResult = App.QueryMsg(QUERY_MODIFIED_MSG);
+
+		if (nResult == IDCANCEL)
+			return;
+
+		if (nResult == IDYES)
+		{
+			OnQuerySave();
+			return;
+		}
+	}
+
 	CPath strPath;
 
 	// Select the file to open.
@@ -619,6 +738,21 @@ void CAppCmds::OnExecFile(const CPath& strPath)
 
 void CAppCmds::OnExecScript(int nCmdID)
 {
+	// If query modified, query to save.
+	if (App.m_bModified)
+	{
+		int nResult = App.QueryMsg(QUERY_MODIFIED_MSG);
+
+		if (nResult == IDCANCEL)
+			return;
+
+		if (nResult == IDYES)
+		{
+			OnQuerySave();
+			return;
+		}
+	}
+
 	// Locate the script by its command ID.
 	CRow* pScript = App.m_oScripts.SelectRow(CScripts::ID, nCmdID);
 
@@ -831,7 +965,7 @@ void CAppCmds::OnResultsPrint()
 		nPages++;
 
 	// Start printing.
-	oDC.Start("PQT Query " + (CString)App.m_strQueryFile);
+	oDC.Start("PQT Results " + (CString)App.m_strQueryFile);
 
 	// For all pages.
 	for (int p = 0; p < nPages; ++p)
@@ -1118,6 +1252,7 @@ bool CAppCmds::LoadQuery(const CPath& strPath)
 
 		// Save query filename.
 		App.m_strQueryFile = strPath;
+		App.m_bModified    = false;
 
 		// Update UI.
 		App.m_AppWnd.UpdateTitle();
@@ -1160,6 +1295,12 @@ bool CAppCmds::SaveQuery(const CPath& strPath)
 		oFile.Create(strPath);
 		oFile.Write(strQuery, strQuery.Length());
 		oFile.Close();
+
+		// Reset modified flag.
+		App.m_bModified = false;
+
+		// Update UI.
+		App.m_AppWnd.UpdateTitle();
 
 		bOK = true;
 	}

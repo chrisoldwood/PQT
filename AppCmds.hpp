@@ -82,6 +82,11 @@ public:
 	//
 	virtual CString CmdHintStr(uint iCmdID) const;
 
+	//
+	// Constants.
+	//
+	static const char* QUERY_MODIFIED_MSG;
+
 protected:
 	//
 	// Members.
