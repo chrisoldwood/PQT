@@ -64,7 +64,7 @@ CAppCmds::CAppCmds()
 		CMD_ENTRY(ID_WINDOW_QUERY,		OnWindowQuery,		NULL,					-1)
 		CMD_ENTRY(ID_WINDOW_RESULTS,	OnWindowResults,	NULL,					-1)
 		// Help menu.
-		CMD_ENTRY(ID_HELP_ABOUT,		OnHelpAbout,		NULL,					7 )
+		CMD_ENTRY(ID_HELP_ABOUT,		OnHelpAbout,		NULL,					10)
 	END_CMD_TABLE
 }
 
