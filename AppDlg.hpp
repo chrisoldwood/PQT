@@ -57,6 +57,7 @@ protected:
 	void    OnQueryChanged();
 	LRESULT OnGridDblClick(NMHDR&);
 	LRESULT OnGridKeyDown(NMHDR& oNMHdr);
+	LRESULT OnGridRightClick(NMHDR& rMsgHdr);
 
 	//
 	// Internal methods.

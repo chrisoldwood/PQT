@@ -37,9 +37,10 @@ CAppDlg::CAppDlg() : CMainDlg(IDD_MAIN)
 	END_GRAVITY_TABLE
 
 	DEFINE_CTRLMSG_TABLE
-		CMD_CTRLMSG(IDC_QUERY, EN_CHANGE,   OnQueryChanged)
-		NFY_CTRLMSG(IDC_GRID,  NM_DBLCLK,   OnGridDblClick)
-		NFY_CTRLMSG(IDC_GRID,  LVN_KEYDOWN, OnGridKeyDown )
+		CMD_CTRLMSG(IDC_QUERY, EN_CHANGE,   OnQueryChanged  )
+		NFY_CTRLMSG(IDC_GRID,  NM_DBLCLK,   OnGridDblClick  )
+		NFY_CTRLMSG(IDC_GRID,  LVN_KEYDOWN, OnGridKeyDown   )
+		NFY_CTRLMSG(IDC_GRID,  NM_RCLICK,   OnGridRightClick)
 	END_CTRLMSG_TABLE
 }
 
@@ -187,6 +188,55 @@ LRESULT CAppDlg::OnGridKeyDown(NMHDR& oNMHdr)
 	// User pressed ENTER key?
 	if (m_lvGrid.IsSelection() && (oMsg.wVKey == VK_RETURN))
 		ShowRowDetails();
+
+	return 0;
+}
+
+/******************************************************************************
+** Method:		OnGridRightClick()
+**
+** Description:	Right click on the grid, show context menu.
+**
+** Parameters:	rMsgHdr		The WM_NOTIFY msg header.
+**
+** Returns:		0.
+**
+*******************************************************************************
+*/
+
+LRESULT CAppDlg::OnGridRightClick(NMHDR& rMsgHdr)
+{
+	NMITEMACTIVATE& oMsgHdr = reinterpret_cast<NMITEMACTIVATE&>(rMsgHdr);
+
+	// If a row is selected AND on clicked a table column.
+	if ( (m_lvGrid.IsSelection()) && (oMsgHdr.iSubItem != 0) )
+	{
+		// Get the current selection.
+		int   nCol = oMsgHdr.iSubItem - 1;
+		int   nRow = m_lvGrid.Selection();
+		CRow& oRow = m_lvGrid.Row(nRow);
+
+		CPopupMenu oMenu(IDR_TABLEMENU);
+
+		// Calculate popup menu position.
+		CPoint ptMenu = oMsgHdr.ptAction;
+
+		::ClientToScreen(m_lvGrid.Handle(), &ptMenu);
+
+		// Show context menu.
+		uint nCmdID = oMenu.TrackMenu(m_lvGrid, ptMenu);
+
+		// Handle command.
+		if (nCmdID == ID_TABLE_COPY_VALUE)
+		{
+			CClipboard::CopyText(m_hWnd, oRow[nCol].Format());
+		}
+
+		if (nCmdID == ID_TABLE_COPY_NAME)
+		{
+			CClipboard::CopyText(m_hWnd, oRow.Table().Column(nCol).Name());
+		}
+	}
 
 	return 0;
 }
