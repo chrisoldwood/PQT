@@ -62,13 +62,13 @@ void CConnectDlg::OnInitDialog()
 	m_ebPassword.TextLimit(100);
 
 	// Load the database combo.
-	for (int i = 0; i < App.m_apConConfigs.Size(); i++)
+	for (uint i = 0; i < App.m_apConConfigs.size(); i++)
 	{
 		CConConfig* pConn = App.m_apConConfigs[i];
 
 		m_cbDatabase.Add(pConn->m_strName, i);
 
-		if (m_nConnection == i)
+		if (m_nConnection == (int)i)
 			strDefault = pConn->m_strName;
 	}
 
@@ -134,11 +134,11 @@ void CConnectDlg::OnAdd()
 	if (Dlg.RunModal(*this) == IDOK)
 	{
 		// Add to the App collection.
-		int nArrIndex = App.m_apConConfigs.Add(new CConConfig(Dlg.m_oConfig));
+		App.m_apConConfigs.push_back(new CConConfig(Dlg.m_oConfig));
 
 		// Add to the combo box.
 		int nCBIndex = m_cbDatabase.Add(Dlg.m_oConfig.m_strName);
-		m_cbDatabase.ItemData(nCBIndex, nArrIndex);
+		m_cbDatabase.ItemData(nCBIndex, App.m_apConConfigs.size()-1);
 
 		// Select by default.
 		m_cbDatabase.CurSel(nCBIndex);

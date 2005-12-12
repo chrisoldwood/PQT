@@ -36,8 +36,8 @@ public:
 
 protected:
 	// Template shorthands.
-	typedef TPtrArray<CLabel>   CLabels;
-	typedef TPtrArray<CEditBox> CEditBoxes;
+	typedef std::vector<CLabel*>   CLabels;
+	typedef std::vector<CEditBox*> CEditBoxes;
 
 	//
 	// Controls.

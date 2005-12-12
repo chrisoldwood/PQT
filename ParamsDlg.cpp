@@ -33,8 +33,8 @@ CParamsDlg::CParamsDlg()
 	m_pebValue  = new CEditBox;
 
 	// Add to containers.
-	m_aoLabels.Add(m_ptxtParam);
-	m_aoEditBoxes.Add(m_pebValue);
+	m_aoLabels.push_back(m_ptxtParam);
+	m_aoEditBoxes.push_back(m_pebValue);
 
 	DEFINE_CTRL_TABLE
 		CTRL(IDC_PARAM_NAME,  m_ptxtParam )
@@ -59,8 +59,8 @@ CParamsDlg::CParamsDlg()
 CParamsDlg::~CParamsDlg()
 {
 	// Free collections.
-	m_aoLabels.DeleteAll();
-	m_aoEditBoxes.DeleteAll();
+	DeleteAll(m_aoLabels);
+	DeleteAll(m_aoEditBoxes);
 }
 
 /******************************************************************************
@@ -145,8 +145,8 @@ void CParamsDlg::OnInitDialog()
 		CEditBox* pEditBox = new CEditBox;
 
 		// Add to containers.
-		m_aoLabels.Add(pLabel);
-		m_aoEditBoxes.Add(pEditBox);
+		m_aoLabels.push_back(pLabel);
+		m_aoEditBoxes.push_back(pEditBox);
 
 		DWORD dwLabelExStyle = 0;
 		DWORD dwLabelStyle   = WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_VISIBLE | SS_SIMPLE | SS_CENTERIMAGE;

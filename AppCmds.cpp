@@ -175,10 +175,10 @@ void CAppCmds::OnDBConnectMRU(int nCmdID)
 	// Get the MRU item.
 	CString strConn = App.m_oMRUList[nCmdID - ID_DB_MRU_1];
 
-	int i = 0;
+	uint i = 0;
 
 	// Find the connection index.
-	for (; i < App.m_apConConfigs.Size(); ++i)
+	for (; i < App.m_apConConfigs.size(); ++i)
 	{
 		CConConfig* pConnCfg = App.m_apConConfigs[i];
 
@@ -187,7 +187,7 @@ void CAppCmds::OnDBConnectMRU(int nCmdID)
 	}
 
 	// Connection invalid?
-	if (i == App.m_apConConfigs.Size())
+	if (i == App.m_apConConfigs.size())
 	{
 		App.AlertMsg("The connection is invalid.");
 		return;

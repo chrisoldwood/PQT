@@ -13,7 +13,7 @@
 #define PQTAPP_HPP
 
 // Template shorthands.
-typedef TPtrArray<CConConfig> CConConfigs;
+typedef std::vector<CConConfig*> CConConfigs;
 
 /******************************************************************************
 ** 

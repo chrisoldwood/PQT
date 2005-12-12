@@ -150,7 +150,7 @@ bool CPQTApp::OnClose()
 
 	// Cleanup.	
 	delete m_pQuery;
-	m_apConConfigs.DeleteAll();
+	DeleteAll(m_apConConfigs);
 
 	return true;
 }
@@ -206,13 +206,13 @@ void CPQTApp::LoadDefaults()
 
 		// Add to collection, if it is valid.
 		if (!pConConfig->m_strName.Empty())
-			m_apConConfigs.Add(pConConfig);
+			m_apConConfigs.push_back(pConConfig);
 		else
 			delete pConConfig;
 	}
 
 	// Validate settings.
-	if (m_nDefConnection >= m_apConConfigs.Size())
+	if (m_nDefConnection >= (int)m_apConConfigs.size())
 		m_nDefConnection = -1;
 
 	// Load MRU list.
@@ -248,9 +248,9 @@ void CPQTApp::SaveDefaults()
 	m_oIniFile.WriteString("Results", "NullValue", m_strNull  );
 
 	// Write the connection list.
-	m_oIniFile.WriteInt("Main", "NumConnections", m_apConConfigs.Size());
+	m_oIniFile.WriteInt("Main", "NumConnections", m_apConConfigs.size());
 
-	for (int i = 0; i < m_apConConfigs.Size(); i++)
+	for (uint i = 0; i < m_apConConfigs.size(); i++)
 	{
 		CConConfig* pConConfig = m_apConConfigs[i];
 		CString     strSection;
