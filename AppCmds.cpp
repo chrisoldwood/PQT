@@ -764,7 +764,7 @@ void CAppCmds::OnExecScript(int nCmdID)
 	CPath strPath = pScript->Field(CScripts::PATH);
 	CPath strFile = pScript->Field(CScripts::NAME);
 
-	OnExecFile(strPath + strFile);
+	OnExecFile(strPath / strFile);
 }
 
 /******************************************************************************
