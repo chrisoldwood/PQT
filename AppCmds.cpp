@@ -14,6 +14,7 @@
 #include "QueryPrefsDlg.hpp"
 #include "FindDlg.hpp"
 #include "ParamsDlg.hpp"
+#include <Legacy/FileFinder.hpp>
 
 /******************************************************************************
 **

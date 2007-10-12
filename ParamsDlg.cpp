@@ -10,6 +10,7 @@
 
 #include "AppHeaders.hpp"
 #include "ParamsDlg.hpp"
+#include <Legacy/STLUtils.hpp>
 
 /******************************************************************************
 ** Method:		Default constructor.
