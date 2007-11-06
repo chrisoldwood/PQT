@@ -8,7 +8,9 @@
 *******************************************************************************
 */
 
-#include "AppHeaders.hpp"
+#include "Common.hpp"
+#include "Query.hpp"
+#include <MDBL/Table.hpp>
 
 /******************************************************************************
 ** Method:		Constructor.

@@ -8,10 +8,11 @@
 *******************************************************************************
 */
 
-#include "AppHeaders.hpp"
+#include "Common.hpp"
 #include "CfgConDlg.hpp"
 #include "SelDSNDlg.hpp"
 #include "SelDriverDlg.hpp"
+#include <WCL/Path.hpp>
 
 /******************************************************************************
 ** Method:		Constructor.

@@ -12,6 +12,12 @@
 #ifndef QUERYPREFS_HPP
 #define QUERYPREFS_HPP
 
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
+#include <WCL/CommonUI.hpp>
+
 /******************************************************************************
 ** 
 ** This is the dialog used to edit the query settings.

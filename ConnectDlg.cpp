@@ -8,9 +8,10 @@
 *******************************************************************************
 */
 
-#include "AppHeaders.hpp"
+#include "Common.hpp"
 #include "ConnectDlg.hpp"
 #include "CfgConDlg.hpp"
+#include "PQTApp.hpp"
 
 /******************************************************************************
 ** Method:		Constructor.

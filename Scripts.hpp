@@ -12,6 +12,12 @@
 #ifndef SCRIPTS_HPP
 #define SCRIPTS_HPP
 
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
+#include <MDBL/Table.hpp>
+
 /******************************************************************************
 ** 
 ** This table is used to store to favourite scripts for a connection.

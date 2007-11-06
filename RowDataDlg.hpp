@@ -12,6 +12,13 @@
 #ifndef ROWDATADLG_HPP
 #define ROWDATADLG_HPP
 
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
+#include <WCL/CommonUI.hpp>
+#include <MDBL/FwdDecls.hpp>
+
 /******************************************************************************
 ** 
 ** This is the dialog used to display a single rows' data.

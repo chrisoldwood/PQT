@@ -8,9 +8,10 @@
 *******************************************************************************
 */
 
-#include "AppHeaders.hpp"
+#include "Common.hpp"
 #include "ParamsDlg.hpp"
 #include <Legacy/STLUtils.hpp>
+#include <WCL/StrArray.hpp>
 
 /******************************************************************************
 ** Method:		Default constructor.

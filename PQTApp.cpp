@@ -8,8 +8,10 @@
 *******************************************************************************
 */
 
-#include "AppHeaders.hpp"
+#include "Common.hpp"
+#include "PQTApp.hpp"
 #include <Legacy/STLUtils.hpp>
+#include "Query.hpp"
 
 /******************************************************************************
 **

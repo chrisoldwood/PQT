@@ -8,7 +8,9 @@
 *******************************************************************************
 */
 
-#include "AppHeaders.hpp"
+#include "Common.hpp"
+#include "AppWnd.hpp"
+#include "PQTApp.hpp"
 
 /******************************************************************************
 ** Method:		Default constructor.

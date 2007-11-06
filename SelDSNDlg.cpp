@@ -8,8 +8,12 @@
 *******************************************************************************
 */
 
-#include "AppHeaders.hpp"
+#include "Common.hpp"
 #include "SelDSNDlg.hpp"
+#include <WCL/BusyCursor.hpp>
+#include <MDBL/ODBCSource.hpp>
+#include <WCL/StrArray.hpp>
+#include <MDBL/SQLException.hpp>
 
 /******************************************************************************
 ** Method:		Constructor.

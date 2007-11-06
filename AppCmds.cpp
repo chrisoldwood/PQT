@@ -8,13 +8,22 @@
 *******************************************************************************
 */
 
-#include "AppHeaders.hpp"
+#include "Common.hpp"
+#include "AppCmds.hpp"
+#include "PQTApp.hpp"
 #include "AboutDlg.hpp"
 #include "ConnectDlg.hpp"
 #include "QueryPrefsDlg.hpp"
 #include "FindDlg.hpp"
 #include "ParamsDlg.hpp"
 #include <Legacy/FileFinder.hpp>
+#include <WCL/Printer.hpp>
+#include <WCL/PrinterDC.hpp>
+#include <WCL/BusyCursor.hpp>
+#include "Query.hpp"
+#include <MDBL/SQLException.hpp>
+#include <WCL/File.hpp>
+#include <WCL/FileException.hpp>
 
 /******************************************************************************
 **

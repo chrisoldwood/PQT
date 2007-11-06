@@ -12,6 +12,10 @@
 #ifndef CONCONFIG_HPP
 #define CONCONFIG_HPP
 
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
 /******************************************************************************
 ** 
 ** This class is used to store a connection configuration.
@@ -39,6 +43,9 @@ public:
 	CString	m_strLogin;
 	CString	m_strSQLDir;
 };
+
+// Template shorthands.
+typedef std::vector<CConConfig*> CConConfigs;
 
 /******************************************************************************
 **

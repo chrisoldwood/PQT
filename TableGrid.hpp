@@ -12,6 +12,13 @@
 #ifndef TABLEGRID_HPP
 #define TABLEGRID_HPP
 
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
+#include <WCL/ListView.hpp>
+#include <MDBL/FwdDecls.hpp>
+#include <Legacy/TArray.hpp>
 
 // Forward declarations.
 class IRowHandler;

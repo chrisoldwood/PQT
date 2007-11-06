@@ -12,6 +12,12 @@
 #ifndef FINDDLG_HPP
 #define FINDDLG_HPP
 
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
+#include <WCL/CommonUI.hpp>
+
 /******************************************************************************
 ** 
 ** This is the dialog used to enter the value to search for.

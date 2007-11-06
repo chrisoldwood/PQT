@@ -12,8 +12,22 @@
 #ifndef PQTAPP_HPP
 #define PQTAPP_HPP
 
-// Template shorthands.
-typedef std::vector<CConConfig*> CConConfigs;
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
+#include <WCL/App.hpp>
+#include "AppWnd.hpp"
+#include "AppCmds.hpp"
+#include <MDBL/ODBCSource.hpp>
+#include <MDBL/MDB.hpp>
+#include <WCL/MRUList.hpp>
+#include <WCL/IniFile.hpp>
+#include "Scripts.hpp"
+#include "ConConfig.hpp"
+
+// Forward declarations.
+class CQuery;
 
 /******************************************************************************
 ** 

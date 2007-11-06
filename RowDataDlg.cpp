@@ -8,8 +8,11 @@
 *******************************************************************************
 */
 
-#include "AppHeaders.hpp"
+#include "Common.hpp"
 #include "RowDataDlg.hpp"
+#include <MDBL/Table.hpp>
+#include "PQTApp.hpp"
+#include <WCL/Clipboard.hpp>
 
 /******************************************************************************
 ** Method:		Default constructor.

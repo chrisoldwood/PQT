@@ -12,6 +12,13 @@
 #ifndef CFGCONDLG_HPP
 #define CFGCONDLG_HPP
 
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
+#include <WCL/CommonUI.hpp>
+#include "ConConfig.hpp"
+
 /******************************************************************************
 ** 
 ** This dialog is used to configure a database connection.

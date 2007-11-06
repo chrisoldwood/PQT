@@ -12,6 +12,13 @@
 #ifndef APPDLG_HPP
 #define APPDLG_HPP
 
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
+#include <WCL/MainDlg.hpp>
+#include <WCL/TabWndHost.hpp> 
+#include <WCL/EditBox.hpp> 
 #include "TableGrid.hpp"
 
 /******************************************************************************

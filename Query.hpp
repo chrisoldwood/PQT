@@ -12,6 +12,12 @@
 #ifndef QUERY_HPP
 #define QUERY_HPP
 
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
+#include <MDBL/FwdDecls.hpp>
+
 /******************************************************************************
 ** 
 ** This is used to hold the query text and resulting table.
