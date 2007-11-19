@@ -71,33 +71,33 @@ CAppCmds::CAppCmds()
 	// Define the command table.
 	DEFINE_CMD_TABLE
 		// Database menu.
-		CMD_ENTRY(ID_DB_CONNECT,			OnDBConnect,		NULL,					0 )
-		CMD_ENTRY(ID_DB_DISCONNECT,			OnDBDisconnect,		OnUIDBDisconnect,		1 )
+		CMD_ENTRY(ID_DB_CONNECT,			&CAppCmds::OnDBConnect,			NULL,							0 )
+		CMD_ENTRY(ID_DB_DISCONNECT,			&CAppCmds::OnDBDisconnect,		&CAppCmds::OnUIDBDisconnect,	1 )
 		CMD_RANGE(ID_DB_MRU_1,
-				  ID_DB_MRU_5,				OnDBConnectMRU,		NULL,					-1) 
-		CMD_ENTRY(ID_DB_EXIT,				OnDBExit,			NULL,					-1)
+				  ID_DB_MRU_5,				&CAppCmds::OnDBConnectMRU,		NULL,							-1) 
+		CMD_ENTRY(ID_DB_EXIT,				&CAppCmds::OnDBExit,			NULL,							-1)
 		// Query menu.
-		CMD_ENTRY(ID_QUERY_NEW,				OnQueryNew,			NULL,					2 )
-		CMD_ENTRY(ID_QUERY_OPEN,			OnQueryOpen,		NULL,					3 )
-		CMD_ENTRY(ID_QUERY_SAVE,			OnQuerySave,		NULL,					4 )
-		CMD_ENTRY(ID_QUERY_SAVEAS,			OnQuerySaveAs,		NULL,					4 )
-		CMD_ENTRY(ID_QUERY_PRINT,			OnQueryPrint,		NULL,					4 )
-		CMD_ENTRY(ID_QUERY_PREFS,			OnQueryPrefs,		NULL,					-1)
+		CMD_ENTRY(ID_QUERY_NEW,				&CAppCmds::OnQueryNew,			NULL,							2 )
+		CMD_ENTRY(ID_QUERY_OPEN,			&CAppCmds::OnQueryOpen,			NULL,							3 )
+		CMD_ENTRY(ID_QUERY_SAVE,			&CAppCmds::OnQuerySave,			NULL,							4 )
+		CMD_ENTRY(ID_QUERY_SAVEAS,			&CAppCmds::OnQuerySaveAs,		NULL,							4 )
+		CMD_ENTRY(ID_QUERY_PRINT,			&CAppCmds::OnQueryPrint,		NULL,							4 )
+		CMD_ENTRY(ID_QUERY_PREFS,			&CAppCmds::OnQueryPrefs,		NULL,							-1)
 		// Execute menu.
-		CMD_ENTRY(ID_EXEC_CURRENT,			OnExecCurrent,		OnUIExecCurrent,		5 )
-		CMD_ENTRY(ID_EXEC_FILE,				OnExecFile,			OnUIExecFile,			6 )
+		CMD_ENTRY(ID_EXEC_CURRENT,			&CAppCmds::OnExecCurrent,		&CAppCmds::OnUIExecCurrent,		5 )
+		CMD_ENTRY(ID_EXEC_FILE,				&CAppCmds::OnExecFile,			&CAppCmds::OnUIExecFile,		6 )
 		CMD_RANGE(ID_FIRST_SCRIPT_CMD,
-				  ID_LAST_SCRIPT_CMD,		OnExecScript,		NULL,					-1)
+				  ID_LAST_SCRIPT_CMD,		&CAppCmds::OnExecScript,		NULL,							-1)
 		// Results menu.
-		CMD_ENTRY(ID_RESULTS_FIND,			OnResultsFind,		OnUIResultsFind,		-1)
-		CMD_ENTRY(ID_RESULTS_FINDNEXT,		OnResultsFindNext,	OnUIResultsFindNext,	-1)
-		CMD_ENTRY(ID_RESULTS_SAVEAS,		OnResultsSaveAs,	OnUIResultsSaveAs,		-1)
-		CMD_ENTRY(ID_RESULTS_PRINT,			OnResultsPrint,		OnUIResultsPrint,		-1)
+		CMD_ENTRY(ID_RESULTS_FIND,			&CAppCmds::OnResultsFind,		&CAppCmds::OnUIResultsFind,		-1)
+		CMD_ENTRY(ID_RESULTS_FINDNEXT,		&CAppCmds::OnResultsFindNext,	&CAppCmds::OnUIResultsFindNext,	-1)
+		CMD_ENTRY(ID_RESULTS_SAVEAS,		&CAppCmds::OnResultsSaveAs,		&CAppCmds::OnUIResultsSaveAs,	-1)
+		CMD_ENTRY(ID_RESULTS_PRINT,			&CAppCmds::OnResultsPrint,		&CAppCmds::OnUIResultsPrint,	-1)
 		// Window menu.
-		CMD_ENTRY(ID_WINDOW_QUERY,			OnWindowQuery,		NULL,					-1)
-		CMD_ENTRY(ID_WINDOW_RESULTS,		OnWindowResults,	NULL,					-1)
+		CMD_ENTRY(ID_WINDOW_QUERY,			&CAppCmds::OnWindowQuery,		NULL,							-1)
+		CMD_ENTRY(ID_WINDOW_RESULTS,		&CAppCmds::OnWindowResults,		NULL,							-1)
 		// Help menu.
-		CMD_ENTRY(ID_HELP_ABOUT,			OnHelpAbout,		NULL,					10)
+		CMD_ENTRY(ID_HELP_ABOUT,			&CAppCmds::OnHelpAbout,			NULL,							10)
 	END_CMD_TABLE
 }
 

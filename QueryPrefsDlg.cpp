@@ -50,10 +50,10 @@ void CQueryPrefsDlg::OnInitDialog()
 	char szValue[50];
 
 	// Initialise the controls
-	m_ebMinWidth.Text(itoa(m_nMinWidth, szValue, 10));
+	m_ebMinWidth.Text(_itoa(m_nMinWidth, szValue, 10));
 	m_ebMinWidth.TextLimit(3);
 
-	m_ebMaxWidth.Text(itoa(m_nMaxWidth, szValue, 10));
+	m_ebMaxWidth.Text(_itoa(m_nMaxWidth, szValue, 10));
 	m_ebMaxWidth.TextLimit(3);
 
 	m_ebNullVal.Text(m_strNullVal);

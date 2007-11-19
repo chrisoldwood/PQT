@@ -43,8 +43,8 @@ CRowDataDlg::CRowDataDlg(CRow& oRow)
 	END_GRAVITY_TABLE
 
 	DEFINE_CTRLMSG_TABLE
-		NFY_CTRLMSG(IDC_GRID, NM_RCLICK,       OnRightClick )
-		NFY_CTRLMSG(IDC_GRID, LVN_COLUMNCLICK, OnClickColumn)
+		NFY_CTRLMSG(IDC_GRID, NM_RCLICK,       &CRowDataDlg::OnRightClick )
+		NFY_CTRLMSG(IDC_GRID, LVN_COLUMNCLICK, &CRowDataDlg::OnClickColumn)
 	END_CTRLMSG_TABLE
 }
 
@@ -78,7 +78,7 @@ void CRowDataDlg::OnInitDialog()
 		char szRow[10];
 
 		// LPARAM is column index.
-		int nRow = m_lvGrid.InsertItem(i, itoa(i, szRow, 10));
+		int nRow = m_lvGrid.InsertItem(i, _itoa(i, szRow, 10));
 
 		// Set the column name.
 		m_lvGrid.ItemText(nRow, 1, m_oTable.Column(i).Name());

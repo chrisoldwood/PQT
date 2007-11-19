@@ -194,7 +194,7 @@ int CTableGrid::AddRow(const CRow& oRow, bool bReSort, bool bSelect)
 	int nRow = AppendItem("");
 
 	// Set the row number.
-	ItemText(nRow, 0, itoa(nRow+1, szRow, 10));
+	ItemText(nRow, 0, _itoa(nRow+1, szRow, 10));
 	ItemPtr (nRow, &oRow);
 
 	return UpdateRow(nRow, bReSort, bSelect);
