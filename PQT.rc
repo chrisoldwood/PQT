@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "Resource.h"
 
@@ -7,10 +7,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#define APSTUDIO_HIDDEN_SYMBOLS
-#include "windows.h"
-#undef APSTUDIO_HIDDEN_SYMBOLS
-#include "WCL/WclRsc.h"
+#include <WCL/CommonRsc.h>
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -30,23 +27,19 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "Resource.h\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
-    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
-    "#include ""windows.h""\r\n"
-    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
-    "#include ""WclRsc.h""\r\n"
+    "#include <WCL/CommonRsc.h>\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
-    "\r\n"
     "#include ""App.rcv""\r\n"
     "\0"
 END
@@ -61,14 +54,14 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_APPICON             ICON    DISCARDABLE     "App.ico"
+IDR_APPICON             ICON                    "App.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Menu
 //
 
-IDR_APPMENU MENU DISCARDABLE 
+IDR_APPMENU MENU 
 BEGIN
     POPUP "&Database"
     BEGIN
@@ -119,7 +112,7 @@ BEGIN
     END
 END
 
-IDR_ROWDATAMENU MENU DISCARDABLE 
+IDR_ROWDATAMENU MENU 
 BEGIN
     POPUP "Popup"
     BEGIN
@@ -128,7 +121,7 @@ BEGIN
     END
 END
 
-IDR_TABLEMENU MENU DISCARDABLE 
+IDR_TABLEMENU MENU 
 BEGIN
     POPUP "Popup"
     BEGIN
@@ -144,7 +137,7 @@ END
 //
 
 IDD_MAIN DIALOGEX 0, 0, 301, 201
-STYLE WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+STYLE DS_SETFONT | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     EDITTEXT        IDC_QUERY,15,25,100,100,ES_MULTILINE | ES_AUTOHSCROLL | 
@@ -155,8 +148,9 @@ BEGIN
     CONTROL         "Tab1",IDC_TAB,"SysTabControl32",0x0,5,5,290,190
 END
 
-IDD_ABOUT DIALOG DISCARDABLE  0, 0, 132, 127
-STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+IDD_ABOUT DIALOG  0, 0, 132, 127
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
 CAPTION "About PQT"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -175,8 +169,8 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,40,100,50,15
 END
 
-IDD_CONNECT DIALOG DISCARDABLE  0, 0, 167, 126
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_CONNECT DIALOG  0, 0, 167, 126
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Connect To A Database"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -193,8 +187,8 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,105,100,50,14
 END
 
-IDD_QUERYPREFS DIALOG DISCARDABLE  0, 0, 222, 90
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_QUERYPREFS DIALOG  0, 0, 222, 90
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Query Settings"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -212,8 +206,8 @@ BEGIN
 END
 
 IDD_ROWDATA DIALOGEX 0, 0, 312, 230
-STYLE WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | 
-    WS_THICKFRAME
+STYLE DS_SETFONT | WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | 
+    WS_SYSMENU | WS_THICKFRAME
 CAPTION "Row Data"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
@@ -223,8 +217,8 @@ BEGIN
     DEFPUSHBUTTON   "Close",IDCANCEL,255,210,50,14
 END
 
-IDD_CFGCONNECTION DIALOG DISCARDABLE  0, 0, 222, 202
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_CFGCONNECTION DIALOG  0, 0, 222, 202
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Configure A Connection"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -253,8 +247,8 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,115,175,50,14
 END
 
-IDD_DSNS DIALOG DISCARDABLE  0, 0, 222, 146
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_DSNS DIALOG  0, 0, 222, 146
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Select A DSN"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -264,8 +258,8 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,115,120,50,14
 END
 
-IDD_DRIVERS DIALOG DISCARDABLE  0, 0, 222, 141
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_DRIVERS DIALOG  0, 0, 222, 141
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Select A Driver"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -275,8 +269,8 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,111,120,50,14
 END
 
-IDD_FIND DIALOG DISCARDABLE  0, 0, 147, 61
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_FIND DIALOG  0, 0, 147, 61
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Find"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -286,8 +280,8 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,75,35,50,14
 END
 
-IDD_PARAMETERS DIALOG DISCARDABLE  0, 0, 127, 61
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_PARAMETERS DIALOG  0, 0, 127, 61
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Query Parameters"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -303,14 +297,14 @@ END
 // Bitmap
 //
 
-IDR_APPTOOLBAR          BITMAP  DISCARDABLE     "Toolbar.bmp"
+IDR_APPTOOLBAR          BITMAP                  "Toolbar.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Accelerator
 //
 
-IDR_APPACCEL ACCELERATORS DISCARDABLE 
+IDR_APPACCEL ACCELERATORS 
 BEGIN
     "D",            ID_DB_CONNECT,          VIRTKEY, CONTROL, NOINVERT
     "E",            ID_EXEC_CURRENT,        VIRTKEY, CONTROL, NOINVERT
@@ -332,7 +326,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
+GUIDELINES DESIGNINFO 
 BEGIN
     IDD_CONNECT, DIALOG
     BEGIN
@@ -406,42 +400,42 @@ END
 // String Table
 //
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDS_SYS_RESTORE         "Restore the window size and position."
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDS_SYS_MOVE            "Move the window"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDS_SYS_SIZE            "Resize the window"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDS_SYS_MINIMIZE        "Minimize the window"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDS_SYS_MAXIMIZE        "Maximize the window"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDS_SYS_CLOSE           "Close the window"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDS_SYS_SWITCH          "Switch to another application"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_DB_POPUP             "Database options"
     ID_DB_CONNECT           "Connect to a database\nConnect"
@@ -454,13 +448,13 @@ BEGIN
     ID_DB_EXIT              "Exit PQT"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_HELP_POPUP           "Help options"
     ID_HELP_ABOUT           "Show PQT version\nHelp"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_QUERY_POPUP          "Query options"
     ID_QUERY_NEW            "Clear the current query\nNew Query"
@@ -471,21 +465,21 @@ BEGIN
     ID_QUERY_PREFS          "Edit the query settings\nQuery Settings"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_EXEC_POPUP           "Query execution options"
     ID_EXEC_CURRENT         "Execute the current query\nExecute Query"
     ID_EXEC_FILE            "Execute a query stored in a file\nExecute File"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_WINDOW_POPUP         "Window selection options"
     ID_WINDOW_QUERY         "Switch to the query window"
     ID_WINDOW_RESULTS       "Switch to the results window"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_RESULTS_POPUP        "Results view options"
     ID_RESULTS_FIND         "Finds the first occurence of a value in the results view"
@@ -504,7 +498,6 @@ END
 //
 // Generated from the TEXTINCLUDE 3 resource.
 //
-
 #include "App.rcv"
 
 /////////////////////////////////////////////////////////////////////////////
