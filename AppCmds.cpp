@@ -24,6 +24,7 @@
 #include <MDBL/SQLException.hpp>
 #include <WCL/File.hpp>
 #include <WCL/FileException.hpp>
+#include <Core/AnsiWide.hpp>
 
 /******************************************************************************
 **
@@ -32,17 +33,17 @@
 *******************************************************************************
 */
 
-static char szSQLExts[] = {	"SQL Scripts (*.sql)\0*.sql\0"
-							"All Files (*.*)\0*.*\0"
-							"\0\0"							};
+static tchar szSQLExts[] = {	TXT("SQL Scripts (*.sql)\0*.sql\0")
+								TXT("All Files (*.*)\0*.*\0")
+								TXT("\0\0")							};
 
-static char szSQLDefExt[] = { "sql" };
+static tchar szSQLDefExt[] = { TXT("sql") };
 
-static char szTXTExts[] = {	"Text Files (*.txt)\0*.txt\0"
-							"All Files (*.*)\0*.*\0"
-							"\0\0"							};
+static tchar szTXTExts[] = {	TXT("Text Files (*.txt)\0*.txt\0")
+								TXT("All Files (*.*)\0*.*\0")
+								TXT("\0\0")							};
 
-static char szTXTDefExt[] = { "txt" };
+static tchar szTXTDefExt[] = { TXT("txt") };
 
 
 /******************************************************************************
@@ -52,7 +53,7 @@ static char szTXTDefExt[] = { "txt" };
 *******************************************************************************
 */
 
-const char* CAppCmds::QUERY_MODIFIED_MSG = "The current query has been modified.\n\nDo you want to save it first?";
+const tchar* CAppCmds::QUERY_MODIFIED_MSG = TXT("The current query has been modified.\n\nDo you want to save it first?");
 
 /******************************************************************************
 ** Method:		Constructor.
@@ -199,7 +200,7 @@ void CAppCmds::OnDBConnectMRU(int nCmdID)
 	// Connection invalid?
 	if (i == App.m_apConConfigs.size())
 	{
-		App.AlertMsg("The connection is invalid.");
+		App.AlertMsg(TXT("The connection is invalid."));
 		return;
 	}
 
@@ -259,13 +260,13 @@ void CAppCmds::OnQueryNew()
 	}
 
 	// Empty the window contents.
-	App.m_AppWnd.m_AppDlg.m_ebQuery.Text("");
+	App.m_AppWnd.m_AppDlg.m_ebQuery.Text(TXT(""));
 
 	// Switch to query window.
 	App.m_AppWnd.m_AppDlg.m_tcTabCtrl.CurSel(CAppDlg::QUERY_TAB);
 
 	// Reset query filename.
-	App.m_strQueryFile = "";
+	App.m_strQueryFile = TXT("");
 	App.m_bModified    = false;
 
 	// Update UI.
@@ -301,10 +302,10 @@ void CAppCmds::OnQueryOpen()
 		}
 	}
 
-	const char* pszDefDir = NULL;
+	const tchar* pszDefDir = NULL;
 
 	// Use Scripts dir as default, if set.
-	if ( (App.m_pCurrConn != NULL) && (App.m_pCurrConn->m_strSQLDir != "") )
+	if ( (App.m_pCurrConn != NULL) && (App.m_pCurrConn->m_strSQLDir != TXT("")) )
 		pszDefDir = App.m_pCurrConn->m_strSQLDir;
 
 	CPath strPath;
@@ -349,7 +350,7 @@ void CAppCmds::OnQueryOpen(const CPath& strPath)
 void CAppCmds::OnQuerySave()
 {
 	// If new query, do a "Save As".
-	if (App.m_strQueryFile != "")
+	if (App.m_strQueryFile != TXT(""))
 		SaveQuery(App.m_strQueryFile);
 	else
 		OnQuerySaveAs();
@@ -369,10 +370,10 @@ void CAppCmds::OnQuerySave()
 
 void CAppCmds::OnQuerySaveAs()
 {
-	const char* pszDefDir = NULL;
+	const tchar* pszDefDir = NULL;
 
 	// Use Scripts dir as default, if set.
-	if ( (App.m_pCurrConn != NULL) && (App.m_pCurrConn->m_strSQLDir != "") )
+	if ( (App.m_pCurrConn != NULL) && (App.m_pCurrConn->m_strSQLDir != TXT("")) )
 		pszDefDir = App.m_pCurrConn->m_strSQLDir;
 
 	CPath strPath;
@@ -382,7 +383,7 @@ void CAppCmds::OnQuerySaveAs()
 		return;
 
 	// Warn if replacing.
-	if ( (strPath.Exists()) && (App.QueryMsg("Replace existing file?\n\n%s", strPath) != IDYES) )
+	if ( (strPath.Exists()) && (App.QueryMsg(TXT("Replace existing file?\n\n%s"), strPath) != IDYES) )
 		return;
 
 	// Save it.
@@ -416,7 +417,7 @@ void CAppCmds::OnQueryPrint()
 	CString strQuery = App.m_AppWnd.m_AppDlg.m_ebQuery.Text();
 
 	// Nothing to print?
-	if (strQuery == "")
+	if (strQuery == TXT(""))
 		return;
 
 	CPrinter oPrinter;
@@ -432,11 +433,11 @@ void CAppCmds::OnQueryPrint()
 
 	// Get printer attributes.
 	CRect rcRect = oDC.PrintableArea();
-	CSize dmFont = oDC.TextExtents("Wy");
+	CSize dmFont = oDC.TextExtents(TXT("Wy"));
 
 	// Calculate number of pages.
 	int nPageSize  = rcRect.Height() / dmFont.cy;
-	int nRptLines  = strQuery.Count('\r');
+	int nRptLines  = strQuery.Count(TXT('\r'));
 	int nPages     = nRptLines / nPageSize;
 	int nLineStart = 0;
 
@@ -445,7 +446,7 @@ void CAppCmds::OnQueryPrint()
 		nPages++;
 
 	// Start printing.
-	oDC.Start("PQT Query " + (CString)App.m_strQueryFile);
+	oDC.Start(TXT("PQT Query ") + (CString)App.m_strQueryFile);
 
 	// For all pages.
 	for (int p = 0; p < nPages; ++p)
@@ -468,7 +469,7 @@ void CAppCmds::OnQueryPrint()
 		for (int l = nFirstLine; l < nLastLine; ++l)
 		{
 			// Find the end of the report line.
-			int nLineEnd = strQuery.Find('\r', nLineStart);
+			int nLineEnd = strQuery.Find(TXT('\r'), nLineStart);
 
 			// Extract report line.
 			CString strLine = strQuery.Mid(nLineStart, nLineEnd-nLineStart-1);
@@ -559,7 +560,7 @@ void CAppCmds::OnExecCurrent()
 		strQuery = strQuery.Mid(nStart, nEnd-nStart);
 
 	// Any parameters to provide?
-	if (strQuery.Find('$') != -1)
+	if (strQuery.Find(TXT('$')) != -1)
 	{
 		CStrArray astrParams, astrValues;
 
@@ -567,15 +568,15 @@ void CAppCmds::OnExecCurrent()
 		int nParamEnd   = 0;
 
 		// For all parameters.
-		while ((nParamStart = strQuery.Find('$', nParamStart)) != -1)
+		while ((nParamStart = strQuery.Find(TXT('$'), nParamStart)) != -1)
 		{
 			// Find parameter end marker.
-			nParamEnd = strQuery.Find('$', nParamStart+1);
+			nParamEnd = strQuery.Find(TXT('$'), nParamStart+1);
 
 			// Parameter end maker not found?
 			if (nParamEnd == -1)
 			{
-				App.AlertMsg("Parameter marker ($) mismatch.");
+				App.AlertMsg(TXT("Parameter marker ($) mismatch."));
 				return;
 			}
 
@@ -584,7 +585,7 @@ void CAppCmds::OnExecCurrent()
 
 			if (strParam.Empty())
 			{
-				App.AlertMsg("Empty parameter ($$) found."); 
+				App.AlertMsg(TXT("Empty parameter ($$) found.")); 
 				return;
 			}
 
@@ -614,16 +615,16 @@ void CAppCmds::OnExecCurrent()
 		nParamEnd   = -1;
 
 		// Clear query.
-		strQuery = "";
+		strQuery = TXT("");
 
 		// For all parameters.
-		while ((nParamStart = strTmpQuery.Find('$', nParamStart)) != -1)
+		while ((nParamStart = strTmpQuery.Find(TXT('$'), nParamStart)) != -1)
 		{
 			// Copy query up to parameter start marker.
 			strQuery += strTmpQuery.Mid(nParamEnd+1, nParamStart-nParamEnd-1);
 
 			// Find parameter end marker.
-			nParamEnd = strTmpQuery.Find('$', nParamStart+1);
+			nParamEnd = strTmpQuery.Find(TXT('$'), nParamStart+1);
 
 			ASSERT(nParamEnd != -1);
 
@@ -656,12 +657,12 @@ void CAppCmds::OnExecCurrent()
 		App.m_pQuery = NULL;
 
 		// Reset the "find row" values.
-		App.m_strFindVal   = "";
+		App.m_strFindVal   = TXT("");
 		App.m_nLastFindRow = -1;
 		App.m_nLastFindCol = -1;
 
 		// Execute the query.
-		CTable& oTable = App.m_oMDB.CreateTable("Query", App.m_oConnection, strQuery);
+		CTable& oTable = App.m_oMDB.CreateTable(TXT("Query"), App.m_oConnection, strQuery);
 
 		// Save query results.
 		App.m_pQuery = new CQuery(strQuery, oTable);
@@ -673,10 +674,10 @@ void CAppCmds::OnExecCurrent()
 	catch(CSQLException& e)
 	{
 		// Translate % chars before reporting.
-		e.m_strError.Replace('%', "%%");
+		e.m_strError.Replace(TXT('%'), TXT("%%"));
 
 		// Notify user.
-		App.AlertMsg(e.m_strError);
+		App.AlertMsg(TXT("%s"), e.m_strError);
 	}
 
 	UpdateUI();
@@ -822,7 +823,7 @@ void CAppCmds::OnResultsFind()
 void CAppCmds::OnResultsFindNext()
 {
 	// Have a value to find.
-	if (App.m_strFindVal != "")
+	if (App.m_strFindVal != TXT(""))
 	{
 		ASSERT(App.m_pQuery != NULL);
 
@@ -832,12 +833,12 @@ void CAppCmds::OnResultsFindNext()
 		int nStartCol = App.m_nLastFindCol+1;
 
 		// For all rows from the last found row.
-		for (int r = nStartRow; r < oRes.RowCount(); r++)
+		for (size_t r = nStartRow; r < oRes.RowCount(); r++)
 		{
 			CRow& oRow = oRes[r];
 
 			// For all columns from the last found column.
-			for (int c = nStartCol; c < oRes.ColumnCount(); c++)
+			for (size_t c = nStartCol; c < oRes.ColumnCount(); c++)
 			{
 				CString strValue = oRow[c].Format().ToLower();
 
@@ -896,16 +897,16 @@ void CAppCmds::OnResultsSaveAs()
 		oFile.Create(strPath);
 
 		// For all rows...
-		for (int r = 0; r < oTable.RowCount(); ++r)
+		for (size_t r = 0; r < oTable.RowCount(); ++r)
 		{
 			CRow&   oRow = oTable[r];
 			CString strLine;
 
 			// Generate line of field values.
-			for (int c = 0; c < oTable.ColumnCount(); ++c)
+			for (size_t c = 0; c < oTable.ColumnCount(); ++c)
 			{
 				if (c != 0)
-					strLine += ',';
+					strLine += TXT(',');
 
 				CString strField = App.m_strNull;
 
@@ -915,7 +916,7 @@ void CAppCmds::OnResultsSaveAs()
 				strLine += strField;
 			}
 
-			strLine += "\r\n";
+			strLine += TXT("\r\n");
 
 			// Write the row out.
 			oFile.Write(strLine, strLine.Length());
@@ -926,7 +927,7 @@ void CAppCmds::OnResultsSaveAs()
 	catch(CFileException& e)
 	{
 		// Notify user.
-		App.AlertMsg(e.ErrorText());
+		App.AlertMsg(TXT("%s"), e.ErrorText());
 	}
 }
 
@@ -966,7 +967,7 @@ void CAppCmds::OnResultsPrint()
 
 	// Get printer attributes.
 	CRect rcRect = oDC.PrintableArea();
-	CSize dmFont = oDC.TextExtents("Wy");
+	CSize dmFont = oDC.TextExtents(TXT("Wy"));
 
 	// Calculate number of pages.
 	int nPageSize  = rcRect.Height() / dmFont.cy;
@@ -977,7 +978,7 @@ void CAppCmds::OnResultsPrint()
 		nPages++;
 
 	// Start printing.
-	oDC.Start("PQT Results " + (CString)App.m_strQueryFile);
+	oDC.Start(TXT("PQT Results ") + (CString)App.m_strQueryFile);
 
 	// For all pages.
 	for (int p = 0; p < nPages; ++p)
@@ -989,21 +990,21 @@ void CAppCmds::OnResultsPrint()
 		rcLine.bottom = rcLine.top + dmFont.cy;
 
 		// Calculate lines on this page.
-		int nFirstLine = p * nPageSize;
-		int nLastLine  = nFirstLine + nPageSize;
+		uint nFirstLine = p * nPageSize;
+		uint nLastLine  = nFirstLine + nPageSize;
 
 		// Adjust rows, if last page.
 		if (nLastLine > oTable.RowCount())
 			nLastLine = oTable.RowCount();
 
 		// For all lines on the page.
-		for (int l = nFirstLine; l < nLastLine; ++l)
+		for (size_t l = nFirstLine; l < nLastLine; ++l)
 		{
 			CRow&   oRow = oTable[l];
 			CString strLine;
 
 			// Generate line of field values.
-			for (int c = 0; c < oTable.ColumnCount(); ++c)
+			for (size_t c = 0; c < oTable.ColumnCount(); ++c)
 			{
 				CString strField = App.m_strNull;
 
@@ -1011,7 +1012,7 @@ void CAppCmds::OnResultsPrint()
 					strField = oRow[c].Format();
 
 				strLine += strField;
-				strLine += ' ';
+				strLine += TXT(' ');
 			}
 
 			// Print it.
@@ -1164,7 +1165,7 @@ CString CAppCmds::CmdHintStr(uint iCmdID) const
 	// Is a favourite script?
 	if ( (iCmdID >= ID_FIRST_SCRIPT_CMD) && (iCmdID <= ID_LAST_SCRIPT_CMD) )
 	{
-		return "Execute this script";
+		return TXT("Execute this script");
 	}
 
 	return CCmdControl::CmdHintStr(iCmdID);
@@ -1216,7 +1217,7 @@ void CAppCmds::Connect(int nConnection, const CString& strLogin, const CString& 
 	catch(CSQLException& e)
 	{
 		// Notify user.
-		App.AlertMsg(e.m_strError);
+		App.AlertMsg(TXT("%s"), e.m_strError);
 
 		// Cleanup connection.
 		OnDBDisconnect();
@@ -1241,26 +1242,14 @@ bool CAppCmds::LoadQuery(const CPath& strPath)
 
 	try
 	{
-		CFile oFile;
+		CString    strQuery;
+		TextFormat eFormat;
 
-		// Open, for reading.
-		oFile.Open(strPath, GENERIC_READ);
-
-		// Get the files' length.
-		long lLength = oFile.Size();
-
-		// Allocate a read buffer + EOL char.
-		char* pszQuery = (char*) _alloca(lLength+1);
-
-		// Read the file and close it.
-		oFile.Read(pszQuery, lLength);
-		oFile.Close();
-
-		// Ensure the query string has an EOL char.
-		pszQuery[lLength] = '\0';
+		// Read the query file.
+		CFile::ReadTextFile(strPath, strQuery, eFormat);
 
 		// Load the query into the text editor.
-		App.m_AppWnd.m_AppDlg.m_ebQuery.Text(pszQuery);
+		App.m_AppWnd.m_AppDlg.m_ebQuery.Text(strQuery);
 
 		// Save query filename.
 		App.m_strQueryFile = strPath;
@@ -1274,7 +1263,7 @@ bool CAppCmds::LoadQuery(const CPath& strPath)
 	catch(CFileException& e)
 	{
 		// Notify user.
-		App.AlertMsg(e.ErrorText());
+		App.AlertMsg(TXT("%s"), e.ErrorText());
 	}
 
 	return bOK;
@@ -1301,12 +1290,8 @@ bool CAppCmds::SaveQuery(const CPath& strPath)
 
 	try
 	{
-		CFile oFile;
-
-		// Write it.
-		oFile.Create(strPath);
-		oFile.Write(strQuery, strQuery.Length());
-		oFile.Close();
+		// Write the query file.
+		CFile::WriteTextFile(strPath, strQuery, ANSI_TEXT);
 
 		// Reset modified flag.
 		App.m_bModified = false;
@@ -1319,7 +1304,7 @@ bool CAppCmds::SaveQuery(const CPath& strPath)
 	catch(CFileException& e)
 	{
 		// Notify user.
-		App.AlertMsg(e.ErrorText());
+		App.AlertMsg(TXT("%s"), e.ErrorText());
 	}
 
 	return bOK;
@@ -1343,13 +1328,13 @@ void CAppCmds::UpdateScriptsMenu()
 	CPopupMenu oMenu = App.m_AppWnd.m_Menu.GetItemPopup(SCRIPTS_MENU_POS);
 
 	// Clear favourite scripts menu and table.
-	for (int i = 0; i < App.m_oScripts.RowCount(); i++)
+	for (size_t i = 0; i < App.m_oScripts.RowCount(); i++)
 		oMenu.RemoveCmd(App.m_oScripts[i][CScripts::ID].GetInt());
 
 	App.m_oScripts.Truncate();
 
 	// Scripts dir set?
-	if ( (App.m_pCurrConn != NULL) && (App.m_pCurrConn->m_strSQLDir != "") )
+	if ( (App.m_pCurrConn != NULL) && (App.m_pCurrConn->m_strSQLDir != TXT("")) )
 	{
 		CPath strPath = App.m_pCurrConn->m_strSQLDir;
 
@@ -1360,17 +1345,17 @@ void CAppCmds::UpdateScriptsMenu()
 			CFileTree	oSQLFiles;
 
 			// Find all scripts.
-			oSQLFinder.Find(strPath, "*.sql", false, oSQLFiles);
+			oSQLFinder.Find(strPath, TXT("*.sql"), false, oSQLFiles);
 
 			// Get shortcut to the filename array.
 			CStrArray& astrFiles = oSQLFiles.Root()->m_oData.m_astrFiles;
 
 			// Copy to the scripts table.
-			for (int i = 0; i < astrFiles.Size(); i++)
+			for (size_t i = 0; i < astrFiles.Size(); i++)
 				App.m_oScripts.Add(ID_FIRST_SCRIPT_CMD+i, strPath, astrFiles[i]);
 
 			// Load favourite scripts menu.
-			for (int i = 0; i < App.m_oScripts.RowCount(); i++)
+			for (size_t i = 0; i < App.m_oScripts.RowCount(); i++)
 			{
 				CRow&   oRow    = App.m_oScripts[i];
 				int     nID     = oRow[CScripts::ID];

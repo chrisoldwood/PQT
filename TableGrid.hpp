@@ -42,9 +42,9 @@ public:
 	struct Column
 	{
 		CString	m_strName;		// The name.
-		int		m_nWidth;		// The width in pixels.
-		int		m_nAlign;		// The alignment of the text.
-		int		m_nField;		// The row field.
+		size_t	m_nWidth;		// The width in pixels.
+		uint	m_nAlign;		// The alignment of the text.
+		size_t	m_nField;		// The row field.
 	};
 
 	//
@@ -53,17 +53,17 @@ public:
 	CTableGrid(IRowHandler* pRowHandler = NULL);
 	~CTableGrid();
 
-	void  Columns(int nColumns, Column* pColumns);
+	void  Columns(size_t nColumns, Column* pColumns);
 
-	int   RowCount();
-	CRow& Row(int nRow);
+	size_t RowCount();
+	CRow& Row(size_t nRow);
 
 	void  Clear    ();
 	void  AddRows  (const CTable& oTable,  bool bReSort = true, int nSel = 0);
 	void  AddRows  (const CResultSet& oRS, bool bReSort = true, int nSel = 0);
-	int   AddRow   (const CRow& oRow,      bool bReSort = true, bool bSelect = true);
-	int   UpdateRow(int nRow,        bool bReSort = true, bool bSelect = true);
-	void  DeleteRow(int nRow);
+	size_t AddRow   (const CRow& oRow,      bool bReSort = true, bool bSelect = true);
+	size_t UpdateRow(size_t nRow,           bool bReSort = true, bool bSelect = true);
+	void  DeleteRow(size_t nRow);
 
 	void  Sort();
 
@@ -111,16 +111,16 @@ public:
 *******************************************************************************
 */
 
-inline int CTableGrid::RowCount()
+inline size_t CTableGrid::RowCount()
 {
 	return ItemCount();
 }
 
-inline CRow& CTableGrid::Row(int nRow)
+inline CRow& CTableGrid::Row(size_t nRow)
 {
 	ASSERT((nRow >= 0) && (nRow < RowCount()));
 
-	return *((CRow*)ItemPtr(nRow));
+	return *(static_cast<CRow*>(ItemPtr(nRow)));
 }
 
 inline void CTableGrid::Clear()

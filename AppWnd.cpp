@@ -178,25 +178,25 @@ void CAppWnd::UpdateTitle()
 	// Append connection, if one.
 	if (App.m_pCurrConn != NULL)
 	{
-		strTitle += " [";
+		strTitle += TXT(" [");
 		strTitle += App.m_pCurrConn->m_strName;
-		strTitle += "]";
+		strTitle += TXT("]");
 	}
 
-	if ( (App.m_pCurrConn != NULL) && (App.m_strQueryFile != "") )
-		strTitle += " -";
+	if ( (App.m_pCurrConn != NULL) && (App.m_strQueryFile != TXT("")) )
+		strTitle += TXT(" -");
 
 	// Append query filename, if one.
-	if (App.m_strQueryFile != "")
+	if (App.m_strQueryFile != TXT(""))
 	{
-		strTitle += " [";
+		strTitle += TXT(" [");
 		strTitle += App.m_strQueryFile.FileName();
 
 		// Add modified flag, if set.
 		if (App.m_bModified)
-			strTitle += " *";
+			strTitle += TXT(" *");
 
-		strTitle += "]";
+		strTitle += TXT("]");
 	}
 
 	Title(strTitle);
@@ -215,7 +215,7 @@ void CAppWnd::UpdateTitle()
 *******************************************************************************
 */
 
-void CAppWnd::OnDropFile(int nFile, const char* pszPath)
+void CAppWnd::OnDropFile(int nFile, const tchar* pszPath)
 {
 	ASSERT(nFile   >= 0);
 	ASSERT(pszPath != NULL);

@@ -63,13 +63,13 @@ void CConnectDlg::OnInitDialog()
 	m_ebPassword.TextLimit(100);
 
 	// Load the database combo.
-	for (uint i = 0; i < App.m_apConConfigs.size(); i++)
+	for (size_t i = 0; i < App.m_apConConfigs.size(); i++)
 	{
 		CConConfig* pConn = App.m_apConConfigs[i];
 
 		m_cbDatabase.Add(pConn->m_strName, i);
 
-		if (m_nConnection == (int)i)
+		if (static_cast<size_t>(m_nConnection) == i)
 			strDefault = pConn->m_strName;
 	}
 

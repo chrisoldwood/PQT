@@ -101,21 +101,21 @@ bool CCfgConDlg::OnOk()
 	// Have a name?
 	if (m_oConfig.m_strName.Empty())
 	{
-		AlertMsg("You must supply a name for the connection.");
+		AlertMsg(TXT("You must supply a name for the connection."));
 		return false;
 	}
 
 	// Have either a DSN or a Driver?
 	if (m_oConfig.m_strDSN.Empty() && m_oConfig.m_strDriver.Empty())
 	{
-		AlertMsg("You must supply either a DSN or a Driver name.");
+		AlertMsg(TXT("You must supply either a DSN or a Driver name."));
 		return false;
 	}
 
 	// Have a Server or File to go with the Driver?
 	if (!m_oConfig.m_strDriver.Empty() && (m_oConfig.m_strServer.Empty() && m_oConfig.m_strFile.Empty()))
 	{
-		AlertMsg("You must supply either a Server or File.");
+		AlertMsg(TXT("You must supply either a Server or File."));
 		return false;
 	}
 
@@ -178,7 +178,7 @@ void CCfgConDlg::OnComputers()
 {
 	CPath strPath;
 
-	if (strPath.SelectComputer(*this, "Select the server."))
+	if (strPath.SelectComputer(*this, TXT("Select the server.")))
 		m_ebServer.Text(strPath);
 }
 
@@ -196,10 +196,10 @@ void CCfgConDlg::OnComputers()
 
 void CCfgConDlg::OnFiles()
 {
-	static char szExts[] = {	"All Files (*.*)\0*.*\0"
-								"\0\0"					 };
+	static tchar szExts[] = {	TXT("All Files (*.*)\0*.*\0")
+								TXT("\0\0")					 };
 
-	static char szDefExt[] = { "" };
+	static tchar szDefExt[] = { TXT("") };
 
 	CPath strPath;
 
@@ -223,6 +223,6 @@ void CCfgConDlg::OnSQLDirs()
 {
 	CPath strPath;
 
-	if (strPath.SelectDir(*this, "Select the default SQL scripts folder.", CPath::ApplicationDir()))
+	if (strPath.SelectDir(*this, TXT("Select the default SQL scripts folder."), CPath::ApplicationDir()))
 		m_ebSQLDir.Text(strPath);
 }

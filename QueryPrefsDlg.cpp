@@ -10,6 +10,7 @@
 
 #include "Common.hpp"
 #include "QueryPrefsDlg.hpp"
+#include <WCL/StrCvt.hpp>
 
 /******************************************************************************
 ** Method:		Default constructor.
@@ -47,13 +48,11 @@ CQueryPrefsDlg::CQueryPrefsDlg()
 
 void CQueryPrefsDlg::OnInitDialog()
 {
-	char szValue[50];
-
 	// Initialise the controls
-	m_ebMinWidth.Text(_itoa(m_nMinWidth, szValue, 10));
+	m_ebMinWidth.Text(CStrCvt::FormatUInt(m_nMinWidth));
 	m_ebMinWidth.TextLimit(3);
 
-	m_ebMaxWidth.Text(_itoa(m_nMaxWidth, szValue, 10));
+	m_ebMaxWidth.Text(CStrCvt::FormatUInt(m_nMaxWidth));
 	m_ebMaxWidth.TextLimit(3);
 
 	m_ebNullVal.Text(m_strNullVal);
@@ -75,20 +74,20 @@ void CQueryPrefsDlg::OnInitDialog()
 bool CQueryPrefsDlg::OnOk()
 {
 	// Fetch data from the controls.
-	m_nMinWidth  = atoi(m_ebMinWidth.Text());
-	m_nMaxWidth  = atoi(m_ebMaxWidth.Text());
+	m_nMinWidth  = CStrCvt::ParseUInt(m_ebMinWidth.Text());
+	m_nMaxWidth  = CStrCvt::ParseUInt(m_ebMaxWidth.Text());
 	m_strNullVal = m_ebNullVal.Text();
 
 	// Validate.
 	if ( (m_nMinWidth < 1) || (m_nMinWidth > 255) )
 	{
-		AlertMsg("The min column width must between 1 and 255");
+		AlertMsg(TXT("The min column width must between 1 and 255"));
 		return false;
 	}
 
 	if ( (m_nMaxWidth < 1) || (m_nMaxWidth > 255) )
 	{
-		AlertMsg("The max column width must between 1 and 255");
+		AlertMsg(TXT("The max column width must between 1 and 255"));
 		return false;
 	}
 

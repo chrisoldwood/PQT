@@ -60,16 +60,16 @@ void CSelDriverDlg::OnInitDialog()
 	{
 		CODBCSource::InstalledDrivers(astrDrivers);
 
-		for (int i = 0; i < astrDrivers.Size(); i++)
+		for (size_t i = 0; i < astrDrivers.Size(); i++)
 			m_lbDrivers.Add(astrDrivers[i]);
 	}
 	catch(CSQLException e)
 	{
-		AlertMsg("Failed to enumerate ODBC drivers.\n\n%s", e.m_strError);
+		AlertMsg(TXT("Failed to enumerate ODBC drivers.\n\n%s"), e.m_strError);
 	}
 
 	// Select first by default.
-	m_lbDrivers.CurSel(0);
+	m_lbDrivers.CurSel(0U);
 
 	// Enable OK button, if something to select.
 	Control(IDOK).Enable(astrDrivers.Size());

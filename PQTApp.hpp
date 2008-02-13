@@ -66,14 +66,14 @@ public:
 	CConConfigs	m_apConConfigs;
 	CConConfig* m_pCurrConn;
 	CRect		m_rcLastPos;
-	int			m_nMinWidth;
-	int			m_nMaxWidth;
+	size_t		m_nMinWidth;
+	size_t		m_nMaxWidth;
 	CString		m_strNull;
 
 	//
 	// Constants.
 	//
-	static const char* VERSION;
+	static const tchar* VERSION;
 
 protected:
 	//

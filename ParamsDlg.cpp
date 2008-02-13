@@ -87,16 +87,16 @@ void CParamsDlg::OnInitDialog()
 	CRect rcValue = m_pebValue->WindowRect();
 
 	// Convert to dialog co-ordinates.
-	::MapWindowPoints(HWND_DESKTOP, m_hWnd, (POINT*)&rcParam, 2);
-	::MapWindowPoints(HWND_DESKTOP, m_hWnd, (POINT*)&rcValue, 2);
+	::MapWindowPoints(HWND_DESKTOP, m_hWnd, reinterpret_cast<POINT*>(&rcParam), 2);
+	::MapWindowPoints(HWND_DESKTOP, m_hWnd, reinterpret_cast<POINT*>(&rcValue), 2);
 
 	// Get the OK/Cancel button positions in screen co-ordinates.
 	CRect rcOK     = m_btnOK.WindowRect();
 	CRect rcCancel = m_btnCancel.WindowRect();
 
 	// Convert to dialog co-ordinates.
-	::MapWindowPoints(HWND_DESKTOP, m_hWnd, (POINT*)&rcOK,     2);
-	::MapWindowPoints(HWND_DESKTOP, m_hWnd, (POINT*)&rcCancel, 2);
+	::MapWindowPoints(HWND_DESKTOP, m_hWnd, reinterpret_cast<POINT*>(&rcOK),     2);
+	::MapWindowPoints(HWND_DESKTOP, m_hWnd, reinterpret_cast<POINT*>(&rcCancel), 2);
 
 	// Calculate how much to grow the dialog by.
 	int nExtraHeight = (rcParam.Height() * (m_pastrParams->Size()-1))
@@ -129,7 +129,7 @@ void CParamsDlg::OnInitDialog()
 	m_ptxtParam->Text(m_pastrParams->At(0));
 
 	// Create the extra param and value controls.
-	for (int i = 1; i < m_pastrParams->Size(); ++i)
+	for (size_t i = 1; i < m_pastrParams->Size(); ++i)
 	{
 		CRect rcNewParam = rcParam;
 		CRect rcNewValue = rcValue;
@@ -189,7 +189,7 @@ void CParamsDlg::OnInitDialog()
 bool CParamsDlg::OnOk()
 {
 	// Get the parameter values.
-	for (int i = 0; i < m_pastrParams->Size(); ++i)
+	for (size_t i = 0; i < m_pastrParams->Size(); ++i)
 		m_pastrValues->Add(m_aoEditBoxes[i]->Text());
 
 	return true;

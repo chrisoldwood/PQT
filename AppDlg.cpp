@@ -62,8 +62,8 @@ CAppDlg::CAppDlg() : CMainDlg(IDD_MAIN)
 void CAppDlg::OnInitDialog()
 {
 	// Add the tabs.
-	m_tcTabCtrl.AddTab("Query",   m_ebQuery);
-	m_tcTabCtrl.AddTab("Results", m_lvGrid);
+	m_tcTabCtrl.AddTab(TXT("Query"),   m_ebQuery);
+	m_tcTabCtrl.AddTab(TXT("Results"), m_lvGrid);
 	m_tcTabCtrl.CurSel(QUERY_TAB);
 
 	// Use a fixed pitch font for the query/results.
@@ -104,12 +104,12 @@ void CAppDlg::DisplayTable(const CTable& oTable)
 	CTableGrid::Column* pColumns = new CTableGrid::Column[oTable.ColumnCount()];
 
 	// Setup the columns.
-	for (int i = 0; i < oTable.ColumnCount(); i++)
+	for (size_t i = 0; i < oTable.ColumnCount(); i++)
 	{
 		const CColumn& oColumn = oTable.Column(i);
 
 		// Compute col width in chars, clipping to app settings.
-		int nColWidth = min(max(oColumn.DisplayWidth(), App.m_nMinWidth), App.m_nMaxWidth);
+		size_t nColWidth = min(max(oColumn.DisplayWidth(), App.m_nMinWidth), App.m_nMaxWidth);
 
 		pColumns[i].m_strName = oColumn.Name();
 		pColumns[i].m_nWidth  = m_lvGrid.StringWidth(nColWidth) + 15;

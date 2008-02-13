@@ -45,7 +45,7 @@ public:
 	//
 	// Methods.
 	//
-	void Add(int nID, const char* pszPath, const char* pszFileName);
+	void Add(int nID, const tchar* pszPath, const tchar* pszFileName);
 
 protected:
 	//
@@ -60,7 +60,7 @@ protected:
 *******************************************************************************
 */
 
-inline void CScripts::Add(int nID, const char* pszPath, const char* pszFileName)
+inline void CScripts::Add(int nID, const tchar* pszPath, const tchar* pszFileName)
 {
 	CRow& oRow = CreateRow();
 

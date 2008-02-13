@@ -24,11 +24,11 @@
 */
 
 CScripts::CScripts(CMDB& oDB)
-	: CTable(oDB, "Scripts")
+	: CTable(oDB, TXT("Scripts"))
 {
-	AddColumn("ID",   MDCT_INT,    0,        CColumn::UNIQUE  );
-	AddColumn("Path", MDCT_FXDSTR, MAX_PATH, CColumn::DEFAULTS);
-	AddColumn("Name", MDCT_FXDSTR, MAX_PATH, CColumn::DEFAULTS);
+	AddColumn(TXT("ID"),   MDCT_INT,    0,        CColumn::UNIQUE  );
+	AddColumn(TXT("Path"), MDCT_FXDSTR, MAX_PATH, CColumn::DEFAULTS);
+	AddColumn(TXT("Name"), MDCT_FXDSTR, MAX_PATH, CColumn::DEFAULTS);
 }
 
 /******************************************************************************

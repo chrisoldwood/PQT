@@ -13,6 +13,7 @@
 #include <MDBL/Table.hpp>
 #include "PQTApp.hpp"
 #include <WCL/Clipboard.hpp>
+#include <WCL/StrCvt.hpp>
 
 /******************************************************************************
 ** Method:		Default constructor.
@@ -68,17 +69,15 @@ void CRowDataDlg::OnInitDialog()
 	m_lvGrid.Font(CFont(ANSI_FIXED_FONT));
 
 	// Set grid columns.
-	m_lvGrid.InsertColumn(0, "#",       50);
-	m_lvGrid.InsertColumn(1, "Column", 150);
-	m_lvGrid.InsertColumn(2, "Value",  225);
+	m_lvGrid.InsertColumn(0, TXT("#"),       50);
+	m_lvGrid.InsertColumn(1, TXT("Column"), 150);
+	m_lvGrid.InsertColumn(2, TXT("Value"),  225);
 
 	// Load column names and data.
-	for (int i = 0; i < m_oTable.ColumnCount(); i++)
+	for (size_t i = 0; i < m_oTable.ColumnCount(); i++)
 	{
-		char szRow[10];
-
 		// LPARAM is column index.
-		int nRow = m_lvGrid.InsertItem(i, _itoa(i, szRow, 10));
+		int nRow = m_lvGrid.InsertItem(i, CStrCvt::FormatUInt(i));
 
 		// Set the column name.
 		m_lvGrid.ItemText(nRow, 1, m_oTable.Column(i).Name());
@@ -211,7 +210,7 @@ int CALLBACK CRowDataDlg::CompareFunction(LPARAM lParam1, LPARAM lParam2, LPARAM
 	// Sort by column name?
 	else if (pDialog->m_nSortColumn == 1)
 	{
-		nResult = strcmp(pDialog->m_oTable.Column(nRowCol1).Name(), pDialog->m_oTable.Column(nRowCol2).Name());
+		nResult = tstrcmp(pDialog->m_oTable.Column(nRowCol1).Name(), pDialog->m_oTable.Column(nRowCol2).Name());
 	}
 	// Sort by column value?
 	else if (pDialog->m_nSortColumn == 2)
@@ -225,7 +224,7 @@ int CALLBACK CRowDataDlg::CompareFunction(LPARAM lParam1, LPARAM lParam2, LPARAM
 		if (pDialog->m_oRow[nRowCol2] != null)
 			strValue2 = pDialog->m_oRow[nRowCol2].Format();
 
-		nResult = strcmp(strValue1, strValue2);
+		nResult = tstrcmp(strValue1, strValue2);
 	}
 
 	return (nResult * pDialog->m_nSortOrder);

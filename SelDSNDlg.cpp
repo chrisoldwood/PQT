@@ -60,16 +60,16 @@ void CSelDSNDlg::OnInitDialog()
 	{
 		CODBCSource::InstalledSources(astrSources);
 
-		for (int i = 0; i < astrSources.Size(); i++)
+		for (size_t i = 0; i < astrSources.Size(); i++)
 			m_lbDSNs.Add(astrSources[i]);
 	}
 	catch(CSQLException e)
 	{
-		AlertMsg("Failed to enumerate ODBC DSNs.\n\n%s", e.m_strError);
+		AlertMsg(TXT("Failed to enumerate ODBC DSNs.\n\n%s"), e.m_strError);
 	}
 
 	// Select first by default.
-	m_lbDSNs.CurSel(0);
+	m_lbDSNs.CurSel(0U);
 
 	// Enable OK button, if something to select.
 	Control(IDOK).Enable(astrSources.Size());

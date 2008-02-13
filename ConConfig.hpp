@@ -60,26 +60,26 @@ inline CString CConConfig::ConnectionString(const CString& strLogin, const CStri
 
 	// Create basic string.
 	if (!m_strDSN.Empty())
-		str += "DSN=" + m_strDSN + ";";
+		str += TXT("DSN=") + m_strDSN + TXT(";");
 
 	if (!m_strDriver.Empty())
-		str += "DRIVER=" + m_strDriver + ";";
+		str += TXT("DRIVER=") + m_strDriver + TXT(";");
 
 	if (!m_strServer.Empty())
-		str += "SERVER=" + m_strServer + ";";
+		str += TXT("SERVER=") + m_strServer + TXT(";");
 
 	if (!m_strDatabase.Empty())
-		str += "DATABASE=" + m_strDatabase + ";";
+		str += TXT("DATABASE=") + m_strDatabase + TXT(";");
 
 	if (!m_strFile.Empty())
-		str += "FILE=" + m_strFile + ";";
+		str += TXT("FILE=") + m_strFile + TXT(";");
 
 	// Append user name and password.
-	str += "UID=" + strLogin    + ";";
-	str += "PWD=" + strPassword + ";";
+	str += TXT("UID=") + strLogin    + TXT(";");
+	str += TXT("PWD=") + strPassword + TXT(";");
 
 	// Append no-dialog option.
-	str += "DLG=0;";
+	str += TXT("DLG=0;");
 
 	return str;
 }

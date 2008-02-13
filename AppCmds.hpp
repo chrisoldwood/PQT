@@ -94,7 +94,7 @@ public:
 	//
 	// Constants.
 	//
-	static const char* QUERY_MODIFIED_MSG;
+	static const tchar* QUERY_MODIFIED_MSG;
 
 protected:
 	//

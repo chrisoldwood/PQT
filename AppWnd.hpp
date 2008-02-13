@@ -70,7 +70,7 @@ protected:
 	//
 	virtual void OnCreate(const CRect& rcClient);
 	virtual void OnFocus();
-	virtual void OnDropFile(int nFile, const char* pszPath);
+	virtual void OnDropFile(int nFile, const tchar* pszPath);
 	virtual bool OnQueryClose();
 	virtual void OnDestroy();
 };
