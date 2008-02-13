@@ -5,3 +5,19 @@
 - Better formatting on results printing.
 
 - Scripts menu to include folders.
+
+- Escaping of param char.
+
+- Change param to ${} format
+
+- Add type hints to param, e.g. ${Customer Name$50} or ${ID%5} or ${Date#}
+
+- Chnage to property page for confiugration.
+
+- Support no login/trusted/#NA.
+
+- Disable gridlines
+
+- varchar not working under Unicode?
+
+- Query/Results files - ANSI/Unicode.
