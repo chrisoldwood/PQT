@@ -50,7 +50,7 @@ const tchar* CPQTApp::VERSION = TXT("v1.1");
 
 CPQTApp::CPQTApp()
 	: CApp(m_AppWnd, m_AppCmds)
-	, m_nDefConnection(-1)
+	, m_nDefConnection(Core::npos)
 	, m_bModified(false)
 	, m_pQuery(NULL)
 	, m_nLastFindRow(-1)
@@ -215,8 +215,8 @@ void CPQTApp::LoadDefaults()
 	}
 
 	// Validate settings.
-	if (static_cast<size_t>(m_nDefConnection) >= m_apConConfigs.size())
-		m_nDefConnection = -1;
+	if (m_nDefConnection >= m_apConConfigs.size())
+		m_nDefConnection = Core::npos;
 
 	// Load MRU list.
 	m_oMRUList.Load(m_oIniFile);

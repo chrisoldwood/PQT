@@ -27,7 +27,7 @@
 
 CConnectDlg::CConnectDlg()
 	: CDialog(IDD_CONNECT)
-	, m_nConnection(-1)
+	, m_nConnection(Core::npos)
 {
 	DEFINE_CTRL_TABLE
 		CTRL(IDC_DATABASE,   &m_cbDatabase  )
@@ -69,7 +69,7 @@ void CConnectDlg::OnInitDialog()
 
 		m_cbDatabase.Add(pConn->m_strName, i);
 
-		if (static_cast<size_t>(m_nConnection) == i)
+		if (m_nConnection == i)
 			strDefault = pConn->m_strName;
 	}
 
@@ -108,6 +108,8 @@ void CConnectDlg::OnInitDialog()
 
 bool CConnectDlg::OnOk()
 {
+	ASSERT(m_cbDatabase.Count() > 0);
+
 	// Fetch data from the controls.
 	m_nConnection = m_cbDatabase.ItemData(m_cbDatabase.CurSel());
 	m_strLogin    = m_ebLogin.Text();

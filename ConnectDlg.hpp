@@ -36,7 +36,7 @@ public:
 	//
 	// Members.
 	//
-	int		m_nConnection;
+	size_t	m_nConnection;
 	CString	m_strLogin;
 	CString	m_strPassword;
 

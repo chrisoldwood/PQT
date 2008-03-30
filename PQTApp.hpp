@@ -51,7 +51,7 @@ public:
 	CAppWnd		m_AppWnd;
 	CAppCmds	m_AppCmds;
 
-	int			m_nDefConnection;
+	size_t		m_nDefConnection;
 	CPath		m_strQueryFile;
 	bool		m_bModified;
 	CODBCSource	m_oConnection;
