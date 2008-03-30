@@ -12,7 +12,9 @@
 
 - Add type hints to param, e.g. ${Customer Name$50} or ${ID%5} or ${Date#}
 
-- Chnage to property page for confiugration.
+- Add default value to para, e.g. Date#Today or Date#'2008-01-01'
+
+- Change to property page for configuration.
 
 - Support no login/trusted/#NA.
 
