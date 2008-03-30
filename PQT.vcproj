@@ -330,18 +330,17 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Scripts"
+			Name="Test"
 			Filter="">
-			<Filter
-				Name="Pubs"
-				Filter="">
-				<File
-					RelativePath="Scripts\Pubs\Authors.sql">
-				</File>
-				<File
-					RelativePath="Scripts\Pubs\Publishers.sql">
-				</File>
-			</Filter>
+			<File
+				RelativePath=".\Database\Customers.csv">
+			</File>
+			<File
+				RelativePath=".\scripts\Test\List Customers.sql">
+			</File>
+			<File
+				RelativePath=".\Database\Schema.ini">
+			</File>
 		</Filter>
 		<File
 			RelativePath="PQT.ini">
