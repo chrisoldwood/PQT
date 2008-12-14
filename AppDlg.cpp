@@ -109,7 +109,7 @@ void CAppDlg::DisplayTable(const CTable& oTable)
 		const CColumn& oColumn = oTable.Column(i);
 
 		// Compute col width in chars, clipping to app settings.
-		size_t nColWidth = min(max(oColumn.DisplayWidth(), App.m_nMinWidth), App.m_nMaxWidth);
+		size_t nColWidth = std::min(std::max(oColumn.DisplayWidth(), App.m_nMinWidth), App.m_nMaxWidth);
 
 		pColumns[i].m_strName = oColumn.Name();
 		pColumns[i].m_nWidth  = m_lvGrid.StringWidth(nColWidth) + 15;
