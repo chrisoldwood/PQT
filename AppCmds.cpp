@@ -927,7 +927,7 @@ void CAppCmds::OnResultsSaveAs()
 	catch(CFileException& e)
 	{
 		// Notify user.
-		App.AlertMsg(TXT("%s"), e.What());
+		App.AlertMsg(TXT("%s"), e.twhat());
 	}
 }
 
@@ -1263,7 +1263,7 @@ bool CAppCmds::LoadQuery(const CPath& strPath)
 	catch(CFileException& e)
 	{
 		// Notify user.
-		App.AlertMsg(TXT("%s"), e.What());
+		App.AlertMsg(TXT("%s"), e.twhat());
 	}
 
 	return bOK;
@@ -1304,7 +1304,7 @@ bool CAppCmds::SaveQuery(const CPath& strPath)
 	catch(CFileException& e)
 	{
 		// Notify user.
-		App.AlertMsg(TXT("%s"), e.What());
+		App.AlertMsg(TXT("%s"), e.twhat());
 	}
 
 	return bOK;
