@@ -18,6 +18,9 @@
 
 #include <MDBL/FwdDecls.hpp>
 
+//! The default CTable smart pointer type.
+typedef Core::SharedPtr<CTable> CTablePtr;
+
 /******************************************************************************
 ** 
 ** This is used to hold the query text and resulting table.
@@ -31,21 +34,16 @@ public:
 	//
 	// Constructors/Destructor.
 	//
-	CQuery(const CString& strQuery, CTable& oTable);
-	~CQuery();
+	CQuery(const CString& strQuery, CTablePtr pTable);
 	
 	//
 	// Members.
 	//
-	CString	m_strQuery;
-	CTable*	m_pResults;
+	CString		m_strQuery;
+	CTablePtr	m_pResults;
 };
 
-/******************************************************************************
-**
-** Implementation of inline functions.
-**
-*******************************************************************************
-*/
+//! The default CQuery smart pointer type.
+typedef Core::SharedPtr<CQuery> CQueryPtr;
 
 #endif //QUERY_HPP

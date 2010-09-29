@@ -24,25 +24,8 @@
 *******************************************************************************
 */
 
-CQuery::CQuery(const CString& strQuery, CTable& oTable)
+CQuery::CQuery(const CString& strQuery, CTablePtr pTable)
 	: m_strQuery(strQuery)
-	, m_pResults(&oTable)
+	, m_pResults(pTable)
 {
-}
-
-/******************************************************************************
-** Method:		Destructor.
-**
-** Description:	.
-**
-** Parameters:	None.
-**
-** Returns:		Nothing.
-**
-*******************************************************************************
-*/
-
-CQuery::~CQuery()
-{
-	delete m_pResults;
 }
