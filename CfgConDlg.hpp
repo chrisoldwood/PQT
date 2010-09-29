@@ -49,6 +49,7 @@ protected:
 	CEditBox	m_ebServer;
 	CEditBox	m_ebDatabase;
 	CEditBox	m_ebFile;
+	CComboBox	m_cbSecurity;
 	CEditBox	m_ebLogin;
 	CEditBox	m_ebSQLDir;
 	
@@ -63,6 +64,7 @@ protected:
 	void OnComputers();
 	void OnFiles();
 	void OnSQLDirs();
+	void OnSelectSecurity();
 };
 
 /******************************************************************************

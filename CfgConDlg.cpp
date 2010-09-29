@@ -12,6 +12,7 @@
 #include "CfgConDlg.hpp"
 #include "SelDSNDlg.hpp"
 #include "SelDriverDlg.hpp"
+#include <Core/StringUtils.hpp>
 #include <WCL/Path.hpp>
 
 /******************************************************************************
@@ -36,6 +37,7 @@ CCfgConDlg::CCfgConDlg()
 		CTRL(IDC_SERVER,   &m_ebServer  )
 		CTRL(IDC_DATABASE, &m_ebDatabase)
 		CTRL(IDC_FILENAME, &m_ebFile    )
+		CTRL(IDC_SECURITY, &m_cbSecurity)
 		CTRL(IDC_LOGIN,    &m_ebLogin   )
 		CTRL(IDC_SQLDIR,   &m_ebSQLDir  )
 	END_CTRL_TABLE
@@ -46,6 +48,7 @@ CCfgConDlg::CCfgConDlg()
 		CMD_CTRLMSG(IDC_COMPUTERS, BN_CLICKED, &CCfgConDlg::OnComputers)
 		CMD_CTRLMSG(IDC_FILES,     BN_CLICKED, &CCfgConDlg::OnFiles    )
 		CMD_CTRLMSG(IDC_SQLDIRS,   BN_CLICKED, &CCfgConDlg::OnSQLDirs  )
+		CMD_CTRLMSG(IDC_SECURITY,  CBN_SELCHANGE, &CCfgConDlg::OnSelectSecurity)
 	END_CTRLMSG_TABLE
 }
 
@@ -64,14 +67,21 @@ CCfgConDlg::CCfgConDlg()
 void CCfgConDlg::OnInitDialog()
 {
 	// Initialise the controls.
+	m_cbSecurity.Add(TXT("None"));
+	m_cbSecurity.Add(TXT("Login"));
+	m_cbSecurity.Add(TXT("Trusted"));
+
 	m_ebName.Text(m_oConfig.m_strName);
 	m_ebDSN.Text(m_oConfig.m_strDSN);
 	m_ebDriver.Text(m_oConfig.m_strDriver);
 	m_ebServer.Text(m_oConfig.m_strServer);
 	m_ebDatabase.Text(m_oConfig.m_strDatabase);
 	m_ebFile.Text(m_oConfig.m_strFile);
+	m_cbSecurity.CurSel(m_oConfig.m_eSecurity);
 	m_ebLogin.Text(m_oConfig.m_strLogin);
 	m_ebSQLDir.Text(m_oConfig.m_strSQLDir);
+
+	OnSelectSecurity();
 }
 
 /******************************************************************************
@@ -95,6 +105,7 @@ bool CCfgConDlg::OnOk()
 	m_oConfig.m_strServer   = m_ebServer.Text();
 	m_oConfig.m_strDatabase = m_ebDatabase.Text();
 	m_oConfig.m_strFile     = m_ebFile.Text();
+	m_oConfig.m_eSecurity   = (SecurityModel)m_cbSecurity.CurSel();
 	m_oConfig.m_strLogin    = m_ebLogin.Text();
 	m_oConfig.m_strSQLDir   = m_ebSQLDir.Text();
 
@@ -225,4 +236,14 @@ void CCfgConDlg::OnSQLDirs()
 
 	if (strPath.SelectDir(*this, TXT("Select the default SQL scripts folder."), CPath::ApplicationDir()))
 		m_ebSQLDir.Text(strPath);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//! Handle a new security model being selected.
+
+void CCfgConDlg::OnSelectSecurity()
+{
+	int eSecurity = m_cbSecurity.CurSel();
+
+	m_ebLogin.Enable(eSecurity == LOGIN);
 }
