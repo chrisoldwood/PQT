@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include "RowDataDlg.hpp"
 #include <WCL/Clipboard.hpp>
+#include <Core/ArrayPtr.hpp>
 
 /******************************************************************************
 ** Method:		Default constructor.
@@ -72,7 +73,7 @@ void CAppDlg::OnInitDialog()
 
 	// Set grid style.
 	m_lvGrid.FullRowSelect(true);
-	m_lvGrid.GridLines(true);
+	m_lvGrid.GridLines(App.m_bGridlines);
 	m_lvGrid.NullValue(App.m_strNull);
 }
 
@@ -90,6 +91,8 @@ void CAppDlg::OnInitDialog()
 
 void CAppDlg::DisplayTable(const CTable& oTable)
 {
+	typedef Core::ArrayPtr<CTableGrid::Column> ColumnArrayPtr;
+
 	// Turn off painting.
 	m_lvGrid.Redraw(false);
 
@@ -101,7 +104,7 @@ void CAppDlg::DisplayTable(const CTable& oTable)
 	m_lvGrid.Reserve(oTable.RowCount());
 
 	// Allocate the columns array.
-	CTableGrid::Column* pColumns = new CTableGrid::Column[oTable.ColumnCount()];
+	ColumnArrayPtr pColumns(new CTableGrid::Column[oTable.ColumnCount()]);
 
 	// Setup the columns.
 	for (size_t i = 0; i < oTable.ColumnCount(); i++)
@@ -118,15 +121,12 @@ void CAppDlg::DisplayTable(const CTable& oTable)
 	}
 
 	// Load the grid.
-	m_lvGrid.Columns(oTable.ColumnCount(), pColumns);
+	m_lvGrid.Columns(oTable.ColumnCount(), pColumns.get());
 	m_lvGrid.AddRows(oTable, false, 0);
 
 	// Turn painting back on.
 	m_lvGrid.Redraw(true);
 	m_lvGrid.Invalidate();
-
-	// Cleanup.
-	delete[] pColumns;
 }
 
 /******************************************************************************
