@@ -54,13 +54,13 @@ protected:
 	virtual void OnInitDialog();
 	virtual bool OnOk();
 
-	void OnAdd();
-	void OnEdit();
+	void OnManage();
 	void OnSelect();
 
 	//
 	// Internal methods.
 	//
+	void LoadDatabaseList();
 	void UpdateUI();
 };
 

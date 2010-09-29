@@ -36,8 +36,7 @@ CConnectDlg::CConnectDlg()
 	END_CTRL_TABLE
 
 	DEFINE_CTRLMSG_TABLE
-		CMD_CTRLMSG(IDC_ADD,      BN_CLICKED,    &CConnectDlg::OnAdd   )
-		CMD_CTRLMSG(IDC_EDIT,     BN_CLICKED,    &CConnectDlg::OnEdit  )
+		CMD_CTRLMSG(IDC_MANAGE,   BN_CLICKED,    &CConnectDlg::OnManage)
 		CMD_CTRLMSG(IDC_DATABASE, CBN_SELCHANGE, &CConnectDlg::OnSelect)
 	END_CTRLMSG_TABLE
 }
@@ -56,32 +55,36 @@ CConnectDlg::CConnectDlg()
 
 void CConnectDlg::OnInitDialog()
 {
-	CString strDefault;
+	ASSERT( (m_nConnection == Core::npos) || (m_nConnection < App.m_apConConfigs.size()) );
 
 	// Initialise the controls.
 	m_ebLogin.TextLimit(100);
+	m_ebLogin.Enable(false);
 	m_ebPassword.TextLimit(100);
+	m_ebPassword.Enable(false);
 
-	// Load the database combo.
-	for (size_t i = 0; i < App.m_apConConfigs.size(); i++)
-	{
-		CConConfig* pConn = App.m_apConConfigs[i];
+	LoadDatabaseList();
 
-		m_cbDatabase.Add(pConn->m_strName, i);
+	CConConfigPtr pDefault;
 
-		if (m_nConnection == i)
-			strDefault = pConn->m_strName;
-	}
+	// Find default connection, if available.
+	if (m_nConnection != Core::npos)
+		pDefault = App.m_apConConfigs[m_nConnection];
 
 	// Any connections setup?
-	if (m_cbDatabase.Count())
+	if (m_cbDatabase.Count() != 0)
 	{
+		CString strDefault;
+
+		if (pDefault.get() != nullptr)
+			strDefault = pDefault->m_strName;
+
 		// Find default.
-		int nDefault = m_cbDatabase.FindExact(strDefault);
+		size_t nDefault = m_cbDatabase.FindExact(strDefault);
 
 		// Select 1st, if no default.
-		if (nDefault == CB_ERR)
-			nDefault = 0;
+		if (nDefault == Core::npos)
+			nDefault = 0u;
 			
 		m_cbDatabase.CurSel(nDefault);
 		OnSelect();
@@ -109,6 +112,7 @@ void CConnectDlg::OnInitDialog()
 bool CConnectDlg::OnOk()
 {
 	ASSERT(m_cbDatabase.Count() > 0);
+	ASSERT(m_cbDatabase.CurSel() != Core::npos);
 
 	// Fetch data from the controls.
 	m_nConnection = m_cbDatabase.ItemData(m_cbDatabase.CurSel());
@@ -130,67 +134,20 @@ bool CConnectDlg::OnOk()
 *******************************************************************************
 */
 
-void CConnectDlg::OnAdd()
+void CConnectDlg::OnManage()
 {
-	CCfgConDlg Dlg;
-
-	if (Dlg.RunModal(*this) == IDOK)
+	if (App.m_AppCmds.ManageDatabases())
 	{
-		// Add to the App collection.
-		App.m_apConConfigs.push_back(new CConConfig(Dlg.m_oConfig));
-
-		// Add to the combo box.
-		int nCBIndex = m_cbDatabase.Add(Dlg.m_oConfig.m_strName);
-		m_cbDatabase.ItemData(nCBIndex, App.m_apConConfigs.size()-1);
+		LoadDatabaseList();
 
 		// Select by default.
-		m_cbDatabase.CurSel(nCBIndex);
-		OnSelect();
-	}
+		if (m_cbDatabase.Count() != 0)
+		{
+			m_cbDatabase.CurSel(0u);
+			OnSelect();
+		}
 
-	UpdateUI();
-}
-
-/******************************************************************************
-** Method:		OnEdit()
-**
-** Description:	Show the dialog to edit the current database connection.
-**
-** Parameters:	None.
-**
-** Returns:		Nothing.
-**
-*******************************************************************************
-*/
-
-void CConnectDlg::OnEdit()
-{
-	// Ignore, if nothing editable.
-	if (m_cbDatabase.CurSel() == CB_ERR)
-		return;
-
-	// Get the current selection.
-	int nSel  = m_cbDatabase.CurSel();
-	int nConn = m_cbDatabase.ItemData(nSel);
-
-	// Initialise the dialog.
-	CCfgConDlg Dlg;
-
-	Dlg.m_oConfig = *App.m_apConConfigs[nConn];
-
-	if (Dlg.RunModal(*this) == IDOK)
-	{
-		// Update the master list.
-		*App.m_apConConfigs[nConn] = Dlg.m_oConfig;
-
-		// Update to the combo box.
-		m_cbDatabase.Delete(nSel);
-		nSel = m_cbDatabase.Add(Dlg.m_oConfig.m_strName);
-		m_cbDatabase.ItemData(nSel, nConn);
-
-		// Reselect.
-		m_cbDatabase.CurSel(nSel);
-		OnSelect();
+		UpdateUI();
 	}
 }
 
@@ -209,12 +166,31 @@ void CConnectDlg::OnEdit()
 void CConnectDlg::OnSelect()
 {
 	// Get the current selection.
-	int         nSel  = m_cbDatabase.CurSel();
-	int         nConn = m_cbDatabase.ItemData(nSel);
-	CConConfig*	pConn = App.m_apConConfigs[nConn];
+	int           nSel  = m_cbDatabase.CurSel();
+	int           nConn = m_cbDatabase.ItemData(nSel);
+	CConConfigPtr pConn = App.m_apConConfigs[nConn];
 
 	// Set the default login.
 	m_ebLogin.Text(pConn->m_strLogin);
+	m_ebLogin.Enable(pConn->m_eSecurity == LOGIN);
+	m_ebPassword.Text(TXT(""));
+	m_ebPassword.Enable(pConn->m_eSecurity == LOGIN);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//! Load the list of database connections in the view.
+
+void CConnectDlg::LoadDatabaseList()
+{
+	m_cbDatabase.Reset();
+
+	// Load the database combo.
+	for (size_t i = 0; i < App.m_apConConfigs.size(); i++)
+	{
+		CConConfigPtr pConn = App.m_apConConfigs[i];
+
+		m_cbDatabase.Add(pConn->m_strName, i);
+	}
 }
 
 /******************************************************************************
@@ -234,5 +210,4 @@ void CConnectDlg::UpdateUI()
 	bool bConns = (m_cbDatabase.Count() > 0);
 
 	Control(IDOK).Enable(bConns);
-	Control(IDC_EDIT).Enable(bConns);
 }
