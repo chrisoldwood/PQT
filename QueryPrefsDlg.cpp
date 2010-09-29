@@ -31,6 +31,7 @@ CQueryPrefsDlg::CQueryPrefsDlg()
 		CTRL(IDC_MINWIDTH,	&m_ebMinWidth)
 		CTRL(IDC_MAXWIDTH,	&m_ebMaxWidth)
 		CTRL(IDC_NULLVAL,	&m_ebNullVal )
+		CTRL(IDC_SHOW_GRID,	&m_ckGridlines)
 	END_CTRL_TABLE
 }
 
@@ -57,6 +58,8 @@ void CQueryPrefsDlg::OnInitDialog()
 
 	m_ebNullVal.Text(m_strNullVal);
 	m_ebNullVal.TextLimit(10);
+
+	m_ckGridlines.Check(m_bGridlines);
 }
 
 /******************************************************************************
@@ -77,6 +80,7 @@ bool CQueryPrefsDlg::OnOk()
 	m_nMinWidth  = CStrCvt::ParseUInt(m_ebMinWidth.Text());
 	m_nMaxWidth  = CStrCvt::ParseUInt(m_ebMaxWidth.Text());
 	m_strNullVal = m_ebNullVal.Text();
+	m_bGridlines = m_ckGridlines.IsChecked();
 
 	// Validate.
 	if ( (m_nMinWidth < 1) || (m_nMinWidth > 255) )

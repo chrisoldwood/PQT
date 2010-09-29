@@ -39,6 +39,7 @@ public:
 	int		m_nMinWidth;
 	int		m_nMaxWidth;
 	CString	m_strNullVal;
+	bool	m_bGridlines;
 
 protected:
 	//
@@ -47,6 +48,7 @@ protected:
 	CEditBox	m_ebMinWidth;
 	CEditBox	m_ebMaxWidth;
 	CEditBox	m_ebNullVal;
+	CCheckBox	m_ckGridlines;
 	
 	//
 	// Message handlers.
