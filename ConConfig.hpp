@@ -16,6 +16,8 @@
 #pragma once
 #endif
 
+#include "SecurityModel.hpp"
+
 /******************************************************************************
 ** 
 ** This class is used to store a connection configuration.
@@ -26,62 +28,33 @@
 class CConConfig
 {
 public:
+	//! Default constructor.
+	CConConfig();
+
 	//
 	// Methods.
 	//
-	CString ConnectionString(const CString& strLogin, const CString& strPassword) const;
+	CString FormatConnectionString(const CString& strLogin, const CString& strPassword) const;
 
 	//
 	// Members.
 	//
-	CString	m_strName;
-	CString	m_strDSN;
-	CString	m_strDriver;
-	CString	m_strServer;
-	CString	m_strDatabase;
-	CString	m_strFile;
-	CString	m_strLogin;
-	CString	m_strSQLDir;
+	CString			m_strName;
+	CString			m_strDSN;
+	CString			m_strDriver;
+	CString			m_strServer;
+	CString			m_strDatabase;
+	CString			m_strFile;
+	SecurityModel	m_eSecurity;		//!< The security model in use.
+	CString			m_strLogin;
+	CString			m_strSQLDir;
+
+	static const uint DEFAULT_TIMEOUT = 15;
 };
 
-// Template shorthands.
-typedef std::vector<CConConfig*> CConConfigs;
-
-/******************************************************************************
-**
-** Implementation of inline functions.
-**
-*******************************************************************************
-*/
-
-inline CString CConConfig::ConnectionString(const CString& strLogin, const CString& strPassword) const
-{
-	CString str;
-
-	// Create basic string.
-	if (!m_strDSN.Empty())
-		str += TXT("DSN=") + m_strDSN + TXT(";");
-
-	if (!m_strDriver.Empty())
-		str += TXT("DRIVER=") + m_strDriver + TXT(";");
-
-	if (!m_strServer.Empty())
-		str += TXT("SERVER=") + m_strServer + TXT(";");
-
-	if (!m_strDatabase.Empty())
-		str += TXT("DATABASE=") + m_strDatabase + TXT(";");
-
-	if (!m_strFile.Empty())
-		str += TXT("FILE=") + m_strFile + TXT(";");
-
-	// Append user name and password.
-	str += TXT("UID=") + strLogin    + TXT(";");
-	str += TXT("PWD=") + strPassword + TXT(";");
-
-	// Append no-dialog option.
-	str += TXT("DLG=0;");
-
-	return str;
-}
+//! The default CConConfig smart pointer type.
+typedef Core::SharedPtr<CConConfig> CConConfigPtr;
+//! The default CConConfig container type.
+typedef std::vector<CConConfigPtr> CConConfigs;
 
 #endif //CONCONFIG_HPP
