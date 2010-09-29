@@ -10,13 +10,15 @@
 #define ID_DB_POPUP                     100
 #define ID_DB_CONNECT                   101
 #define ID_DB_DISCONNECT                102
-#define ID_DB_MRU_1                     103
-#define ID_DB_MRU_2                     104
-#define ID_DB_MRU_3                     105
-#define ID_DB_MRU_4                     106
-#define ID_DB_MRU_5                     107
+#define ID_DB_MANAGE                    103
+#define ID_DB_MRU_1                     104
+#define ID_DB_MRU_2                     105
+#define ID_DB_MRU_3                     106
+#define ID_DB_MRU_4                     107
+#define ID_DB_MRU_5                     108
 #define ID_DB_EXIT                      110
 #define IDR_TABLEMENU                   125
+#define IDD_MANAGE                      126
 #define ID_TABLE_COPY_NAME              143
 #define ID_TABLE_COPY_VALUE             144
 #define ID_QUERY_POPUP                  200
@@ -25,7 +27,6 @@
 #define ID_QUERY_SAVE                   203
 #define ID_QUERY_SAVEAS                 204
 #define ID_QUERY_PRINT                  205
-#define ID_QUERY_PREFS                  206
 #define ID_EXEC_POPUP                   300
 #define ID_EXEC_CURRENT                 301
 #define ID_EXEC_FILE                    302
@@ -34,10 +35,13 @@
 #define ID_RESULTS_FINDNEXT             402
 #define ID_RESULTS_SAVEAS               403
 #define ID_RESULTS_PRINT                404
+#define ID_TOOLS_POPUP                  700
+#define ID_TOOLS_OPTIONS                701
 #define ID_WINDOW_POPUP                 800
 #define ID_WINDOW_QUERY                 801
 #define ID_WINDOW_RESULTS               802
 #define ID_HELP_POPUP                   900
+#define ID_HELP_CONTENTS                901
 #define ID_HELP_ABOUT                   902
 #define ID_ROWDATA_COPYNAME             1001
 #define ID_ROWDATA_COPYVALUE            1002
@@ -64,9 +68,15 @@
 #define IDC_SQLDIR                      1074
 #define IDC_SQLDIRS                     1075
 #define IDC_COMPUTERS                   1076
+#define IDC_SECURITY                    1077
 #define IDC_WEBSITE                     1083
 #define IDC_EMAIL                       1084
 #define IDC_VERSION                     1085
+#define IDC_COPYRIGHT                   1086
+#define IDC_SHOW_GRID                   1091
+#define IDC_CONNECTIONS                 1092
+#define IDC_DELETE                      1095
+#define IDC_MANAGE                      1096
 #define IDC_PARAM_VALUE                 2000
 #define IDC_PARAM_NAME                  2500
 #define IDD_MAIN                        5000
@@ -86,9 +96,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        126
-#define _APS_NEXT_COMMAND_VALUE         145
-#define _APS_NEXT_CONTROL_VALUE         1073
-#define _APS_NEXT_SYMED_VALUE           104
+#define _APS_NEXT_RESOURCE_VALUE        127
+#define _APS_NEXT_COMMAND_VALUE         146
+#define _APS_NEXT_CONTROL_VALUE         1097
+#define _APS_NEXT_SYMED_VALUE           105
 #endif
 #endif

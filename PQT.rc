@@ -67,6 +67,7 @@ BEGIN
     BEGIN
         MENUITEM "&Connect...\tCtrl+D",         ID_DB_CONNECT
         MENUITEM "&Disconnect",                 ID_DB_DISCONNECT
+        MENUITEM "&Manage...",                  ID_DB_MANAGE
         MENUITEM SEPARATOR
         MENUITEM "&1",                          ID_DB_MRU_1
         MENUITEM "&2",                          ID_DB_MRU_2
@@ -84,8 +85,6 @@ BEGIN
         MENUITEM "Save &As...",                 ID_QUERY_SAVEAS
         MENUITEM SEPARATOR
         MENUITEM "&Print...",                   ID_QUERY_PRINT
-        MENUITEM SEPARATOR
-        MENUITEM "&Preferences...",             ID_QUERY_PREFS
     END
     POPUP "&Execute"
     BEGIN
@@ -101,6 +100,10 @@ BEGIN
         MENUITEM "&Save...",                    ID_RESULTS_SAVEAS
         MENUITEM "&Print...\tCtrl+P",           ID_RESULTS_PRINT
     END
+    POPUP "&Tools"
+    BEGIN
+        MENUITEM "&Options...",                 ID_TOOLS_OPTIONS
+    END
     POPUP "&Window"
     BEGIN
         MENUITEM "&Query\tCtrl+Y",              ID_WINDOW_QUERY
@@ -108,6 +111,8 @@ BEGIN
     END
     POPUP "&Help"
     BEGIN
+        MENUITEM "&Contents\tF1",               ID_HELP_CONTENTS
+        MENUITEM SEPARATOR
         MENUITEM "&About PQT",                  ID_HELP_ABOUT
     END
 END
@@ -148,37 +153,34 @@ BEGIN
     CONTROL         "Tab1",IDC_TAB,"SysTabControl32",0x0,5,5,290,190
 END
 
-IDD_ABOUT DIALOG  0, 0, 132, 127
+IDD_ABOUT DIALOGEX 0, 0, 122, 126
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
     WS_SYSMENU
 CAPTION "About PQT"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
     ICON            IDR_APPICON,IDC_STATIC,10,15,20,20
-    CTEXT           "Parameterised Query Tool",IDC_STATIC,35,10,90,10,
+    CTEXT           "PQT",IDC_STATIC,40,10,70,10,SS_CENTERIMAGE
+    CTEXT           "%s",IDC_VERSION,40,20,70,8,SS_CENTERIMAGE
+    CTEXT           "Freeware",IDC_STATIC,40,30,70,8,SS_CENTERIMAGE
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,10,50,99,1
+    CTEXT           "%s",IDC_COPYRIGHT,10,60,100,10,SS_CENTERIMAGE
+    CTEXT           "gort@cix.co.uk",IDC_EMAIL,10,70,100,10,SS_NOTIFY | 
                     SS_CENTERIMAGE
-    CTEXT           "v1.0 Alpha",IDC_VERSION,35,20,90,8,SS_CENTERIMAGE
-    CTEXT           "Freeware",IDC_STATIC,35,30,90,8,SS_CENTERIMAGE
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,10,50,110,1
-    CTEXT           "(C) Chris Oldwood 2000-2003",IDC_STATIC,10,60,110,10,
+    CTEXT           "www.cix.co.uk/~gort",IDC_WEBSITE,10,80,100,10,SS_NOTIFY | 
                     SS_CENTERIMAGE
-    CTEXT           "gort@cix.co.uk",IDC_EMAIL,10,70,110,10,SS_NOTIFY | 
-                    SS_CENTERIMAGE
-    CTEXT           "www.cix.co.uk/~gort",IDC_WEBSITE,10,80,110,10,SS_NOTIFY | 
-                    SS_CENTERIMAGE
-    DEFPUSHBUTTON   "OK",IDOK,40,100,50,15
+    DEFPUSHBUTTON   "OK",IDOK,35,100,50,15
 END
 
-IDD_CONNECT DIALOG  0, 0, 167, 126
+IDD_CONNECT DIALOGEX 0, 0, 167, 127
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Connect To A Database"
-FONT 8, "MS Sans Serif"
+CAPTION "Open Database"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
     LTEXT           "&Database:",IDC_STATIC,10,12,40,8
     COMBOBOX        IDC_DATABASE,50,10,105,50,CBS_DROPDOWNLIST | CBS_SORT | 
                     WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "&Add...",IDC_ADD,50,25,50,14
-    PUSHBUTTON      "&Edit...",IDC_EDIT,105,25,50,14
+    PUSHBUTTON      "&Manage Databases...",IDC_MANAGE,50,25,105,14
     LTEXT           "&Login:",IDC_STATIC,10,53,40,8
     EDITTEXT        IDC_LOGIN,50,50,105,14,ES_AUTOHSCROLL
     LTEXT           "&Password:",IDC_STATIC,10,73,40,8
@@ -187,12 +189,12 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,105,100,50,14
 END
 
-IDD_QUERYPREFS DIALOG  0, 0, 222, 90
+IDD_QUERYPREFS DIALOGEX 0, 0, 157, 130
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Query Settings"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    GROUPBOX        "Results Window",IDC_STATIC,5,5,145,80
+    GROUPBOX        "Results Window",IDC_STATIC,5,5,145,95
     LTEXT           "M&in column width:",IDC_STATIC,15,23,65,8
     EDITTEXT        IDC_MINWIDTH,85,20,30,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "chars",IDC_STATIC,121,23,25,8
@@ -201,8 +203,10 @@ BEGIN
     LTEXT           "chars",IDC_STATIC,121,43,25,8
     LTEXT           "&Null value:",IDC_STATIC,15,62,65,10
     EDITTEXT        IDC_NULLVAL,85,60,30,14,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,165,10,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,165,27,50,14
+    CONTROL         "Display &gridlines",IDC_SHOW_GRID,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,80,100,10
+    DEFPUSHBUTTON   "OK",IDOK,45,110,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,100,110,50,14
 END
 
 IDD_ROWDATA DIALOGEX 0, 0, 312, 230
@@ -217,78 +221,102 @@ BEGIN
     DEFPUSHBUTTON   "Close",IDCANCEL,255,210,50,14
 END
 
-IDD_CFGCONNECTION DIALOG  0, 0, 222, 202
+IDD_CFGCONNECTION DIALOGEX 0, 0, 222, 261
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Configure A Connection"
-FONT 8, "MS Sans Serif"
+CAPTION "Configure Connection"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
     LTEXT           "&Name:",IDC_STATIC,10,13,30,8
-    EDITTEXT        IDC_NAME,45,10,75,14,ES_AUTOHSCROLL
-    LTEXT           "&DSN:",IDC_STATIC,10,33,30,8
-    EDITTEXT        IDC_DSN,45,30,75,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_DSNS,121,30,15,14
-    LTEXT           "D&river:",IDC_STATIC,10,53,30,8
-    EDITTEXT        IDC_DRIVER,45,50,100,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_DRIVERS,145,50,15,14
-    LTEXT           "&Server:",IDC_STATIC,10,73,30,8
-    EDITTEXT        IDC_SERVER,45,70,75,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_COMPUTERS,121,70,15,14
-    LTEXT           "&Database:",IDC_STATIC,10,93,35,8
-    EDITTEXT        IDC_DATABASE,45,90,75,14,ES_AUTOHSCROLL
-    LTEXT           "&File:",IDC_STATIC,10,113,30,8
-    EDITTEXT        IDC_FILENAME,45,110,150,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_FILES,195,110,15,14
-    LTEXT           "&Login:",IDC_STATIC,10,133,30,8
-    EDITTEXT        IDC_LOGIN,45,130,75,14,ES_AUTOHSCROLL
-    LTEXT           "Scri&pts:",IDC_STATIC,10,153,30,8
-    EDITTEXT        IDC_SQLDIR,45,150,150,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_SQLDIRS,195,150,15,14
-    DEFPUSHBUTTON   "OK",IDOK,60,175,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,115,175,50,14
+    EDITTEXT        IDC_NAME,45,10,100,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,10,30,200,1
+    LTEXT           "&DSN:",IDC_STATIC,10,43,30,8
+    EDITTEXT        IDC_DSN,45,40,100,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_DSNS,145,40,15,14
+    LTEXT           "D&river:",IDC_STATIC,10,63,30,8
+    EDITTEXT        IDC_DRIVER,45,60,100,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_DRIVERS,145,60,15,14
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,10,80,200,1
+    LTEXT           "&Server:",IDC_STATIC,10,93,30,8
+    EDITTEXT        IDC_SERVER,45,90,100,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_COMPUTERS,145,90,15,14
+    LTEXT           "Data&base:",IDC_STATIC,10,113,35,8
+    EDITTEXT        IDC_DATABASE,45,110,100,14,ES_AUTOHSCROLL
+    LTEXT           "&File:",IDC_STATIC,10,133,30,8
+    EDITTEXT        IDC_FILENAME,45,130,150,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_FILES,195,130,15,14
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,10,150,200,1
+    LTEXT           "Se&curity:",IDC_STATIC,10,162,35,8
+    COMBOBOX        IDC_SECURITY,46,160,99,50,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "&Login:",IDC_STATIC,10,183,30,8
+    EDITTEXT        IDC_LOGIN,45,180,100,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,10,200,200,1
+    LTEXT           "Scri&pts:",IDC_STATIC,10,214,30,8
+    EDITTEXT        IDC_SQLDIR,45,210,150,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_SQLDIRS,195,210,15,14
+    DEFPUSHBUTTON   "OK",IDOK,105,234,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,160,234,50,14
 END
 
-IDD_DSNS DIALOG  0, 0, 222, 146
+IDD_DSNS DIALOGEX 0, 0, 212, 135
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Select A DSN"
-FONT 8, "MS Sans Serif"
+CAPTION "Select DSN"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    LISTBOX         IDC_DSNS,10,10,200,100,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+    LISTBOX         IDC_DSNS,5,5,200,100,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
                     WS_VSCROLL | WS_TABSTOP
-    DEFPUSHBUTTON   "OK",IDOK,60,120,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,115,120,50,14
+    DEFPUSHBUTTON   "OK",IDOK,100,115,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,155,115,50,14
 END
 
-IDD_DRIVERS DIALOG  0, 0, 222, 141
+IDD_DRIVERS DIALOGEX 0, 0, 212, 135
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Select A Driver"
-FONT 8, "MS Sans Serif"
+CAPTION "Select Driver"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    LISTBOX         IDC_DRIVERS,10,10,200,100,LBS_SORT | 
-                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
-    DEFPUSHBUTTON   "OK",IDOK,55,120,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,111,120,50,14
+    LISTBOX         IDC_DRIVERS,5,5,200,100,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,100,115,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,155,115,50,14
 END
 
-IDD_FIND DIALOG  0, 0, 147, 61
+IDD_FIND DIALOGEX 0, 0, 172, 61
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Find"
-FONT 8, "MS Sans Serif"
+CAPTION "Find Value"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    LTEXT           "Value:",IDC_STATIC,10,13,25,8
-    EDITTEXT        IDC_VALUE,35,10,100,14,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,20,35,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,75,35,50,14
+    LTEXT           "&Value:",IDC_STATIC,10,13,25,8
+    EDITTEXT        IDC_VALUE,35,10,125,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,55,35,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,110,35,50,14
 END
 
-IDD_PARAMETERS DIALOG  0, 0, 127, 61
+IDD_PARAMETERS DIALOGEX 0, 0, 197, 61
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Query Parameters"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    LTEXT           "Name:",IDC_PARAM_NAME,10,10,50,15,SS_CENTERIMAGE
-    EDITTEXT        IDC_PARAM_VALUE,65,10,50,15,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,10,35,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,65,35,50,14
+    LTEXT           "Name:",IDC_PARAM_NAME,10,10,75,14,SS_CENTERIMAGE
+    EDITTEXT        IDC_PARAM_VALUE,85,10,100,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,80,35,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,135,35,50,14
+END
+
+IDD_MANAGE DIALOGEX 0, 0, 362, 130
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Manage Databases"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_CONNECTIONS,"SysListView32",LVS_REPORT | 
+                    LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | 
+                    LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,5,5,350,100,
+                    WS_EX_CLIENTEDGE
+    PUSHBUTTON      "&Add...",IDC_ADD,5,110,50,14
+    PUSHBUTTON      "&Edit...",IDC_EDIT,60,110,50,14
+    PUSHBUTTON      "&Delete",IDC_DELETE,115,110,50,14
+    DEFPUSHBUTTON   "OK",IDOK,250,110,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,305,110,50,14
 END
 
 
@@ -314,6 +342,7 @@ BEGIN
     "P",            ID_RESULTS_PRINT,       VIRTKEY, CONTROL, NOINVERT
     "R",            ID_WINDOW_RESULTS,      VIRTKEY, CONTROL, NOINVERT
     "S",            ID_QUERY_SAVE,          VIRTKEY, CONTROL, NOINVERT
+    VK_F1,          ID_HELP_CONTENTS,       VIRTKEY, NOINVERT
     VK_F3,          ID_RESULTS_FINDNEXT,    VIRTKEY, NOINVERT
     VK_F3,          ID_RESULTS_FIND,        VIRTKEY, CONTROL, NOINVERT
     "Y",            ID_WINDOW_QUERY,        VIRTKEY, CONTROL, NOINVERT
@@ -333,15 +362,15 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 160
         TOPMARGIN, 7
-        BOTTOMMARGIN, 119
+        BOTTOMMARGIN, 120
     END
 
     IDD_QUERYPREFS, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 215
+        RIGHTMARGIN, 150
         TOPMARGIN, 7
-        BOTTOMMARGIN, 83
+        BOTTOMMARGIN, 123
     END
 
     IDD_ROWDATA, DIALOG
@@ -357,29 +386,29 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 215
         TOPMARGIN, 7
-        BOTTOMMARGIN, 195
+        BOTTOMMARGIN, 254
     END
 
     IDD_DSNS, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 215
+        RIGHTMARGIN, 205
         TOPMARGIN, 7
-        BOTTOMMARGIN, 139
+        BOTTOMMARGIN, 128
     END
 
     IDD_DRIVERS, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 215
+        RIGHTMARGIN, 205
         TOPMARGIN, 7
-        BOTTOMMARGIN, 134
+        BOTTOMMARGIN, 128
     END
 
     IDD_FIND, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 140
+        RIGHTMARGIN, 165
         TOPMARGIN, 7
         BOTTOMMARGIN, 54
     END
@@ -387,9 +416,17 @@ BEGIN
     IDD_PARAMETERS, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 120
+        RIGHTMARGIN, 190
         TOPMARGIN, 7
         BOTTOMMARGIN, 54
+    END
+
+    IDD_MANAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 355
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 123
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -440,6 +477,7 @@ BEGIN
     ID_DB_POPUP             "Database options"
     ID_DB_CONNECT           "Connect to a database\nConnect"
     ID_DB_DISCONNECT        "Disconnect from the current database\nDisconnect"
+    ID_DB_MANAGE            "Manage the database configurations\nManage Databases"
     ID_DB_MRU_1             "Open this connection"
     ID_DB_MRU_2             "Open this connection"
     ID_DB_MRU_3             "Open this connection"
@@ -451,7 +489,8 @@ END
 STRINGTABLE 
 BEGIN
     ID_HELP_POPUP           "Help options"
-    ID_HELP_ABOUT           "Show PQT version\nHelp"
+    ID_HELP_CONTENTS        "Display the help contents page\nHelp"
+    ID_HELP_ABOUT           "Show PQT version\nAbout"
 END
 
 STRINGTABLE 
@@ -462,7 +501,6 @@ BEGIN
     ID_QUERY_SAVE           "Save the query to a file\nSave Query"
     ID_QUERY_SAVEAS         "Save the current query to a file\nSave Query"
     ID_QUERY_PRINT          "Print the query\nPrint Query"
-    ID_QUERY_PREFS          "Edit the query settings\nQuery Settings"
 END
 
 STRINGTABLE 
@@ -486,6 +524,12 @@ BEGIN
     ID_RESULTS_FINDNEXT     "Finds the next occurence of a value in the results view"
     ID_RESULTS_SAVEAS       "Save the results to a file\nSave Results"
     ID_RESULTS_PRINT        "Print the results\nPrint Results"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_TOOLS_POPUP          "Tools options"
+    ID_TOOLS_OPTIONS        "Edit program settings\nPreferences"
 END
 
 #endif    // English (U.K.) resources
