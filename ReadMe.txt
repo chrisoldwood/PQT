@@ -1,24 +1,36 @@
-PQT v1.1
-========
-
-1) Installation.
-
-Copy the file PQT.exe to a folder.
+Parameterised Query Tool v1.5
+=============================
 
 
-2) Uninstallation.
+1: Installation
+---------------
 
-Delete the files PQT.exe and PQT.ini.
+Run setup.exe.
+
+or
+
+Copy the files PQT.* to a folder.
 
 
-3) Manual/Help/Contact Info etc.
+2: Uninstallation
+-----------------
 
-There is no manual at present.
+Delete the files listed above.
 
-EMail: gort@cix.co.uk
+
+3: Help/Manual
+--------------
+
+There is a HelpFile - PQT.mht.
+
+
+4: Contact Details
+------------------
+
+Email: gort@cix.co.uk
 Web:   http://www.cix.co.uk/~gort
 
 
 Chris Oldwood 
 
-19th June 2003
+20th September 2010
