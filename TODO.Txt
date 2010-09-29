@@ -1,4 +1,6 @@
-- Toolbar buttons & tooltips.
+- Find is broken.
+
+- Save is writing incorrectly in Unicode.
 
 - HelpFile.
 
@@ -6,20 +8,16 @@
 
 - Scripts menu to include folders.
 
-- Escaping of param char.
+- Add type hints to param, e.g. ${Value Date;DateTime}
 
-- Change param to ${} format
+- Support list type, e.g. ${Calc Type;Int;1,2,3,4}
 
-- Add type hints to param, e.g. ${Customer Name$50} or ${ID%5} or ${Date#}
+- Add default value to param (if not already used), e.g. ${Value Date;DatetTime;Today}
 
-- Add default value to para, e.g. Date#Today or Date#'2008-01-01'
+- Use regex to implement find/replace in query string.
 
-- Change to property page for configuration.
+- Support empty value is NULL.
 
-- Support no login/trusted/#NA.
+- Need File/Folder in Server/Database column in Manage dialog.
 
-- Disable gridlines
-
-- varchar not working under Unicode?
-
-- Query/Results files - ANSI/Unicode.
+- Double-click to edit database in Manage dialog.
