@@ -25,9 +25,8 @@
 #include <WCL/IniFile.hpp>
 #include "Scripts.hpp"
 #include "ConConfig.hpp"
-
-// Forward declarations.
-class CQuery;
+#include <map>
+#include "Query.hpp"
 
 /******************************************************************************
 ** 
@@ -45,35 +44,35 @@ public:
 	CPQTApp();
 	~CPQTApp();
 
+	typedef std::map<CString, CString> ParamValueMap;
+
+
 	//
 	// Members
 	//
 	CAppWnd		m_AppWnd;
 	CAppCmds	m_AppCmds;
 
-	size_t		m_nDefConnection;
+	int			m_nDefConnection;
 	CPath		m_strQueryFile;
 	bool		m_bModified;
 	CODBCSource	m_oConnection;
 	CMDB		m_oMDB;
-	CQuery*		m_pQuery;
+	CQueryPtr	m_pQuery;
 	CString		m_strFindVal;
 	int			m_nLastFindRow;
 	int			m_nLastFindCol;
 	CScripts	m_oScripts;
 	CMRUList	m_oMRUList;
+	ParamValueMap	m_mapPrevValues;
 
-	CConConfigs	m_apConConfigs;
-	CConConfig* m_pCurrConn;
+	CConConfigs		m_apConConfigs;
+	CConConfigPtr	m_pCurrConn;
 	CRect		m_rcLastPos;
 	size_t		m_nMinWidth;
 	size_t		m_nMaxWidth;
 	CString		m_strNull;
-
-	//
-	// Constants.
-	//
-	static const tchar* VERSION;
+	bool		m_bGridlines;
 
 protected:
 	//
@@ -83,15 +82,10 @@ protected:
 	virtual	bool OnClose();
 
 	//
-	// Preferences.
-	//
-	CIniFile	m_oIniFile;
-
-	//
 	// Internal methods.
 	//
-	void LoadDefaults();
-	void SaveDefaults();
+	void loadConfig();
+	void saveConfig();
 };
 
 /******************************************************************************

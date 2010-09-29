@@ -12,6 +12,9 @@
 #include "PQTApp.hpp"
 #include <Legacy/STLUtils.hpp>
 #include "Query.hpp"
+#include <WCL/BusyCursor.hpp>
+#include <WCL/AppConfig.hpp>
+#include <Core/ConfigurationException.hpp>
 
 /******************************************************************************
 **
@@ -30,11 +33,12 @@ CPQTApp App;
 *******************************************************************************
 */
 
-#ifdef _DEBUG
-const tchar* CPQTApp::VERSION = TXT("v1.1 [Debug]");
-#else
-const tchar* CPQTApp::VERSION = TXT("v1.1");
-#endif
+//! The configuration data publisher name.
+const tchar* PUBLISHER = TXT("Chris Oldwood");
+//! The configuration data application name.
+const tchar* APPLICATION = TXT("PQT");
+//! The configuration data format version.
+const tchar* CONFIG_VERSION = TXT("1.0");
 
 /******************************************************************************
 ** Method:		Constructor
@@ -61,6 +65,7 @@ CPQTApp::CPQTApp()
 	, m_nMinWidth(6)
 	, m_nMaxWidth(25)
 	, m_strNull(TXT("(null)"))
+	, m_bGridlines(true)
 {
 }
 
@@ -97,8 +102,15 @@ bool CPQTApp::OnOpen()
 	// Set the app title.
 	m_strTitle = TXT("P.Q.T.");
 
-	// Load settings.
-	LoadDefaults();
+	try
+	{
+		loadConfig();
+	}
+	catch (const Core::Exception& e)
+	{
+		FatalMsg(TXT("Failed to configure the application:-\n\n%s"), e.twhat());
+		return false;
+	}
 	
 	// Load the toolbar bitmap.
 	m_rCmdControl.CmdBitmap().LoadRsc(IDR_APPTOOLBAR);
@@ -148,20 +160,23 @@ bool CPQTApp::OnClose()
 	if (App.m_oConnection.IsOpen())
 		App.m_oConnection.Close();
 
-	// Save settings.
-	SaveDefaults();
-
-	// Cleanup.	
-	delete m_pQuery;
-	DeleteAll(m_apConConfigs);
+	try
+	{
+		saveConfig();
+	}
+	catch (const Core::Exception& e)
+	{
+		FatalMsg(TXT("Failed to save the application configuration:-\n\n%s"), e.twhat());
+		return false;
+	}
 
 	return true;
 }
 
 /******************************************************************************
-** Method:		LoadDefaults()
+** Method:		loadConfig()
 **
-** Description:	Load the default settings.
+** Description:	Load the appliccation configuraion.
 **
 ** Parameters:	None.
 **
@@ -170,62 +185,63 @@ bool CPQTApp::OnClose()
 *******************************************************************************
 */
 
-void CPQTApp::LoadDefaults()
+void CPQTApp::loadConfig()
 {
+	CBusyCursor    busyCursor;
+	WCL::AppConfig appConfig(PUBLISHER, APPLICATION);
+
+	// Read the config data version.
+	tstring version = appConfig.readString(appConfig.DEFAULT_SECTION, TXT("Version"), CONFIG_VERSION);
+
+	if (version != CONFIG_VERSION)
+		throw Core::ConfigurationException(Core::fmt(TXT("The configuration data is incompatible - '%s'"), version.c_str()));
+
+	// Read the UI settings.
+	m_rcLastPos  = appConfig.readValue<CRect>(TXT("UI"), TXT("MainWindow"), m_rcLastPos);
+	m_nMinWidth = appConfig.readValue<uint>(TXT("UI"), TXT("MinColumnWidth"), m_nMinWidth);
+	m_nMaxWidth = appConfig.readValue<uint>(TXT("UI"), TXT("MaxColumnWidth"), m_nMaxWidth);
+	m_strNull   = appConfig.readString(TXT("UI"), TXT("NullValue"), tstring(m_strNull));
+	m_bGridlines = appConfig.readValue<bool>(TXT("UI"), TXT("Gridlines"), m_bGridlines);
+
 	// Read the default connection.
-	m_nDefConnection = m_oIniFile.ReadInt(TXT("Main"), TXT("Connection"), -1);
-
-	// Read the window pos and size.
-	m_rcLastPos.left   = m_oIniFile.ReadInt(TXT("Main"), TXT("Left"),   0);
-	m_rcLastPos.top    = m_oIniFile.ReadInt(TXT("Main"), TXT("Top"),    0);
-	m_rcLastPos.right  = m_oIniFile.ReadInt(TXT("Main"), TXT("Right"),  0);
-	m_rcLastPos.bottom = m_oIniFile.ReadInt(TXT("Main"), TXT("Bottom"), 0);
-
-	// Read the results preferences.
-	m_nMinWidth = m_oIniFile.ReadInt   (TXT("Results"), TXT("MinWidth"),  m_nMinWidth);
-	m_nMaxWidth = m_oIniFile.ReadInt   (TXT("Results"), TXT("MaxWidth"),  m_nMaxWidth);
-	m_strNull   = m_oIniFile.ReadString(TXT("Results"), TXT("NullValue"), m_strNull);
+	m_nDefConnection = appConfig.readValue<int>(TXT("Main"), TXT("LastConnection"), Core::npos);
 
 	// Read the connection list.
-	int nConnections = m_oIniFile.ReadInt(TXT("Main"), TXT("NumConnections"), 0);
+	size_t nConnections = appConfig.readValue<size_t>(TXT("Main"), TXT("ConnectionCount"), 0);
 
-	for (int i = 0; i < nConnections; i++)
+	for (size_t i = 0; i != nConnections; i++)
 	{
-		CConConfig* pConConfig = new CConConfig;
-		CString     strSection;
-
-		// Create the section name.
-		strSection.Format(TXT("Connection%d"), i);
+		CConConfigPtr pConConfig(new CConConfig);
+		tstring       section = Core::fmt(TXT("Connection[%u]"), i);
 
 		// Read the section.
-		pConConfig->m_strName     = m_oIniFile.ReadString(strSection, TXT("Name"),     TXT(""));
-		pConConfig->m_strDSN      = m_oIniFile.ReadString(strSection, TXT("DSN"),      TXT(""));
-		pConConfig->m_strDriver   = m_oIniFile.ReadString(strSection, TXT("Driver"),   TXT(""));
-		pConConfig->m_strServer   = m_oIniFile.ReadString(strSection, TXT("Server"),   TXT(""));
-		pConConfig->m_strDatabase = m_oIniFile.ReadString(strSection, TXT("Database"), TXT(""));
-		pConConfig->m_strFile     = m_oIniFile.ReadString(strSection, TXT("File"),     TXT(""));
-		pConConfig->m_strLogin    = m_oIniFile.ReadString(strSection, TXT("Login"),    TXT(""));
-		pConConfig->m_strSQLDir   = m_oIniFile.ReadString(strSection, TXT("Scripts"),  TXT(""));
+		pConConfig->m_strName     = appConfig.readString(section, TXT("Name"),     TXT(""));
+		pConConfig->m_strDSN      = appConfig.readString(section, TXT("DSN"),      TXT(""));
+		pConConfig->m_strDriver   = appConfig.readString(section, TXT("Driver"),   TXT(""));
+		pConConfig->m_strServer   = appConfig.readString(section, TXT("Server"),   TXT(""));
+		pConConfig->m_strDatabase = appConfig.readString(section, TXT("Database"), TXT(""));
+		pConConfig->m_strFile     = appConfig.readString(section, TXT("File"),     TXT(""));
+		pConConfig->m_eSecurity   = static_cast<SecurityModel>(appConfig.readValue<int>(section, TXT("Security"), NONE));
+		pConConfig->m_strLogin    = appConfig.readString(section, TXT("Login"),    TXT(""));
+		pConConfig->m_strSQLDir   = appConfig.readString(section, TXT("Scripts"),  TXT(""));
 
 		// Add to collection, if it is valid.
 		if (!pConConfig->m_strName.Empty())
 			m_apConConfigs.push_back(pConConfig);
-		else
-			delete pConConfig;
 	}
 
 	// Validate settings.
-	if (m_nDefConnection >= m_apConConfigs.size())
+	if (m_nDefConnection >= static_cast<int>(m_apConConfigs.size()))
 		m_nDefConnection = Core::npos;
 
 	// Load MRU list.
-	m_oMRUList.Load(m_oIniFile);
+	m_oMRUList.Read(appConfig);
 }
 
 /******************************************************************************
-** Method:		SaveDefaults()
+** Method:		saveConfig()
 **
-** Description:	Save the default settings.
+** Description:	Save the application configuration.
 **
 ** Parameters:	None.
 **
@@ -234,44 +250,43 @@ void CPQTApp::LoadDefaults()
 *******************************************************************************
 */
 
-void CPQTApp::SaveDefaults()
+void CPQTApp::saveConfig()
 {
-	// Write the default connection.
-	m_oIniFile.WriteInt(TXT("Main"), TXT("Connection"), m_nDefConnection);
+	CBusyCursor    busyCursor;
+	WCL::AppConfig appConfig(PUBLISHER, APPLICATION);
 
-	// Write the window pos and size.
-	m_oIniFile.WriteInt(TXT("Main"), TXT("Left"),   m_rcLastPos.left);
-	m_oIniFile.WriteInt(TXT("Main"), TXT("Top"),    m_rcLastPos.top);
-	m_oIniFile.WriteInt(TXT("Main"), TXT("Right"),  m_rcLastPos.right);
-	m_oIniFile.WriteInt(TXT("Main"), TXT("Bottom"), m_rcLastPos.bottom);
+	// Write the config data version.
+	appConfig.writeString(appConfig.DEFAULT_SECTION, TXT("Version"), CONFIG_VERSION);
 
-	// Write the results preferences.
-	m_oIniFile.WriteInt   (TXT("Results"), TXT("MinWidth"),  m_nMinWidth);
-	m_oIniFile.WriteInt   (TXT("Results"), TXT("MaxWidth"),  m_nMaxWidth);
-	m_oIniFile.WriteString(TXT("Results"), TXT("NullValue"), m_strNull  );
+	// Write the UI settings.
+	appConfig.writeValue<CRect>(TXT("UI"), TXT("MainWindow"), m_rcLastPos);
+	appConfig.writeValue<uint>(TXT("UI"), TXT("MinColumnWidth"), m_nMinWidth);
+	appConfig.writeValue<uint>(TXT("UI"), TXT("MaxColumnWidth"), m_nMaxWidth);
+	appConfig.writeString(TXT("UI"), TXT("NullValue"), tstring(m_strNull));
+	appConfig.writeValue<bool>(TXT("UI"), TXT("Gridlines"), m_bGridlines);
 
 	// Write the connection list.
-	m_oIniFile.WriteInt(TXT("Main"), TXT("NumConnections"), m_apConConfigs.size());
+	appConfig.writeValue<size_t>(TXT("Main"), TXT("ConnectionCount"), m_apConConfigs.size());
 
-	for (uint i = 0; i < m_apConConfigs.size(); i++)
+	for (size_t i = 0; i != m_apConConfigs.size(); i++)
 	{
-		CConConfig* pConConfig = m_apConConfigs[i];
-		CString     strSection;
-
-		// Create the section name.
-		strSection.Format(TXT("Connection%d"), i);
+		CConConfigPtr pConConfig = m_apConConfigs[i];
+		tstring       section = Core::fmt(TXT("Connection[%u]"), i);
 
 		// Write the section.
-		m_oIniFile.WriteString(strSection, TXT("Name"),     pConConfig->m_strName);
-		m_oIniFile.WriteString(strSection, TXT("DSN"),      pConConfig->m_strDSN);
-		m_oIniFile.WriteString(strSection, TXT("Driver"),   pConConfig->m_strDriver);
-		m_oIniFile.WriteString(strSection, TXT("Server"),   pConConfig->m_strServer);
-		m_oIniFile.WriteString(strSection, TXT("Database"), pConConfig->m_strDatabase);
-		m_oIniFile.WriteString(strSection, TXT("File"),     pConConfig->m_strFile);
-		m_oIniFile.WriteString(strSection, TXT("Login"),    pConConfig->m_strLogin);
-		m_oIniFile.WriteString(strSection, TXT("Scripts"),  pConConfig->m_strSQLDir);
+		appConfig.writeString(section, TXT("Name"), tstring(pConConfig->m_strName));
+		appConfig.writeString(section, TXT("DSN"), tstring(pConConfig->m_strDSN));
+		appConfig.writeString(section, TXT("Driver"), tstring(pConConfig->m_strDriver));
+		appConfig.writeString(section, TXT("Server"), tstring(pConConfig->m_strServer));
+		appConfig.writeString(section, TXT("Database"), tstring(pConConfig->m_strDatabase));
+		appConfig.writeString(section, TXT("File"), tstring(pConConfig->m_strFile));
+		appConfig.writeValue<int>(section, TXT("Security"), pConConfig->m_eSecurity);
+		appConfig.writeString(section, TXT("Login"), tstring(pConConfig->m_strLogin));
+		appConfig.writeString(section, TXT("Scripts"), tstring(pConConfig->m_strSQLDir));
 	}
 
+	appConfig.writeValue<int>(TXT("Main"), TXT("LastConnection"), m_nDefConnection);
+
 	// Save MRU list.
-	m_oMRUList.Save(m_oIniFile);
+	m_oMRUList.Write(appConfig);
 }
