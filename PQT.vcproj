@@ -164,10 +164,19 @@
 				RelativePath="CfgConDlg.cpp">
 			</File>
 			<File
+				RelativePath=".\ConConfig.cpp">
+			</File>
+			<File
 				RelativePath="ConnectDlg.cpp">
 			</File>
 			<File
 				RelativePath="FindDlg.cpp">
+			</File>
+			<File
+				RelativePath=".\ManageDatabasesDialog.cpp">
+			</File>
+			<File
+				RelativePath=".\ParameterParser.cpp">
 			</File>
 			<File
 				RelativePath="ParamsDlg.cpp">
@@ -246,6 +255,12 @@
 				RelativePath="FindDlg.hpp">
 			</File>
 			<File
+				RelativePath=".\ManageDatabasesDialog.hpp">
+			</File>
+			<File
+				RelativePath=".\ParameterParser.hpp">
+			</File>
+			<File
 				RelativePath="ParamsDlg.hpp">
 			</File>
 			<File
@@ -262,6 +277,9 @@
 			</File>
 			<File
 				RelativePath="Scripts.hpp">
+			</File>
+			<File
+				RelativePath=".\SecurityModel.hpp">
 			</File>
 			<File
 				RelativePath="SelDriverDlg.hpp">
@@ -305,9 +323,13 @@
 				RelativePath=".\Database\Schema.ini">
 			</File>
 		</Filter>
-		<File
-			RelativePath="PQT.ini">
-		</File>
+		<Filter
+			Name="HelpFile"
+			Filter="">
+			<File
+				RelativePath=".\HelpFile\PQT.html">
+			</File>
+		</Filter>
 		<File
 			RelativePath="ReadMe.txt">
 		</File>
