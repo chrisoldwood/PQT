@@ -175,15 +175,17 @@ void CAppWnd::UpdateTitle()
 	// Start with app name.
 	CString strTitle = App.m_strTitle;
 
+	bool bConnected = (App.m_pCurrConn.get() != nullptr);
+
 	// Append connection, if one.
-	if (App.m_pCurrConn != NULL)
+	if (bConnected)
 	{
 		strTitle += TXT(" [");
 		strTitle += App.m_pCurrConn->m_strName;
 		strTitle += TXT("]");
 	}
 
-	if ( (App.m_pCurrConn != NULL) && (App.m_strQueryFile != TXT("")) )
+	if ( (bConnected) && (App.m_strQueryFile != TXT("")) )
 		strTitle += TXT(" -");
 
 	// Append query filename, if one.
