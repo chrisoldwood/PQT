@@ -65,7 +65,7 @@ void CRowDataDlg::OnInitDialog()
 {
 	// Set grid style.
 	m_lvGrid.FullRowSelect(true);
-	m_lvGrid.GridLines(true);
+	m_lvGrid.GridLines(App.m_bGridlines);
 	m_lvGrid.Font(CFont(ANSI_FIXED_FONT));
 
 	// Set grid columns.
