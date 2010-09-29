@@ -12,6 +12,7 @@
 #include "ParamsDlg.hpp"
 #include <Legacy/STLUtils.hpp>
 #include <WCL/StrArray.hpp>
+#include "PQTApp.hpp"
 
 /******************************************************************************
 ** Method:		Default constructor.
@@ -125,8 +126,11 @@ void CParamsDlg::OnInitDialog()
 	// Get the dialog font.
 	CFont oDlgFont = Font();
 
+	CString strLabel = m_pastrParams->At(0);
+
 	// Set the 1st parameter label.
-	m_ptxtParam->Text(m_pastrParams->At(0));
+	m_ptxtParam->Text(strLabel);
+	m_pebValue->Text(App.m_mapPrevValues[strLabel]);
 
 	// Create the extra param and value controls.
 	for (size_t i = 1; i < m_pastrParams->Size(); ++i)
@@ -142,6 +146,8 @@ void CParamsDlg::OnInitDialog()
 		rcNewValue.top   += (i*CONTROL_GAP) + (i*rcValue.Height());
 		rcNewValue.bottom = rcNewValue.top  + rcValue.Height();
 
+		strLabel = m_pastrParams->At(i);
+
 		// Allocate control wrappers.
 		CLabel*   pLabel   = new CLabel;
 		CEditBox* pEditBox = new CEditBox;
@@ -150,20 +156,21 @@ void CParamsDlg::OnInitDialog()
 		m_aoLabels.push_back(pLabel);
 		m_aoEditBoxes.push_back(pEditBox);
 
-		DWORD dwLabelExStyle = 0;
-		DWORD dwLabelStyle   = WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_VISIBLE | SS_SIMPLE | SS_CENTERIMAGE;
+		DWORD dwLabelExStyle = m_ptxtParam->WindowExStyle();
+		DWORD dwLabelStyle   = m_ptxtParam->WindowStyle();
 
 		// Create and initialise the label control.
 		pLabel->Create(*this, IDC_PARAM_NAME+i, rcNewParam, dwLabelExStyle, dwLabelStyle);
-		pLabel->Text(m_pastrParams->At(i));
+		pLabel->Text(strLabel);
 		pLabel->Font(oDlgFont);
 
-		DWORD dwEditExStyle = WS_EX_CLIENTEDGE;
-		DWORD dwEditStyle   = WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL | WS_BORDER | WS_TABSTOP;
+		DWORD dwEditExStyle = m_pebValue->WindowExStyle();
+		DWORD dwEditStyle   = m_pebValue->WindowStyle();
 
 		// Create and initialise the edit control.
 		pEditBox->Create(*this, IDC_PARAM_VALUE+i, rcNewValue, dwEditExStyle, dwEditStyle );
 		pEditBox->Font(oDlgFont);
+		pEditBox->Text(App.m_mapPrevValues[strLabel]);
 	}
 
 	// Fix the tabbing order.
