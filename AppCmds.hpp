@@ -44,6 +44,8 @@ public:
 	// Database menu.
 	void OnDBConnect();
 	void OnDBDisconnect();
+	void OnDBManage();
+	bool ManageDatabases();
 	void OnDBConnectMRU(int nCmdID);
 	void OnDBExit();
 
@@ -54,7 +56,6 @@ public:
 	void OnQuerySave();
 	void OnQuerySaveAs();
 	void OnQueryPrint();
-	void OnQueryPrefs();
 
 	// Execute menu.
 	void OnExecCurrent();
@@ -68,11 +69,15 @@ public:
 	void OnResultsSaveAs();
 	void OnResultsPrint();
 
+	// Tools menu.
+	void OnToolsOptions();
+
 	// Window menu.
 	void OnWindowQuery();
 	void OnWindowResults();
 
 	// Help menu.
+	void OnHelpContents();
 	void OnHelpAbout();
 
 	//

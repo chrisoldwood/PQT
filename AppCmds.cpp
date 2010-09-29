@@ -25,6 +25,8 @@
 #include <WCL/File.hpp>
 #include <WCL/FileException.hpp>
 #include <Core/AnsiWide.hpp>
+#include "ParameterParser.hpp"
+#include "ManageDatabasesDialog.hpp"
 
 /******************************************************************************
 **
@@ -74,6 +76,7 @@ CAppCmds::CAppCmds()
 		// Database menu.
 		CMD_ENTRY(ID_DB_CONNECT,			&CAppCmds::OnDBConnect,			NULL,							0 )
 		CMD_ENTRY(ID_DB_DISCONNECT,			&CAppCmds::OnDBDisconnect,		&CAppCmds::OnUIDBDisconnect,	1 )
+		CMD_ENTRY(ID_DB_MANAGE,				&CAppCmds::OnDBManage,			NULL,							0 )
 		CMD_RANGE(ID_DB_MRU_1,
 				  ID_DB_MRU_5,				&CAppCmds::OnDBConnectMRU,		NULL,							-1) 
 		CMD_ENTRY(ID_DB_EXIT,				&CAppCmds::OnDBExit,			NULL,							-1)
@@ -83,7 +86,6 @@ CAppCmds::CAppCmds()
 		CMD_ENTRY(ID_QUERY_SAVE,			&CAppCmds::OnQuerySave,			NULL,							4 )
 		CMD_ENTRY(ID_QUERY_SAVEAS,			&CAppCmds::OnQuerySaveAs,		NULL,							4 )
 		CMD_ENTRY(ID_QUERY_PRINT,			&CAppCmds::OnQueryPrint,		NULL,							4 )
-		CMD_ENTRY(ID_QUERY_PREFS,			&CAppCmds::OnQueryPrefs,		NULL,							-1)
 		// Execute menu.
 		CMD_ENTRY(ID_EXEC_CURRENT,			&CAppCmds::OnExecCurrent,		&CAppCmds::OnUIExecCurrent,		5 )
 		CMD_ENTRY(ID_EXEC_FILE,				&CAppCmds::OnExecFile,			&CAppCmds::OnUIExecFile,		6 )
@@ -94,10 +96,13 @@ CAppCmds::CAppCmds()
 		CMD_ENTRY(ID_RESULTS_FINDNEXT,		&CAppCmds::OnResultsFindNext,	&CAppCmds::OnUIResultsFindNext,	-1)
 		CMD_ENTRY(ID_RESULTS_SAVEAS,		&CAppCmds::OnResultsSaveAs,		&CAppCmds::OnUIResultsSaveAs,	-1)
 		CMD_ENTRY(ID_RESULTS_PRINT,			&CAppCmds::OnResultsPrint,		&CAppCmds::OnUIResultsPrint,	-1)
+		// Tools menu.
+		CMD_ENTRY(ID_TOOLS_OPTIONS,			&CAppCmds::OnToolsOptions,		NULL,							-1)
 		// Window menu.
 		CMD_ENTRY(ID_WINDOW_QUERY,			&CAppCmds::OnWindowQuery,		NULL,							-1)
 		CMD_ENTRY(ID_WINDOW_RESULTS,		&CAppCmds::OnWindowResults,		NULL,							-1)
 		// Help menu.
+		CMD_ENTRY(ID_HELP_CONTENTS,			&CAppCmds::OnHelpContents,		NULL,							-1)
 		CMD_ENTRY(ID_HELP_ABOUT,			&CAppCmds::OnHelpAbout,			NULL,							10)
 	END_CMD_TABLE
 }
@@ -160,13 +165,56 @@ void CAppCmds::OnDBDisconnect()
 	if (App.m_oConnection.IsOpen())
 		App.m_oConnection.Close();
 
-	App.m_pCurrConn = NULL;
+	App.m_pCurrConn.reset();
 
 	// Reset the scripts menu.
 	UpdateScriptsMenu();
 
 	UpdateUI();
 	App.m_AppWnd.UpdateTitle();
+}
+
+/******************************************************************************
+** Method:		OnDBManage()
+**
+** Description:	Manage the database configurations.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppCmds::OnDBManage()
+{
+	ManageDatabases();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//! Launch the dialog used to manage the dataase connection settings.
+
+bool CAppCmds::ManageDatabases()
+{
+	typedef CConConfigs::const_iterator iter;
+
+	ManageDatabasesDialog dialog;
+
+	for (iter it = App.m_apConConfigs.begin(); it != App.m_apConConfigs.end(); ++it)
+	{
+		CConConfigPtr config = *it;
+		CConConfigPtr copy = CConConfigPtr(new CConConfig(*config));
+
+		dialog.m_databases.push_back(copy);
+	}
+
+	if (dialog.RunModal(App.m_AppWnd) != IDOK)
+		return false;
+
+	App.m_apConConfigs = dialog.m_databases;
+	App.m_nDefConnection = Core::npos;		
+
+	return true;
 }
 
 /******************************************************************************
@@ -191,7 +239,7 @@ void CAppCmds::OnDBConnectMRU(int nCmdID)
 	// Find the connection index.
 	for (; i < App.m_apConConfigs.size(); ++i)
 	{
-		CConConfig* pConnCfg = App.m_apConConfigs[i];
+		CConConfigPtr pConnCfg = App.m_apConConfigs[i];
 
 		if (pConnCfg->m_strName == strConn)
 			break;
@@ -204,13 +252,24 @@ void CAppCmds::OnDBConnectMRU(int nCmdID)
 		return;
 	}
 
-	CConnectDlg Dlg;
+	CString login;
+	CString password;
 
-	Dlg.m_nConnection = i;
+	// Prompt the user, if login required.
+	if (App.m_apConConfigs[i]->m_eSecurity == LOGIN)
+	{
+		CConnectDlg Dlg;
 
-	// Prompt the user.
-	if (Dlg.RunModal(App.m_AppWnd) == IDOK)
-		Connect(Dlg.m_nConnection, Dlg.m_strLogin, Dlg.m_strPassword);
+		Dlg.m_nConnection = i;
+
+		if (Dlg.RunModal(App.m_AppWnd) != IDOK)
+			return;
+
+		login = Dlg.m_strLogin;
+		password = Dlg.m_strPassword;
+	}
+
+	Connect(i, login, password);
 }
 
 /******************************************************************************
@@ -305,7 +364,7 @@ void CAppCmds::OnQueryOpen()
 	const tchar* pszDefDir = NULL;
 
 	// Use Scripts dir as default, if set.
-	if ( (App.m_pCurrConn != NULL) && (App.m_pCurrConn->m_strSQLDir != TXT("")) )
+	if ( (App.m_pCurrConn.get() != nullptr) && (App.m_pCurrConn->m_strSQLDir != TXT("")) )
 		pszDefDir = App.m_pCurrConn->m_strSQLDir;
 
 	CPath strPath;
@@ -373,7 +432,7 @@ void CAppCmds::OnQuerySaveAs()
 	const tchar* pszDefDir = NULL;
 
 	// Use Scripts dir as default, if set.
-	if ( (App.m_pCurrConn != NULL) && (App.m_pCurrConn->m_strSQLDir != TXT("")) )
+	if ( (App.m_pCurrConn.get() != nullptr) && (App.m_pCurrConn->m_strSQLDir != TXT("")) )
 		pszDefDir = App.m_pCurrConn->m_strSQLDir;
 
 	CPath strPath;
@@ -493,40 +552,6 @@ void CAppCmds::OnQueryPrint()
 }
 
 /******************************************************************************
-** Method:		OnQueryPrefs()
-**
-** Description:	Show the query settings dialog.
-**
-** Parameters:	None.
-**
-** Returns:		Nothing.
-**
-*******************************************************************************
-*/
-
-void CAppCmds::OnQueryPrefs()
-{
-	CQueryPrefsDlg Dlg;
-
-	// Initialise with current settings.
-	Dlg.m_nMinWidth  = App.m_nMinWidth;
-	Dlg.m_nMaxWidth  = App.m_nMaxWidth;
-	Dlg.m_strNullVal = App.m_strNull;
-
-	// Show the dialog.
-	if (Dlg.RunModal(App.m_rMainWnd) == IDOK)
-	{
-		// Save new settings.
-		App.m_nMinWidth = Dlg.m_nMinWidth;
-		App.m_nMaxWidth = Dlg.m_nMaxWidth;
-		App.m_strNull   = Dlg.m_strNullVal;
-
-		// Update grid.
-		App.m_AppWnd.m_AppDlg.m_lvGrid.NullValue(App.m_strNull);
-	}
-}
-
-/******************************************************************************
 ** Method:		OnExecCurrent()
 **
 ** Description:	Execute the current query.
@@ -559,43 +584,18 @@ void CAppCmds::OnExecCurrent()
 	if (nEnd > nStart)
 		strQuery = strQuery.Mid(nStart, nEnd-nStart);
 
-	// Any parameters to provide?
-	if (strQuery.Find(TXT('$')) != -1)
+	CString strError;
+	CStrArray astrParams;
+
+	if (!FindParameters(strQuery, astrParams, strError))
 	{
-		CStrArray astrParams, astrValues;
+		App.AlertMsg(TXT("Parameter error in query:-\n\n%s"), strError);
+		return;
+	}
 
-		int nParamStart = 0;
-		int nParamEnd   = 0;
-
-		// For all parameters.
-		while ((nParamStart = strQuery.Find(TXT('$'), nParamStart)) != -1)
-		{
-			// Find parameter end marker.
-			nParamEnd = strQuery.Find(TXT('$'), nParamStart+1);
-
-			// Parameter end maker not found?
-			if (nParamEnd == -1)
-			{
-				App.AlertMsg(TXT("Parameter marker ($) mismatch."));
-				return;
-			}
-
-			// Extract parameter name.
-			CString strParam = strQuery.Mid(nParamStart+1, nParamEnd-nParamStart-1);
-
-			if (strParam.Empty())
-			{
-				App.AlertMsg(TXT("Empty parameter ($$) found.")); 
-				return;
-			}
-
-			// Add to list, if a new parameter.
-			if (astrParams.Find(strParam) == -1)
-				astrParams.Add(strParam);
-
-			// Skip passed parameter.
-			nParamStart = nParamEnd+1;
-		}
+	if (!astrParams.Empty())
+	{
+		CStrArray astrValues;
 
 		CParamsDlg Dlg;
 
@@ -606,45 +606,10 @@ void CAppCmds::OnExecCurrent()
 		if (Dlg.RunModal(App.m_AppWnd) != IDOK)
 			return;
 
-		ASSERT(astrParams.Size() == astrValues.Size());
+		strQuery = ReplaceParameters(strQuery, astrParams, astrValues);
 
-		// Copy parameterised query.
-		CString strTmpQuery = strQuery;
-
-		nParamStart = 0;
-		nParamEnd   = -1;
-
-		// Clear query.
-		strQuery = TXT("");
-
-		// For all parameters.
-		while ((nParamStart = strTmpQuery.Find(TXT('$'), nParamStart)) != -1)
-		{
-			// Copy query up to parameter start marker.
-			strQuery += strTmpQuery.Mid(nParamEnd+1, nParamStart-nParamEnd-1);
-
-			// Find parameter end marker.
-			nParamEnd = strTmpQuery.Find(TXT('$'), nParamStart+1);
-
-			ASSERT(nParamEnd != -1);
-
-			// Extract parameter name.
-			CString strParam = strTmpQuery.Mid(nParamStart+1, nParamEnd-nParamStart-1);
-
-			// Find parameter index.
-			int nParam = astrParams.Find(strParam);
-
-			ASSERT(nParam != -1);
-
-			// Substitute value.
-			strQuery += astrValues[nParam];
-
-			// Skip passed parameter.
-			nParamStart = nParamEnd+1;
-		}
-
-		// Copy tail end of query.
-		strQuery += strTmpQuery.Mid(nParamEnd+1, strTmpQuery.Length()-nParamEnd-1);
+		for (size_t i = 0; i != astrParams.Size(); ++i)
+			App.m_mapPrevValues[astrParams[i]] = astrValues[i];
 	}
 
 	try
@@ -653,8 +618,7 @@ void CAppCmds::OnExecCurrent()
 
 		// Remove the last query.
 		oAppDlg.m_lvGrid.Clear();
-		delete App.m_pQuery;
-		App.m_pQuery = NULL;
+		App.m_pQuery.reset();
 
 		// Reset the "find row" values.
 		App.m_strFindVal   = TXT("");
@@ -665,7 +629,7 @@ void CAppCmds::OnExecCurrent()
 		CTable& oTable = App.m_oMDB.CreateTable(TXT("Query"), App.m_oConnection, strQuery);
 
 		// Save query results.
-		App.m_pQuery = new CQuery(strQuery, oTable);
+		App.m_pQuery = CQueryPtr(new CQuery(strQuery, CTablePtr(&oTable)));
 
 		// Load the table and switch to the results view.
 		oAppDlg.DisplayTable(oTable);
@@ -825,7 +789,7 @@ void CAppCmds::OnResultsFindNext()
 	// Have a value to find.
 	if (App.m_strFindVal != TXT(""))
 	{
-		ASSERT(App.m_pQuery != NULL);
+		ASSERT(App.m_pQuery.get() != nullptr);
 
 		CTable& oRes = *App.m_pQuery->m_pResults;
 
@@ -875,14 +839,17 @@ void CAppCmds::OnResultsFindNext()
 
 void CAppCmds::OnResultsSaveAs()
 {
-	ASSERT(App.m_pQuery != NULL);
+	ASSERT(App.m_pQuery.get() != nullptr);
 
 	// Get the results table.
 	CTable& oTable = *App.m_pQuery->m_pResults;
 
 	// Nothing to save?
 	if (oTable.RowCount() == 0)
+	{
+		App.NotifyMsg(TXT("The result set is empty"));
 		return;
+	}
 
 	CPath strPath;
 
@@ -945,14 +912,17 @@ void CAppCmds::OnResultsSaveAs()
 
 void CAppCmds::OnResultsPrint()
 {
-	ASSERT(App.m_pQuery != NULL);
+	ASSERT(App.m_pQuery.get() != nullptr);
 
 	// Get the results table.
 	CTable& oTable = *App.m_pQuery->m_pResults;
 
 	// Nothing to print?
 	if (oTable.RowCount() == 0)
+	{
+		App.NotifyMsg(TXT("The result set is empty"));
 		return;
+	}
 
 	CPrinter oPrinter;
 
@@ -1031,6 +1001,45 @@ void CAppCmds::OnResultsPrint()
 }
 
 /******************************************************************************
+** Method:		OnToolsOptions()
+**
+** Description:	Show the query settings dialog.
+**
+** Parameters:	None.
+**
+** Returns:		Nothing.
+**
+*******************************************************************************
+*/
+
+void CAppCmds::OnToolsOptions()
+{
+	CQueryPrefsDlg Dlg;
+
+	// Initialise with current settings.
+	Dlg.m_nMinWidth  = App.m_nMinWidth;
+	Dlg.m_nMaxWidth  = App.m_nMaxWidth;
+	Dlg.m_strNullVal = App.m_strNull;
+	Dlg.m_bGridlines = App.m_bGridlines;
+
+	// Show the dialog.
+	if (Dlg.RunModal(App.m_rMainWnd) == IDOK)
+	{
+		// Save new settings.
+		App.m_nMinWidth = Dlg.m_nMinWidth;
+		App.m_nMaxWidth = Dlg.m_nMaxWidth;
+		App.m_strNull   = Dlg.m_strNullVal;
+		App.m_bGridlines = Dlg.m_bGridlines;
+
+		// Update grid.
+		CTableGrid& lvGrid = App.m_AppWnd.m_AppDlg.m_lvGrid;
+
+		lvGrid.NullValue(App.m_strNull);
+		lvGrid.GridLines(App.m_bGridlines);
+	}
+}
+
+/******************************************************************************
 ** Method:		OnWindowQuery()
 **
 ** Description:	Switch to the query window.
@@ -1064,6 +1073,16 @@ void CAppCmds::OnWindowResults()
 	App.m_AppWnd.m_AppDlg.m_tcTabCtrl.CurSel(CAppDlg::RESULTS_TAB);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//! Show the HelpFile.
+
+void CAppCmds::OnHelpContents()
+{
+	CBusyCursor busyCursor;
+
+	::ShellExecute(NULL, NULL, CPath::ApplicationDir() / TXT("PQT.mht"), NULL, NULL, SW_SHOW);
+}
+
 /******************************************************************************
 ** Method:		OnHelpAbout()
 **
@@ -1078,7 +1097,7 @@ void CAppCmds::OnWindowResults()
 
 void CAppCmds::OnHelpAbout()
 {
-	CAboutDlg Dlg;
+	AboutDlg Dlg;
 
 	Dlg.RunModal(App.m_rMainWnd);
 }
@@ -1121,28 +1140,28 @@ void CAppCmds::OnUIExecFile()
 
 void CAppCmds::OnUIResultsFind()
 {
-	bool bQuery = (App.m_pQuery != NULL);
+	bool bQuery = (App.m_pQuery.get() != nullptr);
 
 	App.m_AppWnd.m_Menu.EnableCmd(ID_RESULTS_FIND, bQuery);
 }
 
 void CAppCmds::OnUIResultsFindNext()
 {
-	bool bQuery = (App.m_pQuery != NULL);
+	bool bQuery = (App.m_pQuery.get() != nullptr);
 
 	App.m_AppWnd.m_Menu.EnableCmd(ID_RESULTS_FINDNEXT, bQuery);
 }
 
 void CAppCmds::OnUIResultsSaveAs()
 {
-	bool bQuery = (App.m_pQuery != NULL);
+	bool bQuery = (App.m_pQuery.get() != nullptr);
 
 	App.m_AppWnd.m_Menu.EnableCmd(ID_RESULTS_SAVEAS, bQuery);
 }
 
 void CAppCmds::OnUIResultsPrint()
 {
-	bool bQuery = (App.m_pQuery != NULL);
+	bool bQuery = (App.m_pQuery.get() != nullptr);
 
 	App.m_AppWnd.m_Menu.EnableCmd(ID_RESULTS_PRINT, bQuery);
 }
@@ -1192,16 +1211,13 @@ void CAppCmds::Connect(int nConnection, const CString& strLogin, const CString& 
 		// Close current connection.
 		OnDBDisconnect();
 
-		// Get the selected connection.
-		App.m_pCurrConn = App.m_apConConfigs[nConnection];
-
-		// Create the connection string.
-		CString strConnection = App.m_pCurrConn->ConnectionString(strLogin, strPassword);
-
 		// Open the connection.
+		CConConfigPtr pConfig = App.m_apConConfigs[nConnection];
+		CString       strConnection = pConfig->FormatConnectionString(strLogin, strPassword);
+
 		App.m_oConnection.Open(strConnection);
 
-		// Use as default connection next time, 
+		App.m_pCurrConn = pConfig;
 		App.m_nDefConnection = nConnection;
 
 		// Update the MRU list.
@@ -1217,10 +1233,7 @@ void CAppCmds::Connect(int nConnection, const CString& strLogin, const CString& 
 	catch(CSQLException& e)
 	{
 		// Notify user.
-		App.AlertMsg(TXT("%s"), e.m_strError);
-
-		// Cleanup connection.
-		OnDBDisconnect();
+		App.AlertMsg(TXT("%s"), e.m_strError.c_str());
 	}
 }
 
@@ -1334,7 +1347,7 @@ void CAppCmds::UpdateScriptsMenu()
 	App.m_oScripts.Truncate();
 
 	// Scripts dir set?
-	if ( (App.m_pCurrConn != NULL) && (App.m_pCurrConn->m_strSQLDir != TXT("")) )
+	if ( (App.m_pCurrConn.get() != nullptr) && (App.m_pCurrConn->m_strSQLDir != TXT("")) )
 	{
 		CPath strPath = App.m_pCurrConn->m_strSQLDir;
 
