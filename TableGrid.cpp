@@ -62,10 +62,6 @@ CTableGrid::~CTableGrid()
 
 void CTableGrid::OnCreate(const CRect& /*rcClient*/)
 {
-	// Set the grid style.
-	GridLines(true);
-	FullRowSelect(true);
-
 	// Setup the grid columns, if supplied.
 	if (m_oColumns.Size())
 	{
