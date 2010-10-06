@@ -41,11 +41,11 @@ static tchar szSQLExts[] = {	TXT("SQL Scripts (*.sql)\0*.sql\0")
 
 static tchar szSQLDefExt[] = { TXT("sql") };
 
-static tchar szTXTExts[] = {	TXT("Text Files (*.txt)\0*.txt\0")
+static tchar szCsvExts[] = {	TXT("CSV Files (*.csv)\0*.csv\0")
 								TXT("All Files (*.*)\0*.*\0")
 								TXT("\0\0")							};
 
-static tchar szTXTDefExt[] = { TXT("txt") };
+static tchar szCsvDefExt[] = { TXT("csv") };
 
 
 /******************************************************************************
@@ -234,7 +234,7 @@ void CAppCmds::OnDBConnectMRU(int nCmdID)
 	// Get the MRU item.
 	CString strConn = App.m_oMRUList[nCmdID - ID_DB_MRU_1];
 
-	uint i = 0;
+	size_t i = 0;
 
 	// Find the connection index.
 	for (; i < App.m_apConConfigs.size(); ++i)
@@ -622,8 +622,7 @@ void CAppCmds::OnExecCurrent()
 
 		// Reset the "find row" values.
 		App.m_strFindVal   = TXT("");
-		App.m_nLastFindRow = -1;
-		App.m_nLastFindCol = -1;
+		App.m_nLastFindRow = Core::npos;
 
 		// Execute the query.
 		CTable& oTable = App.m_oMDB.CreateTable(TXT("Query"), App.m_oConnection, strQuery);
@@ -764,9 +763,8 @@ void CAppCmds::OnResultsFind()
 	if (Dlg.RunModal(App.m_rMainWnd) == IDOK)
 	{
 		// Save the value.
-		App.m_strFindVal   = Dlg.m_strValue.ToLower();
-		App.m_nLastFindRow = -1;
-		App.m_nLastFindCol = -1;
+		App.m_strFindVal   = Dlg.m_strValue;
+		App.m_nLastFindRow = Core::npos;
 
 		OnResultsFindNext();
 	}
@@ -786,15 +784,17 @@ void CAppCmds::OnResultsFind()
 
 void CAppCmds::OnResultsFindNext()
 {
+	CString strFindVal = App.m_strFindVal.ToLower();
+
 	// Have a value to find.
-	if (App.m_strFindVal != TXT(""))
+	if (strFindVal != TXT(""))
 	{
 		ASSERT(App.m_pQuery.get() != nullptr);
 
 		CTable& oRes = *App.m_pQuery->m_pResults;
 
-		int nStartRow = (App.m_nLastFindCol == -1) ? App.m_nLastFindRow+1 : App.m_nLastFindRow;
-		int nStartCol = App.m_nLastFindCol+1;
+		int nStartRow = App.m_nLastFindRow+1;
+		int nStartCol = 0;
 
 		// For all rows from the last found row.
 		for (size_t r = nStartRow; r < oRes.RowCount(); r++)
@@ -806,14 +806,13 @@ void CAppCmds::OnResultsFindNext()
 			{
 				CString strValue = oRow[c].Format().ToLower();
 
-				if (strValue.Find(App.m_strFindVal) >= 0)
+				if (strValue.Find(strFindVal) != Core::npos)
 				{
 					// Select the row.
 					App.m_AppWnd.m_AppDlg.m_lvGrid.Select(r);
 
 					// Save find results.
 					App.m_nLastFindRow = r;
-					App.m_nLastFindCol = c;
 
 					return;
 				}
@@ -821,6 +820,14 @@ void CAppCmds::OnResultsFindNext()
 
 			// Reset column.
 			nStartCol = 0;
+		}
+
+		// Start again from the beginning.
+		if (nStartRow != 0)
+		{
+			App.m_nLastFindRow = Core::npos;
+
+			OnResultsFindNext();
 		}
 	}
 }
@@ -854,7 +861,7 @@ void CAppCmds::OnResultsSaveAs()
 	CPath strPath;
 
 	// Select the filename.
-	if (!strPath.Select(App.m_AppWnd, CPath::SaveFile, szTXTExts, szTXTDefExt, CPath::ApplicationDir()))
+	if (!strPath.Select(App.m_AppWnd, CPath::SaveFile, szCsvExts, szCsvDefExt, CPath::ApplicationDir()))
 		return;
 
 	try
@@ -883,10 +890,8 @@ void CAppCmds::OnResultsSaveAs()
 				strLine += strField;
 			}
 
-			strLine += TXT("\r\n");
-
 			// Write the row out.
-			oFile.Write(strLine, strLine.Length());
+			oFile.WriteLine(strLine, ANSI_TEXT);
 		}
 		
 		oFile.Close();
@@ -1202,7 +1207,7 @@ CString CAppCmds::CmdHintStr(uint iCmdID) const
 *******************************************************************************
 */
 
-void CAppCmds::Connect(int nConnection, const CString& strLogin, const CString& strPassword)
+void CAppCmds::Connect(size_t nConnection, const CString& strLogin, const CString& strPassword)
 {
 	try
 	{

@@ -119,7 +119,7 @@ protected:
 	//
 	// Internal methods.
 	//
-	void Connect(int nConnection, const CString& strLogin, const CString& strPassword);
+	void Connect(size_t nConnection, const CString& strLogin, const CString& strPassword);
 	bool LoadQuery(const CPath& strPath);
 	bool SaveQuery(const CPath& strPath);
 	void UpdateScriptsMenu();
