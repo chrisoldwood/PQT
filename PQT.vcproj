@@ -317,9 +317,6 @@
 				RelativePath=".\Database\Customers.csv">
 			</File>
 			<File
-				RelativePath=".\scripts\Test\List Customers.sql">
-			</File>
-			<File
 				RelativePath=".\Database\Schema.ini">
 			</File>
 		</Filter>
@@ -327,7 +324,40 @@
 			Name="HelpFile"
 			Filter="">
 			<File
+				RelativePath=".\HelpFile\Configure.gif">
+			</File>
+			<File
+				RelativePath=".\HelpFile\Connect.gif">
+			</File>
+			<File
+				RelativePath=".\HelpFile\ContextMenu.gif">
+			</File>
+			<File
+				RelativePath=".\HelpFile\ExecuteMenu.gif">
+			</File>
+			<File
+				RelativePath=".\HelpFile\Manage.gif">
+			</File>
+			<File
+				RelativePath=".\HelpFile\MRU.gif">
+			</File>
+			<File
+				RelativePath=".\HelpFile\Options.gif">
+			</File>
+			<File
+				RelativePath=".\HelpFile\Parameters.gif">
+			</File>
+			<File
 				RelativePath=".\HelpFile\PQT.html">
+			</File>
+			<File
+				RelativePath=".\HelpFile\Query.gif">
+			</File>
+			<File
+				RelativePath=".\HelpFile\Results.gif">
+			</File>
+			<File
+				RelativePath=".\HelpFile\RowData.gif">
 			</File>
 		</Filter>
 		<File
@@ -335,6 +365,9 @@
 		</File>
 		<File
 			RelativePath="RelNotes.txt">
+		</File>
+		<File
+			RelativePath=".\Setup.ini">
 		</File>
 		<File
 			RelativePath="TODO.Txt">
