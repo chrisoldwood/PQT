@@ -53,15 +53,14 @@ public:
 	CAppWnd		m_AppWnd;
 	CAppCmds	m_AppCmds;
 
-	int			m_nDefConnection;
+	size_t		m_nDefConnection;
 	CPath		m_strQueryFile;
 	bool		m_bModified;
 	CODBCSource	m_oConnection;
 	CMDB		m_oMDB;
 	CQueryPtr	m_pQuery;
 	CString		m_strFindVal;
-	int			m_nLastFindRow;
-	int			m_nLastFindCol;
+	size_t		m_nLastFindRow;
 	CScripts	m_oScripts;
 	CMRUList	m_oMRUList;
 	ParamValueMap	m_mapPrevValues;

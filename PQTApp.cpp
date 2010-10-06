@@ -57,8 +57,7 @@ CPQTApp::CPQTApp()
 	, m_nDefConnection(Core::npos)
 	, m_bModified(false)
 	, m_pQuery(NULL)
-	, m_nLastFindRow(-1)
-	, m_nLastFindCol(-1)
+	, m_nLastFindRow(Core::npos)
 	, m_oScripts(m_oMDB)
 	, m_oMRUList(5)
 	, m_pCurrConn(NULL)
@@ -204,7 +203,7 @@ void CPQTApp::loadConfig()
 	m_bGridlines = appConfig.readValue<bool>(TXT("UI"), TXT("Gridlines"), m_bGridlines);
 
 	// Read the default connection.
-	m_nDefConnection = appConfig.readValue<int>(TXT("Main"), TXT("LastConnection"), Core::npos);
+	m_nDefConnection = appConfig.readValue<size_t>(TXT("Main"), TXT("LastConnection"), Core::npos);
 
 	// Read the connection list.
 	size_t nConnections = appConfig.readValue<size_t>(TXT("Main"), TXT("ConnectionCount"), 0);
@@ -231,7 +230,7 @@ void CPQTApp::loadConfig()
 	}
 
 	// Validate settings.
-	if (m_nDefConnection >= static_cast<int>(m_apConConfigs.size()))
+	if ( (m_nDefConnection != Core::npos) && (m_nDefConnection >= m_apConConfigs.size()) )
 		m_nDefConnection = Core::npos;
 
 	// Load MRU list.
@@ -285,7 +284,7 @@ void CPQTApp::saveConfig()
 		appConfig.writeString(section, TXT("Scripts"), tstring(pConConfig->m_strSQLDir));
 	}
 
-	appConfig.writeValue<int>(TXT("Main"), TXT("LastConnection"), m_nDefConnection);
+	appConfig.writeValue<size_t>(TXT("Main"), TXT("LastConnection"), m_nDefConnection);
 
 	// Save MRU list.
 	m_oMRUList.Write(appConfig);
