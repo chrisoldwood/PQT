@@ -23,6 +23,7 @@ ManageDatabasesDialog::ManageDatabasesDialog()
 		CMD_CTRLMSG(IDC_EDIT,        BN_CLICKED,      &ManageDatabasesDialog::onEditDatabase)
 		CMD_CTRLMSG(IDC_DELETE,      BN_CLICKED,      &ManageDatabasesDialog::onDeleteDatabase)
 		NFY_CTRLMSG(IDC_CONNECTIONS, LVN_ITEMCHANGED, &ManageDatabasesDialog::onDatabaseSelected)
+		NFY_CTRLMSG(IDC_CONNECTIONS, NM_DBLCLK,       &ManageDatabasesDialog::onDatabasaeDoubleClick)
 	END_CTRLMSG_TABLE
 }
 
@@ -44,7 +45,7 @@ tstring formatDsnOrDriver(CConConfigPtr config)
 ////////////////////////////////////////////////////////////////////////////////
 //! Format the server and database properties into a single string.
 
-tstring formatServerAndDatabase(CConConfigPtr config)
+tstring formatServerDatabaseOrFile(CConConfigPtr config)
 {
 	tstring result = config->m_strServer;
 
@@ -52,6 +53,11 @@ tstring formatServerAndDatabase(CConConfigPtr config)
 		result += TXT(" ");
 
 	result += config->m_strDatabase;
+
+	if (!result.empty() && !config->m_strFile.Empty())
+		result += TXT(" ");
+
+	result += config->m_strFile;
 
 	return result;
 }
@@ -163,6 +169,17 @@ LRESULT ManageDatabasesDialog::onDatabaseSelected(NMHDR& header)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+//! Double-clicked database.
+
+LRESULT ManageDatabasesDialog::onDatabasaeDoubleClick(NMHDR& /*header*/)
+{
+	if (m_view.IsSelection())
+		onEditDatabase();
+
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 //! Update the state of the UI.
 
 void ManageDatabasesDialog::updateUi()
@@ -181,7 +198,7 @@ size_t ManageDatabasesDialog::addToView(CConConfigPtr config)
 	size_t row = m_view.AppendItem(config->m_strName);
 
 	m_view.ItemText(row, 1, formatDsnOrDriver(config));
-	m_view.ItemText(row, 2, formatServerAndDatabase(config));
+	m_view.ItemText(row, 2, formatServerDatabaseOrFile(config));
 
 	return row;
 }
@@ -193,5 +210,5 @@ void ManageDatabasesDialog::updateView(size_t row, CConConfigPtr config)
 {
 	m_view.ItemText(row, 0, config->m_strName);
 	m_view.ItemText(row, 1, formatDsnOrDriver(config));
-	m_view.ItemText(row, 2, formatServerAndDatabase(config));
+	m_view.ItemText(row, 2, formatServerDatabaseOrFile(config));
 }

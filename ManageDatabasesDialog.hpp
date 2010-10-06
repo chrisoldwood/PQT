@@ -55,6 +55,8 @@ private:
 	void onDeleteDatabase();
 	//! Database view selection change handler.
 	LRESULT onDatabaseSelected(NMHDR& header);
+	//! Double-clicked database.
+	LRESULT onDatabasaeDoubleClick(NMHDR& header);
 
 	//
 	// Internal methods.
