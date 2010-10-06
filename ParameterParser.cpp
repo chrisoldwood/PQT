@@ -60,7 +60,7 @@ CString ReplaceParameters(const CString& strQuery, CStrArray astrParams, CStrArr
 	size_t nParamEnd = nParamStart - 1;
 
 	// For all parameters.
-	while ((nParamStart = strQuery.Find(TXT("${"), nParamStart)) != -1)
+	while ((nParamStart = strQuery.Find(TXT("${"), nParamStart)) != Core::npos)
 	{
 		// Copy query up to parameter start marker.
 		strResult += strQuery.Mid(nParamEnd+1, nParamStart-nParamEnd-1);
@@ -68,15 +68,15 @@ CString ReplaceParameters(const CString& strQuery, CStrArray astrParams, CStrArr
 		// Find parameter end marker.
 		nParamEnd = strQuery.Find(TXT('}'), nParamStart+1);
 
-		ASSERT(nParamEnd != -1);
+		ASSERT(nParamEnd != Core::npos);
 
 		// Extract parameter name.
 		CString strParam = strQuery.Mid(nParamStart+2, nParamEnd-nParamStart-2);
 
 		// Find parameter index.
-		int nParam = astrParams.Find(strParam);
+		size_t nParam = astrParams.Find(strParam);
 
-		ASSERT(nParam != -1);
+		ASSERT(nParam != Core::npos);
 
 		// Substitute value.
 		strResult += astrValues[nParam];
