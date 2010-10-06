@@ -243,7 +243,7 @@ void CCfgConDlg::OnSQLDirs()
 
 void CCfgConDlg::OnSelectSecurity()
 {
-	int eSecurity = m_cbSecurity.CurSel();
+	SecurityModel eSecurity = static_cast<SecurityModel>(m_cbSecurity.CurSel());
 
 	m_ebLogin.Enable(eSecurity == LOGIN);
 }
