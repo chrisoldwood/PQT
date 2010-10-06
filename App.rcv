@@ -40,7 +40,7 @@ BEGIN
 			VALUE "LegalCopyright",   "(C) Chris Oldwood 2000-2010\0"
 			VALUE "OriginalFilename", "PQT.exe\0"
 			VALUE "ProductName",      "Parameterised Query Tool\0"
-			VALUE "ProductVersion",   "1.5 [Alpha]\0"
+			VALUE "ProductVersion",   "1.5 [Beta]\0"
 #ifdef _DEBUG
 			VALUE "Comments",         "Debug Build\0"
 #endif

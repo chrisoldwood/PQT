@@ -1,7 +1,14 @@
 Version 1.5
 ===========
 
-- ???
+- Changed parameter format to ${parameter} to make them less likely to clash with real SQL.
+- Added support for remembering each parameter and using them as the default next time.
+- Added explicit support for Trusted Security to avoid unecessarily prompting for login details.
+- Added separate dialog to manage the list of database configurations.
+- Added support for hiding the grid lines in the results view.
+- Added a manual.
+- Changed to storing settings in the Registry so it's XP friendly.
+- Changed to a Unicode build.
 
 
 Version 1.1
@@ -19,4 +26,4 @@ Version 1.0
 Chris Oldwood 
 [gort@cix.co.uk]
 
-20th September 2010
+6th October 2010
