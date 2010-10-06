@@ -166,8 +166,8 @@ void CConnectDlg::OnManage()
 void CConnectDlg::OnSelect()
 {
 	// Get the current selection.
-	int           nSel  = m_cbDatabase.CurSel();
-	int           nConn = m_cbDatabase.ItemData(nSel);
+	size_t        nSel  = m_cbDatabase.CurSel();
+	size_t        nConn = m_cbDatabase.ItemData(nSel);
 	CConConfigPtr pConn = App.m_apConConfigs[nConn];
 
 	// Set the default login.
