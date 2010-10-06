@@ -1,9 +1,3 @@
-- Find is broken.
-
-- Save is writing incorrectly in Unicode.
-
-- HelpFile.
-
 - Better formatting on results printing.
 
 - Scripts menu to include folders.
@@ -16,8 +10,10 @@
 
 - Use regex to implement find/replace in query string.
 
-- Support empty value is NULL.
+- Write functor to match connection configuration by name.
 
-- Need File/Folder in Server/Database column in Manage dialog.
+- Support (var)blob types (see sysdatabases for blob example).
 
-- Double-click to edit database in Manage dialog.
+- Custom formating support for columns, e.g. string width, double -> %9.2f vs %g.
+
+- Bug (?) Displaying paths (error messages in Task table with paths in).
