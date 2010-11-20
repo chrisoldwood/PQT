@@ -17,3 +17,7 @@
 - Custom formating support for columns, e.g. string width, double -> %9.2f vs %g.
 
 - Bug (?) Displaying paths (error messages in Task table with paths in).
+
+- Show row count and database connection in the status bar.
+
+- Refesh result set using same parameters (polling a table).
