@@ -21,3 +21,7 @@
 - Show row count and database connection in the status bar.
 
 - Refesh result set using same parameters (polling a table).
+
+- Default value is not case-insensitive on parameter name.
+
+- Querying if you want to save first does not continue with original operation.
