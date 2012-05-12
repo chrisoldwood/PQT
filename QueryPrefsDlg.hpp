@@ -36,8 +36,8 @@ public:
 	//
 	// Members.
 	//
-	int		m_nMinWidth;
-	int		m_nMaxWidth;
+	uint	m_nMinWidth;
+	uint	m_nMaxWidth;
 	CString	m_strNullVal;
 	bool	m_bGridlines;
 

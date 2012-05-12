@@ -112,7 +112,7 @@ void CAppDlg::DisplayTable(const CTable& oTable)
 		const CColumn& oColumn = oTable.Column(i);
 
 		// Compute col width in chars, clipping to app settings.
-		size_t nColWidth = std::min(std::max(oColumn.DisplayWidth(), App.m_nMinWidth), App.m_nMaxWidth);
+		size_t nColWidth = std::min<size_t>(std::max<size_t>(oColumn.DisplayWidth(), App.m_nMinWidth), App.m_nMaxWidth);
 
 		pColumns[i].m_strName = oColumn.Name();
 		pColumns[i].m_nWidth  = m_lvGrid.StringWidth(nColWidth) + 15;
@@ -216,7 +216,7 @@ LRESULT CAppDlg::OnGridRightClick(NMHDR& rMsgHdr)
 	{
 		// Get the current selection.
 		int   nCol = oMsgHdr.iSubItem - 1;
-		int   nRow = m_lvGrid.Selection();
+		size_t nRow = m_lvGrid.Selection();
 		CRow& oRow = m_lvGrid.Row(nRow);
 
 		CPopupMenu oMenu(IDR_TABLEMENU);
@@ -263,7 +263,7 @@ void CAppDlg::ShowRowDetails()
 	if (m_lvGrid.IsSelection())
 	{
 		// Get the current selection.
-		int   nRow = m_lvGrid.Selection();
+		size_t nRow = m_lvGrid.Selection();
 		CRow& oRow = m_lvGrid.Row(nRow);
 
 		CRowDataDlg Dlg(oRow);

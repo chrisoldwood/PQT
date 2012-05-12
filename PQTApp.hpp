@@ -68,8 +68,8 @@ public:
 	CConConfigs		m_apConConfigs;
 	CConConfigPtr	m_pCurrConn;
 	CRect		m_rcLastPos;
-	size_t		m_nMinWidth;
-	size_t		m_nMaxWidth;
+	uint		m_nMinWidth;
+	uint		m_nMaxWidth;
 	CString		m_strNull;
 	bool		m_bGridlines;
 

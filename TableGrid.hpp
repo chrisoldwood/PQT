@@ -87,7 +87,7 @@ protected:
 	//
 	friend int  CALLBACK TableGridCmpRows(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 	virtual int CompareRows(CRow& oRow1, CRow& oRow2);
-	virtual CString FieldValue(int nColumn, const CRow& oRow);
+	virtual CString FieldValue(size_t nColumn, const CRow& oRow);
 };
 
 /******************************************************************************
@@ -101,7 +101,7 @@ class IRowHandler
 {
 public:
 	virtual int     CompareRows(const CRow& oRow1, const CRow& oRow2) = 0;
-	virtual CString RowFieldValue(const CRow& oRow, int nField) = 0;
+	virtual CString RowFieldValue(const CRow& oRow, size_t nField) = 0;
 };
 
 /******************************************************************************

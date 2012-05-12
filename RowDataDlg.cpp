@@ -13,7 +13,7 @@
 #include <MDBL/Table.hpp>
 #include "PQTApp.hpp"
 #include <WCL/Clipboard.hpp>
-#include <WCL/StrCvt.hpp>
+#include <Core/StringUtils.hpp>
 
 /******************************************************************************
 ** Method:		Default constructor.
@@ -77,7 +77,7 @@ void CRowDataDlg::OnInitDialog()
 	for (size_t i = 0; i < m_oTable.ColumnCount(); i++)
 	{
 		// LPARAM is column index.
-		int nRow = m_lvGrid.InsertItem(i, CStrCvt::FormatUInt(i));
+		size_t nRow = m_lvGrid.InsertItem(i, Core::format(i));
 
 		// Set the column name.
 		m_lvGrid.ItemText(nRow, 1, m_oTable.Column(i).Name());
@@ -118,7 +118,7 @@ LRESULT CRowDataDlg::OnRightClick(NMHDR& rMsgHdr)
 	if (m_lvGrid.IsSelection())
 	{
 		// Get the selected row column.
-		uint nRowCol = m_lvGrid.ItemData(m_lvGrid.Selection());
+		size_t nRowCol = m_lvGrid.ItemData(m_lvGrid.Selection());
 
 		CPopupMenu oMenu(IDR_ROWDATAMENU);
 
@@ -198,8 +198,8 @@ LRESULT CRowDataDlg::OnClickColumn(NMHDR& rMsgHdr)
 int CALLBACK CRowDataDlg::CompareFunction(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
 	CRowDataDlg* pDialog  = reinterpret_cast<CRowDataDlg*>(lParamSort);
-	uint         nRowCol1 = lParam1;
-	uint         nRowCol2 = lParam2;
+	uint         nRowCol1 = static_cast<uint>(lParam1);
+	uint         nRowCol2 = static_cast<uint>(lParam2);
 	int          nResult  = 0;
 
 	// Sort by column index?

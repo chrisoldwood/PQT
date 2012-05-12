@@ -136,6 +136,8 @@ bool CConnectDlg::OnOk()
 
 void CConnectDlg::OnManage()
 {
+	const size_t first = 0;
+
 	if (App.m_AppCmds.ManageDatabases())
 	{
 		LoadDatabaseList();
@@ -143,7 +145,7 @@ void CConnectDlg::OnManage()
 		// Select by default.
 		if (m_cbDatabase.Count() != 0)
 		{
-			m_cbDatabase.CurSel(0u);
+			m_cbDatabase.CurSel(first);
 			OnSelect();
 		}
 

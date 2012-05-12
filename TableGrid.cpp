@@ -13,6 +13,7 @@
 #include <MDBL/Table.hpp>
 #include <MDBL/ResultSet.hpp>
 #include <WCL/StrCvt.hpp>
+#include <Core/StringUtils.hpp>
 
 /******************************************************************************
 ** Method:		Constructor.
@@ -186,10 +187,10 @@ void CTableGrid::AddRows(const CResultSet& oRS, bool bReSort, int nSel)
 
 size_t CTableGrid::AddRow(const CRow& oRow, bool bReSort, bool bSelect)
 {
-	int nRow = AppendItem(TXT(""));
+	size_t nRow = AppendItem(TXT(""));
 
 	// Set the row number.
-	ItemText(nRow, 0, CStrCvt::FormatUInt(nRow+1));
+	ItemText(nRow, 0, Core::format(nRow+1));
 	ItemPtr (nRow, &oRow);
 
 	return UpdateRow(nRow, bReSort, bSelect);
@@ -324,7 +325,7 @@ int CTableGrid::CompareRows(CRow& oRow1, CRow& oRow2)
 		return m_pRowHandler->CompareRows(oRow1, oRow2);
 
 	// Sort by column 0's field.
-	int nSortCol = m_oColumns[0].m_nField;
+	size_t nSortCol = m_oColumns[0].m_nField;
 
 	return oRow1[nSortCol].Compare(oRow2[nSortCol]);
 }
@@ -342,9 +343,9 @@ int CTableGrid::CompareRows(CRow& oRow1, CRow& oRow2)
 *******************************************************************************
 */
 
-CString CTableGrid::FieldValue(int nColumn, const CRow& oRow)
+CString CTableGrid::FieldValue(size_t nColumn, const CRow& oRow)
 {
-	int nField = m_oColumns[nColumn].m_nField;
+	size_t nField = m_oColumns[nColumn].m_nField;
 
 	// Use external handler?
 	if (m_pRowHandler != NULL)

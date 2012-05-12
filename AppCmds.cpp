@@ -495,10 +495,10 @@ void CAppCmds::OnQueryPrint()
 	CSize dmFont = oDC.TextExtents(TXT("Wy"));
 
 	// Calculate number of pages.
-	int nPageSize  = rcRect.Height() / dmFont.cy;
-	int nRptLines  = strQuery.Count(TXT('\r'));
-	int nPages     = nRptLines / nPageSize;
-	int nLineStart = 0;
+	size_t nPageSize  = rcRect.Height() / dmFont.cy;
+	size_t nRptLines  = strQuery.Count(TXT('\r'));
+	size_t nPages     = nRptLines / nPageSize;
+	size_t nLineStart = 0;
 
 	// Doesn't end on a page?
 	if ((nRptLines % nPageSize) != 0)
@@ -508,7 +508,7 @@ void CAppCmds::OnQueryPrint()
 	oDC.Start(TXT("PQT Query ") + (CString)App.m_strQueryFile);
 
 	// For all pages.
-	for (int p = 0; p < nPages; ++p)
+	for (size_t p = 0; p < nPages; ++p)
 	{
 		oDC.StartPage();
 
@@ -517,18 +517,18 @@ void CAppCmds::OnQueryPrint()
 		rcLine.bottom = rcLine.top + dmFont.cy;
 
 		// Calculate lines on this page.
-		int nFirstLine = p * nPageSize;
-		int nLastLine  = nFirstLine + nPageSize;
+		size_t nFirstLine = p * nPageSize;
+		size_t nLastLine  = nFirstLine + nPageSize;
 
 		// Adjust rows, if last page.
 		if (nLastLine > nRptLines)
 			nLastLine = nRptLines;
 
 		// For all lines on the page.
-		for (int l = nFirstLine; l < nLastLine; ++l)
+		for (size_t l = nFirstLine; l < nLastLine; ++l)
 		{
 			// Find the end of the report line.
-			int nLineEnd = strQuery.Find(TXT('\r'), nLineStart);
+			size_t nLineEnd = strQuery.Find(TXT('\r'), nLineStart);
 
 			// Extract report line.
 			CString strLine = strQuery.Mid(nLineStart, nLineEnd-nLineStart-1);
@@ -793,8 +793,8 @@ void CAppCmds::OnResultsFindNext()
 
 		CTable& oRes = *App.m_pQuery->m_pResults;
 
-		int nStartRow = App.m_nLastFindRow+1;
-		int nStartCol = 0;
+		size_t nStartRow = App.m_nLastFindRow+1;
+		size_t nStartCol = 0;
 
 		// For all rows from the last found row.
 		for (size_t r = nStartRow; r < oRes.RowCount(); r++)
@@ -945,8 +945,8 @@ void CAppCmds::OnResultsPrint()
 	CSize dmFont = oDC.TextExtents(TXT("Wy"));
 
 	// Calculate number of pages.
-	int nPageSize  = rcRect.Height() / dmFont.cy;
-	int nPages     = oTable.RowCount() / nPageSize;
+	size_t nPageSize  = rcRect.Height() / dmFont.cy;
+	size_t nPages     = oTable.RowCount() / nPageSize;
 
 	// Doesn't end on a page?
 	if ((oTable.RowCount() % nPageSize) != 0)
@@ -956,7 +956,7 @@ void CAppCmds::OnResultsPrint()
 	oDC.Start(TXT("PQT Results ") + (CString)App.m_strQueryFile);
 
 	// For all pages.
-	for (int p = 0; p < nPages; ++p)
+	for (size_t p = 0; p < nPages; ++p)
 	{
 		oDC.StartPage();
 
@@ -965,8 +965,8 @@ void CAppCmds::OnResultsPrint()
 		rcLine.bottom = rcLine.top + dmFont.cy;
 
 		// Calculate lines on this page.
-		uint nFirstLine = p * nPageSize;
-		uint nLastLine  = nFirstLine + nPageSize;
+		size_t nFirstLine = p * nPageSize;
+		size_t nLastLine  = nFirstLine + nPageSize;
 
 		// Adjust rows, if last page.
 		if (nLastLine > oTable.RowCount())
@@ -1370,7 +1370,7 @@ void CAppCmds::UpdateScriptsMenu()
 
 			// Copy to the scripts table.
 			for (size_t i = 0; i < astrFiles.Size(); i++)
-				App.m_oScripts.Add(ID_FIRST_SCRIPT_CMD+i, strPath, astrFiles[i]);
+				App.m_oScripts.Add(static_cast<int>(ID_FIRST_SCRIPT_CMD+i), strPath, astrFiles[i]);
 
 			// Load favourite scripts menu.
 			for (size_t i = 0; i < App.m_oScripts.RowCount(); i++)

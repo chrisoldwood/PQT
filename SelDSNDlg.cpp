@@ -53,6 +53,8 @@ CSelDSNDlg::CSelDSNDlg()
 
 void CSelDSNDlg::OnInitDialog()
 {
+	const size_t first = 0;
+
 	CBusyCursor	oWaitCursor;
 	CStrArray   astrSources;
 
@@ -69,7 +71,7 @@ void CSelDSNDlg::OnInitDialog()
 	}
 
 	// Select first by default.
-	m_lbDSNs.CurSel(0U);
+	m_lbDSNs.CurSel(first);
 
 	// Enable OK button, if something to select.
 	Control(IDOK).Enable(astrSources.Size());

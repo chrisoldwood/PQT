@@ -53,6 +53,8 @@ CSelDriverDlg::CSelDriverDlg()
 
 void CSelDriverDlg::OnInitDialog()
 {
+	const size_t first = 0;
+
 	CBusyCursor	oWaitCursor;
 	CStrArray   astrDrivers;
 
@@ -69,7 +71,7 @@ void CSelDriverDlg::OnInitDialog()
 	}
 
 	// Select first by default.
-	m_lbDrivers.CurSel(0U);
+	m_lbDrivers.CurSel(first);
 
 	// Enable OK button, if something to select.
 	Control(IDOK).Enable(astrDrivers.Size());

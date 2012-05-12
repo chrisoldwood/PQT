@@ -100,8 +100,9 @@ void CParamsDlg::OnInitDialog()
 	::MapWindowPoints(HWND_DESKTOP, m_hWnd, reinterpret_cast<POINT*>(&rcCancel), 2);
 
 	// Calculate how much to grow the dialog by.
-	int nExtraHeight = (rcParam.Height() * (m_pastrParams->Size()-1))
-					 + (CONTROL_GAP      * (m_pastrParams->Size()-1));
+	int numParams    = static_cast<int>(m_pastrParams->Size());
+	int nExtraHeight = (rcParam.Height() * (numParams-1))
+					 + (CONTROL_GAP      * (numParams-1));
 
 	// Grow the dialog.
 	CRect rcDialog = WindowRect();
@@ -139,11 +140,11 @@ void CParamsDlg::OnInitDialog()
 		CRect rcNewValue = rcValue;
 
 		// Calculate param control position.
-		rcNewParam.top   += (i*CONTROL_GAP) + (i*rcParam.Height());
+		rcNewParam.top   += static_cast<LONG>((i*CONTROL_GAP) + (i*rcParam.Height()));
 		rcNewParam.bottom = rcNewParam.top  + rcParam.Height();
 
 		// Calculate value control position.
-		rcNewValue.top   += (i*CONTROL_GAP) + (i*rcValue.Height());
+		rcNewValue.top   += static_cast<LONG>((i*CONTROL_GAP) + (i*rcValue.Height()));
 		rcNewValue.bottom = rcNewValue.top  + rcValue.Height();
 
 		strLabel = m_pastrParams->At(i);
@@ -160,7 +161,7 @@ void CParamsDlg::OnInitDialog()
 		DWORD dwLabelStyle   = m_ptxtParam->WindowStyle();
 
 		// Create and initialise the label control.
-		pLabel->Create(*this, IDC_PARAM_NAME+i, rcNewParam, dwLabelExStyle, dwLabelStyle);
+		pLabel->Create(*this, static_cast<uint>(IDC_PARAM_NAME+i), rcNewParam, dwLabelExStyle, dwLabelStyle);
 		pLabel->Text(strLabel);
 		pLabel->Font(oDlgFont);
 
@@ -168,13 +169,13 @@ void CParamsDlg::OnInitDialog()
 		DWORD dwEditStyle   = m_pebValue->WindowStyle();
 
 		// Create and initialise the edit control.
-		pEditBox->Create(*this, IDC_PARAM_VALUE+i, rcNewValue, dwEditExStyle, dwEditStyle );
+		pEditBox->Create(*this, static_cast<uint>(IDC_PARAM_VALUE+i), rcNewValue, dwEditExStyle, dwEditStyle );
 		pEditBox->Font(oDlgFont);
 		pEditBox->Text(App.m_mapPrevValues[strLabel]);
 	}
 
 	// Fix the tabbing order.
-	for (int i = m_pastrParams->Size()-1; i >= 0; --i)
+	for (int i = numParams-1; i >= 0; --i)
 	{
 		::BringWindowToTop(m_aoLabels[i]->Handle());
 		::BringWindowToTop(m_aoEditBoxes[i]->Handle());
