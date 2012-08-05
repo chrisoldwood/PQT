@@ -111,9 +111,6 @@ bool CPQTApp::OnOpen()
 		return false;
 	}
 	
-	// Load the toolbar bitmap.
-	m_rCmdControl.CmdBitmap().LoadRsc(IDR_APPTOOLBAR);
-
 	// Create the main window.
 	if (!m_AppWnd.Create())
 		return false;
@@ -132,7 +129,7 @@ bool CPQTApp::OnOpen()
 		App.m_AppCmds.OnQueryOpen(m_strCmdLine);
 
 	// Update UI.
-	m_AppCmds.UpdateUI();
+	m_AppCmds.InitialiseUI();
 
 	// Prompt for connection, if running SQL script.
 	if (m_strCmdLine != TXT(""))

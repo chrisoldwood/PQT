@@ -70,6 +70,7 @@ const tchar* CAppCmds::QUERY_MODIFIED_MSG = TXT("The current query has been modi
 */
 
 CAppCmds::CAppCmds()
+//	: CCmdControl(IDR_APPTOOLBAR)
 {
 	// Define the command table.
 	DEFINE_CMD_TABLE

@@ -19,7 +19,6 @@
 #include <WCL/DlgFrame.hpp>
 #include "AppDlg.hpp"
 #include <WCL/FrameMenu.hpp>
-//#include "AppToolbar.hpp"
 #include <WCL/StatusBar.hpp>
 #include <WCL/Accel.hpp>
 
@@ -49,7 +48,6 @@ public:
 	//
 	CAppDlg		m_AppDlg;
 	CFrameMenu	m_Menu;
-//	CAppToolBar	m_ToolBar;
 	CStatusBar	m_StatusBar;
 
 protected:
