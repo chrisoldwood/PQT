@@ -20,8 +20,22 @@
 
 - Show row count and database connection in the status bar.
 
-- Refesh result set using same parameters (polling a table).
+- Refesh result set using same parameters (polling a table - C+S+E).
 
 - Default value is not case-insensitive on parameter name.
 
 - Querying if you want to save first does not continue with original operation.
+
+- Why is the Query Parameters dialog showing up as a top-level window when using alt-tab?
+
+- No "expand row data" option on the right-click menu.
+
+- Make "Manage Databases" resizable
+
+- Show column type in expanded row dialog
+
+- Formatting options in the query within comments
+
+- Specifying a NULL parameter so that you can write "(x == Y) or (x isnull)"
+
+- Warning when there is no connection open (command disabled).
