@@ -54,6 +54,8 @@ const tchar* CONFIG_VERSION = TXT("1.0");
 
 CPQTApp::CPQTApp()
 	: CApp(m_AppWnd, m_AppCmds)
+	, m_AppWnd()
+	, m_AppCmds(m_AppWnd)
 	, m_nDefConnection(Core::npos)
 	, m_bModified(false)
 	, m_pQuery(NULL)
@@ -119,7 +121,7 @@ bool CPQTApp::OnOpen()
 	m_oMRUList.UpdateMenu(*m_AppWnd.Menu(), ID_DB_MRU_1);
 
 	// Show it.
-	if (ShowNormal() && !m_rcLastPos.Empty())
+	if (!m_rcLastPos.Empty())
 		m_AppWnd.Move(m_rcLastPos);
 
 	m_AppWnd.Show(m_iCmdShow);

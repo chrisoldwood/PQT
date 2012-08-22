@@ -19,6 +19,7 @@
 #include <WCL/CmdCtrl.hpp>
 
 // Forward declarations.
+class CAppWnd;
 class CPath;
 
 /******************************************************************************
@@ -34,7 +35,7 @@ public:
 	//
 	// Constructors/Destructor.
 	//
-	CAppCmds();
+	CAppCmds(CAppWnd& appWnd);
 	~CAppCmds();
 
 	//
