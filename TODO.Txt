@@ -39,3 +39,5 @@
 - Specifying a NULL parameter so that you can write "(x == Y) or (x isnull)"
 
 - Warning when there is no connection open (command disabled).
+
+- Remember variable values across sessions.
