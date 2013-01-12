@@ -41,3 +41,5 @@
 - Warning when there is no connection open (command disabled).
 
 - Remember variable values across sessions.
+
+- Sort the parameters by name to make the order consistent.
