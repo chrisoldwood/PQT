@@ -43,3 +43,9 @@
 - Remember variable values across sessions.
 
 - Sort the parameters by name to make the order consistent.
+
+- Display dates without a time portion.
+
+- Clone database settings.
+
+- Add mapping for the SQL Server 2008 separate time and date types.
