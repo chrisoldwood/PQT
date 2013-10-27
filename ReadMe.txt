@@ -1,36 +1,27 @@
 Parameterised Query Tool v1.5
 =============================
 
+Introduction
+------------
 
-1: Installation
----------------
+This SQL query tool is designed to execute queries where you want to vary the
+parameters at run-time.
 
-Run setup.exe.
-
-or
-
-Copy the files PQT.* to a folder.
-
-
-2: Uninstallation
------------------
-
-Delete the files listed above.
-
-
-3: Help/Manual
---------------
+Documentation
+-------------
 
 There is a HelpFile - PQT.mht.
 
+Development
+-----------
 
-4: Contact Details
-------------------
+See DevNotes.txt
+
+Contact Details
+---------------
 
 Email: gort@cix.co.uk
-Web:   http://www.cix.co.uk/~gort
+Web:   http://www.chrisoldwood.com
 
-
-Chris Oldwood 
-
+Chris Oldwood
 6th October 2010
