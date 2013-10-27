@@ -23,31 +23,6 @@ Global
 	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
 		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
 	EndGlobalSection
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 6
-		SccProjectUniqueName0 = PQT.vcproj
-		SccLocalPath0 = .
-		CanCheckoutShared = true
-		SccProjectUniqueName1 = ..\\Lib\\Core\\Core.vcproj
-		SccProjectName1 = \u0022$/Win32/Lib/Core\u0022,\u0020QWDAAAAA
-		SccLocalPath1 = ..\\Lib\\Core
-		CanCheckoutShared = true
-		SccProjectUniqueName2 = ..\\Lib\\WCL\\Wcl.vcproj
-		SccProjectName2 = \u0022$/Win32/Lib/WCL\u0022,\u0020HPAAAAAA
-		SccLocalPath2 = ..\\Lib\\WCL
-		CanCheckoutShared = true
-		SccProjectUniqueName3 = ..\\Lib\\MDBL\\MDBL.vcproj
-		SccProjectName3 = \u0022$/Win32/Lib/MDBL\u0022,\u0020BPAAAAAA
-		SccLocalPath3 = ..\\Lib\\MDBL
-		CanCheckoutShared = true
-		SccProjectUniqueName4 = ..\\Lib\\Legacy\\Legacy.vcproj
-		SccProjectName4 = \u0022$/Win32/Lib/Legacy\u0022,\u0020JHEAAAAA
-		SccLocalPath4 = ..\\Lib\\Legacy
-		CanCheckoutShared = true
-		SccLocalPath5 = .
-		CanCheckoutShared = true
-		SolutionUniqueID = {4C1F2FB4-7761-4FA0-A458-4FC65C88329B}
-	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
