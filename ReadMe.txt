@@ -7,6 +7,15 @@ Introduction
 This SQL query tool is designed to execute queries where you want to vary the
 parameters at run-time.
 
+Releases
+--------
+
+Stable releases are formally packaged and made available from my Win32 tools page:
+http://www.chrisoldwood.com/win32.htm
+
+The latest code is available from my GitHub repo:
+https://github.com/chrisoldwood/PQT
+
 Documentation
 -------------
 
