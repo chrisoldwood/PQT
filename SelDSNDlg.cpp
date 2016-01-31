@@ -67,7 +67,7 @@ void CSelDSNDlg::OnInitDialog()
 	}
 	catch(CSQLException e)
 	{
-		AlertMsg(TXT("Failed to enumerate ODBC DSNs.\n\n%s"), e.m_strError);
+		AlertMsg(TXT("Failed to enumerate ODBC DSNs.\n\n%s"), e.twhat());
 	}
 
 	// Select first by default.

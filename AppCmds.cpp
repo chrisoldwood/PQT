@@ -637,11 +637,7 @@ void CAppCmds::OnExecCurrent()
 	}
 	catch(CSQLException& e)
 	{
-		// Translate % chars before reporting.
-		e.m_strError.Replace(TXT('%'), TXT("%%"));
-
-		// Notify user.
-		App.AlertMsg(TXT("%s"), e.m_strError);
+		App.AlertMsg(TXT("%s"), e.twhat());
 	}
 
 	UpdateUI();
@@ -1238,8 +1234,7 @@ void CAppCmds::Connect(size_t nConnection, const CString& strLogin, const CStrin
 	}
 	catch(CSQLException& e)
 	{
-		// Notify user.
-		App.AlertMsg(TXT("%s"), e.m_strError.c_str());
+		App.AlertMsg(TXT("%s"), e.twhat());
 	}
 }
 
