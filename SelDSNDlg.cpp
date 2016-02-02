@@ -65,7 +65,7 @@ void CSelDSNDlg::OnInitDialog()
 		for (size_t i = 0; i < astrSources.Size(); i++)
 			m_lbDSNs.Add(astrSources[i]);
 	}
-	catch(CSQLException e)
+	catch(const CSQLException& e)
 	{
 		AlertMsg(TXT("Failed to enumerate ODBC DSNs.\n\n%s"), e.twhat());
 	}

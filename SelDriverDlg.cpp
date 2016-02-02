@@ -65,7 +65,7 @@ void CSelDriverDlg::OnInitDialog()
 		for (size_t i = 0; i < astrDrivers.Size(); i++)
 			m_lbDrivers.Add(astrDrivers[i]);
 	}
-	catch(CSQLException e)
+	catch(const CSQLException& e)
 	{
 		AlertMsg(TXT("Failed to enumerate ODBC drivers.\n\n%s"), e.twhat());
 	}

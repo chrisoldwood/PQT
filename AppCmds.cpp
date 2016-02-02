@@ -635,7 +635,7 @@ void CAppCmds::OnExecCurrent()
 		oAppDlg.DisplayTable(oTable);
 		oAppDlg.m_tcTabCtrl.CurSel(CAppDlg::RESULTS_TAB);
 	}
-	catch(CSQLException& e)
+	catch(const CSQLException& e)
 	{
 		App.AlertMsg(TXT("%s"), e.twhat());
 	}
@@ -893,7 +893,7 @@ void CAppCmds::OnResultsSaveAs()
 		
 		oFile.Close();
 	}
-	catch(CFileException& e)
+	catch(const CFileException& e)
 	{
 		// Notify user.
 		App.AlertMsg(TXT("%s"), e.twhat());
@@ -1232,7 +1232,7 @@ void CAppCmds::Connect(size_t nConnection, const CString& strLogin, const CStrin
 		UpdateUI();
 		App.m_AppWnd.UpdateTitle();
 	}
-	catch(CSQLException& e)
+	catch(const CSQLException& e)
 	{
 		App.AlertMsg(TXT("%s"), e.twhat());
 	}
@@ -1274,7 +1274,7 @@ bool CAppCmds::LoadQuery(const CPath& strPath)
 
 		bOK = true;
 	}
-	catch(CFileException& e)
+	catch(const CFileException& e)
 	{
 		// Notify user.
 		App.AlertMsg(TXT("%s"), e.twhat());
@@ -1315,7 +1315,7 @@ bool CAppCmds::SaveQuery(const CPath& strPath)
 
 		bOK = true;
 	}
-	catch(CFileException& e)
+	catch(const CFileException& e)
 	{
 		// Notify user.
 		App.AlertMsg(TXT("%s"), e.twhat());
