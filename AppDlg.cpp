@@ -15,6 +15,7 @@
 #include "RowDataDlg.hpp"
 #include <WCL/Clipboard.hpp>
 #include <Core/ArrayPtr.hpp>
+#include <algorithm>
 
 /******************************************************************************
 ** Method:		Default constructor.
