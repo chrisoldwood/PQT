@@ -1,18 +1,7 @@
-use Test
-
-/*
-
-drop table TypeTest
-
-create table TypeTest
-(
-    Int32Number int not null,
-    Int64Number bigint not null,
-    RealNumber  real not null,
-)
-
-insert into TypeTest values(2147483647, 9876543210, 9876543210)
-
-*/
-select * from TypeTest
-
+select
+    cast(1 as bit)          as [bit],
+    cast(1 as tinyint)      as [tinyint],
+    cast(1 as smallint)     as [smallint],
+    cast(1 as int)          as [int],
+    cast(1 as bigint)       as [bigint],
+    cast(1 as decimal(2,1)) as [decimal]
