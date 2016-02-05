@@ -7,7 +7,6 @@ this:-
 +-PQT
 +-Lib
 | +-Core
-| +-Legacy
 | +-MDBL
 | +-WCL
 +-Scripts
@@ -19,7 +18,6 @@ C:\> mkdir Win32
 C:\> git clone https://github.com/chrisoldwood/PQT.git Win32\PQT
 C:\> mkdir Win32\Lib
 C:\> git clone https://github.com/chrisoldwood/Core.git Win32\Lib\Core
-C:\> git clone https://github.com/chrisoldwood/Legacy.git Win32\Lib\Legacy
 C:\> git clone https://github.com/chrisoldwood/MDBL.git Win32\Lib\MDBL
 C:\> git clone https://github.com/chrisoldwood/WCL.git Win32\Lib\WCL
 <optional>

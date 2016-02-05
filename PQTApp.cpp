@@ -10,7 +10,6 @@
 
 #include "Common.hpp"
 #include "PQTApp.hpp"
-#include <Legacy/STLUtils.hpp>
 #include "Query.hpp"
 #include <WCL/BusyCursor.hpp>
 #include <WCL/AppConfig.hpp>

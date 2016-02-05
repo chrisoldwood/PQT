@@ -10,7 +10,6 @@
 
 #include "Common.hpp"
 #include "ParamsDlg.hpp"
-#include <Legacy/STLUtils.hpp>
 #include <WCL/StrArray.hpp>
 #include "PQTApp.hpp"
 
@@ -32,12 +31,11 @@ CParamsDlg::CParamsDlg()
 	, m_pastrValues(NULL)
 {
 	// Create template control wrappers.
-	m_ptxtParam = new CLabel;
-	m_pebValue  = new CEditBox;
+	m_aoLabels.push_back(LabelPtr(new CLabel));
+	m_aoEditBoxes.push_back(EditBoxPtr(new CEditBox));
 
-	// Add to containers.
-	m_aoLabels.push_back(m_ptxtParam);
-	m_aoEditBoxes.push_back(m_pebValue);
+	m_ptxtParam = m_aoLabels[0].get();
+	m_pebValue  = m_aoEditBoxes[0].get();
 
 	DEFINE_CTRL_TABLE
 		CTRL(IDC_PARAM_NAME,  m_ptxtParam )
@@ -61,9 +59,6 @@ CParamsDlg::CParamsDlg()
 
 CParamsDlg::~CParamsDlg()
 {
-	// Free collections.
-	DeleteAll(m_aoLabels);
-	DeleteAll(m_aoEditBoxes);
 }
 
 /******************************************************************************
@@ -150,8 +145,8 @@ void CParamsDlg::OnInitDialog()
 		strLabel = m_pastrParams->At(i);
 
 		// Allocate control wrappers.
-		CLabel*   pLabel   = new CLabel;
-		CEditBox* pEditBox = new CEditBox;
+		LabelPtr   pLabel(new CLabel);
+		EditBoxPtr pEditBox(new CEditBox);
 
 		// Add to containers.
 		m_aoLabels.push_back(pLabel);

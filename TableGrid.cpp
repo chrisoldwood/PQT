@@ -46,7 +46,6 @@ CTableGrid::CTableGrid(IRowHandler* pRowHandler)
 
 CTableGrid::~CTableGrid()
 {
-	m_oColumns.DeleteAll();
 }
 
 /******************************************************************************
@@ -64,11 +63,11 @@ CTableGrid::~CTableGrid()
 void CTableGrid::OnCreate(const CRect& /*rcClient*/)
 {
 	// Setup the grid columns, if supplied.
-	if (m_oColumns.Size())
+	if (m_oColumns.size())
 	{
-		for (size_t c = 0; c < m_oColumns.Size(); c++)
+		for (size_t c = 0; c < m_oColumns.size(); c++)
 		{
-			Column& oColumn = m_oColumns[c];
+			const Column& oColumn = m_oColumns[c];
 
 			InsertColumn(c, oColumn.m_strName, oColumn.m_nWidth, oColumn.m_nAlign);
 		}
@@ -94,7 +93,7 @@ void CTableGrid::Columns(size_t nColumns, Column* pColumns)
 	ASSERT(pColumns != NULL);
 
 	// Delete exsiting columns.
-	m_oColumns.DeleteAll();
+	m_oColumns.clear();
 
 	// Window created?
 	if (Handle() != NULL)
@@ -107,10 +106,10 @@ void CTableGrid::Columns(size_t nColumns, Column* pColumns)
 		// Setup the grid columns.
 		for (size_t c = 0; c < nColumns; c++)
 		{
-			Column* pColumn = new Column(pColumns[c]);
+			const Column& column = pColumns[c];
 
-			m_oColumns.Add(*pColumn);
-			InsertColumn(c+1, pColumn->m_strName, pColumn->m_nWidth, pColumn->m_nAlign);
+			m_oColumns.push_back(column);
+			InsertColumn(c+1, column.m_strName, column.m_nWidth, column.m_nAlign);
 		}
 	}
 }
@@ -215,7 +214,7 @@ size_t CTableGrid::UpdateRow(size_t nRow, bool bReSort, bool bSelect)
 	CRow& oRow = Row(nRow);
 
 	// For all grid columns.
-	for (size_t i = 0; i < m_oColumns.Size(); i++)
+	for (size_t i = 0; i < m_oColumns.size(); i++)
 		ItemText(nRow, i+1, FieldValue(i, oRow));
 
 	// Re-sort the row?

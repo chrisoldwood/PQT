@@ -42,8 +42,10 @@ public:
 
 protected:
 	// Template shorthands.
-	typedef std::vector<CLabel*>   CLabels;
-	typedef std::vector<CEditBox*> CEditBoxes;
+	typedef Core::SharedPtr<CLabel> LabelPtr;
+	typedef std::vector<LabelPtr> CLabels;
+	typedef Core::SharedPtr<CEditBox> EditBoxPtr;
+	typedef std::vector<EditBoxPtr> CEditBoxes;
 
 	//
 	// Controls.

@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="PQT"
 	ProjectGUID="{B48800FE-15ED-48DD-90E9-E993A2973BA3}"
+	RootNamespace="PQT"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -186,15 +187,15 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{790BC113-52FB-4565-8968-79B8B011C520}"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{AED77F84-49CF-4B84-B319-2D07025ECA06}"
+			RelativePathToProject="..\Lib\Core\Core.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{9E405156-9B1D-483A-9BBD-B86240FA86BE}"
+			RelativePathToProject="..\Lib\MDBL\MDBL.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{9B0335B6-93BE-4604-8497-27431874D758}"
+			RelativePathToProject="..\Lib\WCL\Wcl.vcproj"
 		/>
 	</References>
 	<Files>
@@ -477,6 +478,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\DevNotes.txt"
+			>
+		</File>
 		<File
 			RelativePath="ReadMe.txt"
 			>

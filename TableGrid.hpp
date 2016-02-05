@@ -18,7 +18,7 @@
 
 #include <WCL/ListView.hpp>
 #include <MDBL/FwdDecls.hpp>
-#include <Legacy/TArray.hpp>
+#include <vector>
 
 // Forward declarations.
 class IRowHandler;
@@ -70,10 +70,13 @@ public:
 	void  NullValue(const CString& strNull);
 
 protected:
+	//! The column collection type.
+	typedef std::vector<Column> ColumnList;
+
 	//
 	// Members.
 	//
-	TRefArray<Column>	m_oColumns;
+	ColumnList			m_oColumns;
 	IRowHandler*		m_pRowHandler;
 	CString				m_strNull;
 
