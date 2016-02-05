@@ -16,7 +16,7 @@
 #include "QueryPrefsDlg.hpp"
 #include "FindDlg.hpp"
 #include "ParamsDlg.hpp"
-#include <Legacy/FileFinder.hpp>
+#include <WCL/FolderIterator.hpp>
 #include <WCL/Printer.hpp>
 #include <WCL/PrinterDC.hpp>
 #include <WCL/BusyCursor.hpp>
@@ -1355,18 +1355,12 @@ void CAppCmds::UpdateScriptsMenu()
 		// Find all favourite scripts.
 		if (strPath.Exists())
 		{
-			CFileFinder oSQLFinder;
-			CFileTree	oSQLFiles;
-
-			// Find all scripts.
-			oSQLFinder.Find(strPath, TXT("*.sql"), false, oSQLFiles);
-
-			// Get shortcut to the filename array.
-			CStrArray& astrFiles = oSQLFiles.Root()->m_oData.m_astrFiles;
+			WCL::FolderIterator end;
+			WCL::FolderIterator it(strPath.c_str(), TXT("*.sql"), WCL::FolderIterator::FIND_FILES);
 
 			// Copy to the scripts table.
-			for (size_t i = 0; i < astrFiles.Size(); i++)
-				App.m_oScripts.Add(static_cast<int>(ID_FIRST_SCRIPT_CMD+i), strPath, astrFiles[i]);
+			for (int i = 0; it != end; ++it, ++i)
+				App.m_oScripts.Add(static_cast<int>(ID_FIRST_SCRIPT_CMD+i), strPath, *it);
 
 			// Load favourite scripts menu.
 			for (size_t i = 0; i < App.m_oScripts.RowCount(); i++)
