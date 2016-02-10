@@ -90,7 +90,7 @@ void CTableGrid::OnCreate(const CRect& /*rcClient*/)
 void CTableGrid::Columns(size_t nColumns, Column* pColumns)
 {
 	ASSERT(nColumns >= 0);
-	ASSERT(pColumns != NULL);
+	ASSERT(pColumns != nullptr);
 
 	// Delete exsiting columns.
 	m_oColumns.clear();
@@ -297,9 +297,9 @@ int CALLBACK TableGridCmpRows(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	CRow*		pRow1 = reinterpret_cast<CRow*>(lParam1);
 	CRow*		pRow2 = reinterpret_cast<CRow*>(lParam2);
 
-	ASSERT(pGrid != NULL);
-	ASSERT(pRow1 != NULL);
-	ASSERT(pRow2 != NULL);
+	ASSERT(pGrid != nullptr);
+	ASSERT(pRow1 != nullptr);
+	ASSERT(pRow2 != nullptr);
 
 	return pGrid->CompareRows(*pRow1, *pRow2);
 }
@@ -320,7 +320,7 @@ int CALLBACK TableGridCmpRows(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 int CTableGrid::CompareRows(CRow& oRow1, CRow& oRow2)
 {
 	// Use external handler?
-	if (m_pRowHandler != NULL)
+	if (m_pRowHandler != nullptr)
 		return m_pRowHandler->CompareRows(oRow1, oRow2);
 
 	// Sort by column 0's field.
@@ -347,7 +347,7 @@ CString CTableGrid::FieldValue(size_t nColumn, const CRow& oRow)
 	size_t nField = m_oColumns[nColumn].m_nField;
 
 	// Use external handler?
-	if (m_pRowHandler != NULL)
+	if (m_pRowHandler != nullptr)
 		return m_pRowHandler->RowFieldValue(oRow, nField);
 
 	// Use default formatter.

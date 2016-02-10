@@ -27,8 +27,8 @@
 
 CParamsDlg::CParamsDlg()
 	: CDialog(IDD_PARAMETERS)
-	, m_pastrParams(NULL)
-	, m_pastrValues(NULL)
+	, m_pastrParams(nullptr)
+	, m_pastrValues(nullptr)
 {
 	// Create template control wrappers.
 	m_aoLabels.push_back(LabelPtr(new CLabel));
@@ -75,8 +75,8 @@ CParamsDlg::~CParamsDlg()
 
 void CParamsDlg::OnInitDialog()
 {
-	ASSERT(m_pastrParams != NULL);
-	ASSERT(m_pastrValues != NULL);
+	ASSERT(m_pastrParams != nullptr);
+	ASSERT(m_pastrValues != nullptr);
 
 	// Get the template control positions in screen co-ordinates.
 	CRect rcParam = m_ptxtParam->WindowRect();

@@ -75,36 +75,36 @@ CAppCmds::CAppCmds(CAppWnd& appWnd)
 	// Define the command table.
 	DEFINE_CMD_TABLE
 		// Database menu.
-		CMD_ENTRY(ID_DB_CONNECT,			&CAppCmds::OnDBConnect,			NULL,							0 )
+		CMD_ENTRY(ID_DB_CONNECT,			&CAppCmds::OnDBConnect,			nullptr,						0 )
 		CMD_ENTRY(ID_DB_DISCONNECT,			&CAppCmds::OnDBDisconnect,		&CAppCmds::OnUIDBDisconnect,	1 )
-		CMD_ENTRY(ID_DB_MANAGE,				&CAppCmds::OnDBManage,			NULL,							0 )
+		CMD_ENTRY(ID_DB_MANAGE,				&CAppCmds::OnDBManage,			nullptr,						0 )
 		CMD_RANGE(ID_DB_MRU_1,
-				  ID_DB_MRU_5,				&CAppCmds::OnDBConnectMRU,		NULL,							-1) 
-		CMD_ENTRY(ID_DB_EXIT,				&CAppCmds::OnDBExit,			NULL,							-1)
+				  ID_DB_MRU_5,				&CAppCmds::OnDBConnectMRU,		nullptr,						-1) 
+		CMD_ENTRY(ID_DB_EXIT,				&CAppCmds::OnDBExit,			nullptr,						-1)
 		// Query menu.
-		CMD_ENTRY(ID_QUERY_NEW,				&CAppCmds::OnQueryNew,			NULL,							2 )
-		CMD_ENTRY(ID_QUERY_OPEN,			&CAppCmds::OnQueryOpen,			NULL,							3 )
-		CMD_ENTRY(ID_QUERY_SAVE,			&CAppCmds::OnQuerySave,			NULL,							4 )
-		CMD_ENTRY(ID_QUERY_SAVEAS,			&CAppCmds::OnQuerySaveAs,		NULL,							4 )
-		CMD_ENTRY(ID_QUERY_PRINT,			&CAppCmds::OnQueryPrint,		NULL,							4 )
+		CMD_ENTRY(ID_QUERY_NEW,				&CAppCmds::OnQueryNew,			nullptr,						2 )
+		CMD_ENTRY(ID_QUERY_OPEN,			&CAppCmds::OnQueryOpen,			nullptr,						3 )
+		CMD_ENTRY(ID_QUERY_SAVE,			&CAppCmds::OnQuerySave,			nullptr,						4 )
+		CMD_ENTRY(ID_QUERY_SAVEAS,			&CAppCmds::OnQuerySaveAs,		nullptr,						4 )
+		CMD_ENTRY(ID_QUERY_PRINT,			&CAppCmds::OnQueryPrint,		nullptr,						4 )
 		// Execute menu.
 		CMD_ENTRY(ID_EXEC_CURRENT,			&CAppCmds::OnExecCurrent,		&CAppCmds::OnUIExecCurrent,		5 )
 		CMD_ENTRY(ID_EXEC_FILE,				&CAppCmds::OnExecFile,			&CAppCmds::OnUIExecFile,		6 )
 		CMD_RANGE(ID_FIRST_SCRIPT_CMD,
-				  ID_LAST_SCRIPT_CMD,		&CAppCmds::OnExecScript,		NULL,							-1)
+				  ID_LAST_SCRIPT_CMD,		&CAppCmds::OnExecScript,		nullptr,						-1)
 		// Results menu.
 		CMD_ENTRY(ID_RESULTS_FIND,			&CAppCmds::OnResultsFind,		&CAppCmds::OnUIResultsFind,		-1)
 		CMD_ENTRY(ID_RESULTS_FINDNEXT,		&CAppCmds::OnResultsFindNext,	&CAppCmds::OnUIResultsFindNext,	-1)
 		CMD_ENTRY(ID_RESULTS_SAVEAS,		&CAppCmds::OnResultsSaveAs,		&CAppCmds::OnUIResultsSaveAs,	-1)
 		CMD_ENTRY(ID_RESULTS_PRINT,			&CAppCmds::OnResultsPrint,		&CAppCmds::OnUIResultsPrint,	-1)
 		// Tools menu.
-		CMD_ENTRY(ID_TOOLS_OPTIONS,			&CAppCmds::OnToolsOptions,		NULL,							-1)
+		CMD_ENTRY(ID_TOOLS_OPTIONS,			&CAppCmds::OnToolsOptions,		nullptr,						-1)
 		// Window menu.
-		CMD_ENTRY(ID_WINDOW_QUERY,			&CAppCmds::OnWindowQuery,		NULL,							-1)
-		CMD_ENTRY(ID_WINDOW_RESULTS,		&CAppCmds::OnWindowResults,		NULL,							-1)
+		CMD_ENTRY(ID_WINDOW_QUERY,			&CAppCmds::OnWindowQuery,		nullptr,						-1)
+		CMD_ENTRY(ID_WINDOW_RESULTS,		&CAppCmds::OnWindowResults,		nullptr,						-1)
 		// Help menu.
-		CMD_ENTRY(ID_HELP_CONTENTS,			&CAppCmds::OnHelpContents,		NULL,							-1)
-		CMD_ENTRY(ID_HELP_ABOUT,			&CAppCmds::OnHelpAbout,			NULL,							10)
+		CMD_ENTRY(ID_HELP_CONTENTS,			&CAppCmds::OnHelpContents,		nullptr,						-1)
+		CMD_ENTRY(ID_HELP_ABOUT,			&CAppCmds::OnHelpAbout,			nullptr,						10)
 	END_CMD_TABLE
 }
 
@@ -362,7 +362,7 @@ void CAppCmds::OnQueryOpen()
 		}
 	}
 
-	const tchar* pszDefDir = NULL;
+	const tchar* pszDefDir = nullptr;
 
 	// Use Scripts dir as default, if set.
 	if ( (App.m_pCurrConn.get() != nullptr) && (App.m_pCurrConn->m_strSQLDir != TXT("")) )
@@ -430,7 +430,7 @@ void CAppCmds::OnQuerySave()
 
 void CAppCmds::OnQuerySaveAs()
 {
-	const tchar* pszDefDir = NULL;
+	const tchar* pszDefDir = nullptr;
 
 	// Use Scripts dir as default, if set.
 	if ( (App.m_pCurrConn.get() != nullptr) && (App.m_pCurrConn->m_strSQLDir != TXT("")) )
@@ -729,7 +729,7 @@ void CAppCmds::OnExecScript(int nCmdID)
 	// Locate the script by its command ID.
 	CRow* pScript = App.m_oScripts.SelectRow(CScripts::ID, nCmdID);
 
-	ASSERT(pScript != NULL);
+	ASSERT(pScript != nullptr);
 
 	// Extract the path and filename.
 	CPath strPath = pScript->Field(CScripts::PATH);
@@ -1082,7 +1082,7 @@ void CAppCmds::OnHelpContents()
 {
 	CBusyCursor busyCursor;
 
-	::ShellExecute(NULL, NULL, CPath::ApplicationDir() / TXT("PQT.mht"), NULL, NULL, SW_SHOW);
+	::ShellExecute(nullptr, nullptr, CPath::ApplicationDir() / TXT("PQT.mht"), nullptr, nullptr, SW_SHOW);
 }
 
 /******************************************************************************

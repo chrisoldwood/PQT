@@ -50,7 +50,7 @@ public:
 	//
 	// Constructors/Destructor.
 	//
-	CTableGrid(IRowHandler* pRowHandler = NULL);
+	CTableGrid(IRowHandler* pRowHandler = nullptr);
 	~CTableGrid();
 
 	void  Columns(size_t nColumns, Column* pColumns);

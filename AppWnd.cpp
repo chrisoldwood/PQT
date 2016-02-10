@@ -217,7 +217,7 @@ void CAppWnd::UpdateTitle()
 void CAppWnd::OnDropFile(int nFile, const tchar* pszPath)
 {
 	ASSERT(nFile   >= 0);
-	ASSERT(pszPath != NULL);
+	ASSERT(pszPath != nullptr);
 
 	// Only load the first file.
 	if (nFile == 0)
