@@ -31,7 +31,7 @@ public:
 	//
 	// Constructors/Destructor.
 	//
-	CScripts(CMDB& oDB);
+	CScripts();
 	~CScripts();
 
 	// Columns.
