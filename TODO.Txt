@@ -51,3 +51,11 @@
 - Add mapping for the SQL Server 2008 separate time and date types.
 
 - Remove need for MDB object.
+
+- Select all in query window (Ctrl+A).
+
+- Configurable query window font.
+
+- Truncate query SQL and possibly the error message in error message box.
+
+- Avoid switching to results pane when no results? Different notification?
