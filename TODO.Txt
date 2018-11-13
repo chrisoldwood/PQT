@@ -59,3 +59,5 @@
 - Truncate query SQL and possibly the error message in error message box.
 
 - Avoid switching to results pane when no results? Different notification?
+
+- Restructure Test folder and include scripts and documentation.

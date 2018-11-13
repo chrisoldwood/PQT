@@ -443,7 +443,7 @@ void CAppCmds::OnQuerySaveAs()
 		return;
 
 	// Warn if replacing.
-	if ( (strPath.Exists()) && (App.QueryMsg(TXT("Replace existing file?\n\n%s"), strPath) != IDYES) )
+	if ( (strPath.Exists()) && (App.QueryMsg(TXT("Replace existing file?\n\n%s"), strPath.c_str()) != IDYES) )
 		return;
 
 	// Save it.
@@ -590,7 +590,7 @@ void CAppCmds::OnExecCurrent()
 
 	if (!FindParameters(strQuery, astrParams, strError))
 	{
-		App.AlertMsg(TXT("Parameter error in query:-\n\n%s"), strError);
+		App.AlertMsg(TXT("Parameter error in query:-\n\n%s"), strError.c_str());
 		return;
 	}
 
