@@ -8,6 +8,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wcl", "..\Lib\WCL\Wcl.vcpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MDBL", "..\Lib\MDBL\MDBL.vcproj", "{9E405156-9B1D-483A-9BBD-B86240FA86BE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcproj", "{A45C5206-309C-4F36-974C-182B27AE3F1B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{790BC113-52FB-4565-8968-79B8B011C520} = {790BC113-52FB-4565-8968-79B8B011C520}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -30,6 +35,10 @@ Global
 		{9E405156-9B1D-483A-9BBD-B86240FA86BE}.Debug|Win32.Build.0 = Debug|Win32
 		{9E405156-9B1D-483A-9BBD-B86240FA86BE}.Release|Win32.ActiveCfg = Release|Win32
 		{9E405156-9B1D-483A-9BBD-B86240FA86BE}.Release|Win32.Build.0 = Release|Win32
+		{A45C5206-309C-4F36-974C-182B27AE3F1B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A45C5206-309C-4F36-974C-182B27AE3F1B}.Debug|Win32.Build.0 = Debug|Win32
+		{A45C5206-309C-4F36-974C-182B27AE3F1B}.Release|Win32.ActiveCfg = Release|Win32
+		{A45C5206-309C-4F36-974C-182B27AE3F1B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
