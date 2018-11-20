@@ -220,6 +220,66 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
+		<Filter
+			Name="Manual"
+			>
+			<Filter
+				Name="SQL Express"
+				>
+				<Filter
+					Name="Scripts"
+					>
+					<File
+						RelativePath=".\Manual\SQL Express\Scripts\List Connections.sql"
+						>
+					</File>
+					<File
+						RelativePath=".\Manual\SQL Express\Scripts\Type Tests.sql"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="Text Database"
+				>
+				<File
+					RelativePath=".\Manual\Text Database\ReadMe.txt"
+					>
+				</File>
+				<Filter
+					Name="Database"
+					>
+					<File
+						RelativePath=".\Manual\Text Database\Database\Customers.csv"
+						>
+					</File>
+					<File
+						RelativePath=".\Manual\Text Database\Database\Schema.ini"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Scripts"
+					>
+					<File
+						RelativePath=".\Manual\Text Database\Scripts\Find Customer By ID Or Name.sql"
+						>
+					</File>
+					<File
+						RelativePath=".\Manual\Text Database\Scripts\Find Customer By ID.sql"
+						>
+					</File>
+					<File
+						RelativePath=".\Manual\Text Database\Scripts\Find Customer By Name.sql"
+						>
+					</File>
+					<File
+						RelativePath=".\Manual\Text Database\Scripts\List Customers.sql"
+						>
+					</File>
+				</Filter>
+			</Filter>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

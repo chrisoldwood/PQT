@@ -410,18 +410,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Test"
-			>
-			<File
-				RelativePath=".\Database\Customers.csv"
-				>
-			</File>
-			<File
-				RelativePath=".\Database\Schema.ini"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="HelpFile"
 			>
 			<File
