@@ -12,7 +12,7 @@
 
 - Write functor to match connection configuration by name.
 
-- Support (var)blob types (see sysdatabases for blob example).
+- Support (var)blob types (see sysdatabases for blob example: 'sid' => ODBC type -3).
 
 - Custom formating support for columns, e.g. string width, double -> %9.2f vs %g.
 
@@ -60,4 +60,6 @@
 
 - Avoid switching to results pane when no results? Different notification?
 
-- Restructure Test folder and include scripts and documentation.
+- Explicit support for the DBQ field used by the text driver.
+
+- Changing Scripts folder for open connection does not refresh scripts.
