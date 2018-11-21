@@ -626,13 +626,11 @@ void CAppCmds::OnExecCurrent()
 		App.m_nLastFindRow = Core::npos;
 
 		// Execute the query.
-		CTable& oTable = App.m_oMDB.CreateTable(TXT("Query"), App.m_oConnection, strQuery);
-
-		// Save query results.
-		App.m_pQuery = CQueryPtr(new CQuery(strQuery, CTablePtr(&oTable)));
+		CTablePtr table = CTable::Create(TXT("Query"), App.m_oConnection, strQuery);
+		App.m_pQuery = CQueryPtr(new CQuery(strQuery, table));
 
 		// Load the table and switch to the results view.
-		oAppDlg.DisplayTable(oTable);
+		oAppDlg.DisplayTable(table.getRef());
 		oAppDlg.m_tcTabCtrl.CurSel(CAppDlg::RESULTS_TAB);
 	}
 	catch(const CSQLException& e)

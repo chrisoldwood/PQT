@@ -50,8 +50,6 @@
 
 - Add mapping for the SQL Server 2008 separate time and date types.
 
-- Remove need for MDB object.
-
 - Select all in query window (Ctrl+A).
 
 - Configurable query window font.

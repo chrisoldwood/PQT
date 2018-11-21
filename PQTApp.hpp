@@ -20,7 +20,6 @@
 #include "AppWnd.hpp"
 #include "AppCmds.hpp"
 #include <MDBL/ODBCSource.hpp>
-#include <MDBL/MDB.hpp>
 #include <WCL/MRUList.hpp>
 #include <WCL/IniFile.hpp>
 #include "Scripts.hpp"
@@ -57,7 +56,6 @@ public:
 	CPath		m_strQueryFile;
 	bool		m_bModified;
 	CODBCSource	m_oConnection;
-	CMDB		m_oMDB;
 	CQueryPtr	m_pQuery;
 	CString		m_strFindVal;
 	size_t		m_nLastFindRow;
